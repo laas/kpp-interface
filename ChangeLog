@@ -1,0 +1,29 @@
+2007/06/23
+	1. Notification deactivated before inserting each robot body in geometry node.
+	
+2007/06/05
+	1. Minor changes in documentation
+	
+2007/05/30
+	1. Correct the segfault at deletion of a hidden roadmap.
+	
+2007/05/29
+	1. Resolving problems with notifications.
+	
+2007/05/25
+	1. Adding Class CkwsGraphicRoadmap to replace CkwsPlusRoadmap. To
+	use it, just create an instance giving your CkwsRoadmap.
+
+2007/04/23
+	1. Correct a bug when adding Device in Model tree
+
+
+2007/04/22
+	1. Generate doxytag file in order to make documentation of this package available to depending packages.
+	2. Documentation is now generated at installation.
+	3. Remove reference to hppCore contained in hppCorbaServer.
+	
+2007/04/19
+	New general KineoPathPlanner interface that deals with common functionalities like notification management.
+	It is now recommended to make other KineoPathPlanner interfaces derive from this one.
+	

@@ -1,0 +1,166 @@
+
+
+/*****************************************
+ INCLUDES
+*******************************************/
+
+
+#include "kppInterface/kppCommandSolvePlanner.h"
+
+#include "KineoController/kppSetPropertyCommand.h"
+#include "KineoModel/kppComponentParameter.h"
+#include "KineoModel/kppValue.h"
+#include "KineoModel/kppComponentClassFilter.h"
+#include "KineoModel/kppComponent.h"
+#include "KineoModel/kppSolidComponent.h"
+#include "KineoModel/kppConfigComponent.h"
+
+#include "hppPlanner.h"
+#include "flicSteeringMethod.h"
+
+/*****************************************
+ DEFINES
+*******************************************/
+
+/*****************************************
+ METHODS
+*******************************************/
+
+
+
+// ==========================================================================
+
+CkppCommandSolvePlanner::CkppCommandSolvePlanner(CkppInterface *kpp)
+{
+  attKpp = kpp;
+}
+
+
+// ==========================================================================
+
+CkppCommandSolvePlanner::CkppCommandSolvePlanner(const CkppCommandSolvePlanner& i_command) :
+  CkppCommand(i_command)
+{
+  attKpp = i_command.attKpp;
+}
+
+
+// ==========================================================================
+
+CkppCommandSolvePlanner::~CkppCommandSolvePlanner()
+{
+  
+}
+
+
+// ==========================================================================
+
+CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::create(CkppInterface *kpp)
+{
+  CkppCommandSolvePlanner*  ptr = new CkppCommandSolvePlanner(kpp);
+  CkppCommandSolvePlannerShPtr shPtr(ptr);
+  
+  if(KD_OK != ptr->init(shPtr))
+    {
+      shPtr.reset();
+    }
+
+  return shPtr;
+}
+
+// ==========================================================================
+
+CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::createCopy(const CkppCommandSolvePlannerConstShPtr& i_command)
+{
+  CkppCommandSolvePlanner*  ptr = new CkppCommandSolvePlanner(*i_command);
+  CkppCommandSolvePlannerShPtr shPtr(ptr);
+  
+  if(KD_OK != ptr->init(shPtr))
+    {
+      shPtr.reset();
+    }
+  
+  return shPtr;
+}
+
+
+// ==========================================================================
+
+ktStatus CkppCommandSolvePlanner::init(const CkppCommandSolvePlannerWkPtr& i_weakPtr)
+{
+  ktStatus success = CkppCommand::init(i_weakPtr);
+  
+  if(KD_OK == success)
+	{
+	  m_weakPtr = i_weakPtr;
+	}
+
+  return success;
+}
+
+
+// ==========================================================================
+
+
+CkppCommandShPtr CkppCommandSolvePlanner::clone() const
+{
+  return CkppCommandSolvePlanner::createCopy(m_weakPtr.lock());
+}
+
+
+// ==========================================================================
+
+bool CkppCommandSolvePlanner::isUndoable() const
+{
+  return true;
+}
+
+
+// ==========================================================================
+
+unsigned int CkppCommandSolvePlanner::countParameters() const
+{
+  return PARAMETER_COUNT;
+}
+
+
+// ==========================================================================
+
+CkppParameterConstShPtr CkppCommandSolvePlanner::parameter(unsigned int i_rank) const
+{
+ 
+  CkppParameterShPtr result;
+  CkppComponentShPtr nullComponent;
+
+  switch(i_rank)
+    {   
+    default:
+      KPP_ASSERT( false );
+    }
+  
+  return result;
+}
+
+
+// ==========================================================================
+
+
+ktStatus CkppCommandSolvePlanner::doExecute()
+{
+  if (attKpp->hppPlanner() == NULL) {
+    cerr << "You need to create a Planner object first." << endl;
+    return KD_ERROR;
+  }
+
+   // set config  x y theta
+  //attKpp->hppPlanner()->initConfig(1.54724, -0.915675, 2.0899) ;
+  //attKpp->hppPlanner()->goalConfig( -1.0892,  1.46143, -2.92461);
+
+  attKpp->hppPlanner()->solve() ;
+
+  return KD_OK ;
+ 
+}
+
+
+// ==========================================================================
