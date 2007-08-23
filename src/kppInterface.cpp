@@ -9,7 +9,6 @@
 *******************************************/
 
 #include "hppPolyhedron.h"
-#include "hppciOpenHrp.h"
 #include "hppProblem.h"
 
 #include "KineoGUI/kppMainWindowUICommandFactory.h"
@@ -112,7 +111,7 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification
 {
   // retrieve the object with key
   ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
-  ChppDeviceShPtr  device(i_notification->shPtrValue<ChppDevice>(ChppPlanner::ROBOT_KEY));
+  CkppDeviceComponentShPtr  device(i_notification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
   
   //debug
   //cout<<"hppAddRobot called."<<endl;
@@ -167,7 +166,7 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& i_notification)
   // retrieve the object with key
   ChppProblem *problem = (ChppProblem*)(i_notification->objectPtr< ChppProblem >());
   CkwsPathShPtr  path(i_notification->shPtrValue<CkwsPath>(ChppProblem::PATH_KEY));
-  ChppDeviceShPtr hppDevice(i_notification->shPtrValue<ChppDevice>(ChppProblem::DEVICE_KEY));
+  CkppDeviceComponentShPtr hppDevice(i_notification->shPtrValue<CkppDeviceComponent>(ChppProblem::DEVICE_KEY));
   unsigned int path_id = i_notification->unsignedIntValue(ChppProblem::PATH_ID_KEY);
 
   //debug

@@ -1,3 +1,8 @@
+2007/08/23
+	Replaced ChppDevice by CkppDeviceComponent since 
+	  1. ChppDevice derives from CkppDeviceComponent and
+	  2. the operations performed on objects of this type only concern CkppDeviceComponent part.
+	
 2007/06/23
 	1. Notification deactivated before inserting each robot body in geometry node.
 	
