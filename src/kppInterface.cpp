@@ -8,7 +8,6 @@
  INCLUDES
 *******************************************/
 
-#include "hppPolyhedron.h"
 #include "hppProblem.h"
 
 #include "KineoGUI/kppMainWindowUICommandFactory.h"
@@ -216,12 +215,12 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
   unsigned int iObstacle = nbObstacles-1;
 
   CkcdObjectShPtr obstacle = (*obstacleList)[iObstacle];
-  ChppPolyhedronShPtr hppPolyhedron;
+  CkppKCDPolyhedronShPtr hppPolyhedron;
 
   // cout<<"nbObstacles "<<nbObstacles<<endl;
 
   // Test if obstacle is a polyhedron
-  if (hppPolyhedron = boost::dynamic_pointer_cast<ChppPolyhedron>(obstacle)) {
+  if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
     CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(hppPolyhedron);
     // modelTree->geometryNode()->addChildComponent(poly);
     // cerr<<" adding hppPolyhedron."<<endl;
