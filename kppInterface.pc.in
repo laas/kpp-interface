@@ -7,5 +7,5 @@ Name: @PACKAGE@
 Description: 
 Version: @VERSION@
 Requires: hppCore >= 1.0, hppCorbaServer >= 1.0
-Libs: -L${libdir} -lkppInterface @HPPCORBASERVER_LIBS@ 
-Cflags: -I${includedir} @HPPCORBASERVER_CFLAGS@ 
+Libs: -L${libdir} -lkppInterface @HPPCORBASERVER_LIBS@ @KINEOPATHPLANNER_LIBS@
+Cflags: -I${includedir} @HPPCORBASERVER_CFLAGS@ @KINEOPATHPLANNER_CFLAGS@
