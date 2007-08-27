@@ -8,8 +8,9 @@ libkppInterface_la_SOURCES = \
 	kppCommandSolvePlanner.cpp \
 	kwsGraphicRoadmap.cpp
 
-libkppInterface_la_LDFLAGS = \
-	@HPPCORBASERVER_LIBS@ 
+libkppInterface_la_LDFLAGS= \
+	@HPPCORBASERVER_LIBS@		\
+	-release $(PACKAGE_VERSION)
 
 libkppInterface_la_CPPFLAGS = \
 	-I$(top_srcdir)/include\
