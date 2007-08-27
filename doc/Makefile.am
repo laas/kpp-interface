@@ -9,7 +9,7 @@ EXTRA_DIST = \
 	header.html \
 	footer.html \
 	package.css \
-	pictures/footer.jpg \
+	pictures/HRP2.jpg \
 	additionalDoc/package.h 
 
 
