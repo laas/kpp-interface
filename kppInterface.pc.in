@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: @PACKAGE@
 Description: 
 Version: @VERSION@
-Requires: hppCore >= 1.0, hppCorbaServer >= 1.0
-Libs: -L${libdir} -lkppInterface @HPPCORBASERVER_LIBS@ @KINEOPATHPLANNER_LIBS@
-Cflags: -I${includedir} @HPPCORBASERVER_CFLAGS@ @KINEOPATHPLANNER_CFLAGS@
+Requires: @HPPCOBASERVER_REQD@, KineoPathPlanner
+Libs: -L${libdir} -lkppInterface
+Cflags: -I${includedir}
