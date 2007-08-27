@@ -1,34 +1,24 @@
-2007/08/23
-	Replaced ChppDevice by CkppDeviceComponent since 
-	  1. ChppDevice derives from CkppDeviceComponent and
-	  2. the operations performed on objects of this type only concern CkppDeviceComponent part.
-	
-2007/06/23
-	1. Notification deactivated before inserting each robot body in geometry node.
-	
-2007/06/05
-	1. Minor changes in documentation
-	
-2007/05/30
-	1. Correct the segfault at deletion of a hidden roadmap.
-	
-2007/05/29
-	1. Resolving problems with notifications.
-	
-2007/05/25
-	1. Adding Class CkwsGraphicRoadmap to replace CkwsPlusRoadmap. To
-	use it, just create an instance giving your CkwsRoadmap.
+$Id: ChangeLog 2007/08/27 19:13:36 mallet $
 
-2007/04/23
-	1. Correct a bug when adding Device in Model tree
+kppInterface 1.0 released August 27th, 2007
 
-
-2007/04/22
-	1. Generate doxytag file in order to make documentation of this package available to depending packages.
-	2. Documentation is now generated at installation.
-	3. Remove reference to hppCore contained in hppCorbaServer.
-	
-2007/04/19
-	New general KineoPathPlanner interface that deals with common functionalities like notification management.
-	It is now recommended to make other KineoPathPlanner interfaces derive from this one.
+	11. Replaced ChppDevice by CkppDeviceComponent since 
+	  a. ChppDevice derives from CkppDeviceComponent and
+	  b. the operations performed on objects of this type only concern
+	     CkppDeviceComponent part.
+	10. Notification deactivated before inserting each robot body in geometry node.
+	9. Minor changes in documentation
+	8. Correct the segfault at deletion of a hidden roadmap.
+	7. Resolving problems with notifications.
+	6. Adding Class CkwsGraphicRoadmap to replace CkwsPlusRoadmap. To
+	   use it, just create an instance giving your CkwsRoadmap.
+	5. Correct a bug when adding Device in Model tree
+	4. Generate doxytag file in order to make documentation of this
+	   package available to depending packages.
+	3. Documentation is now generated at installation.
+	2. Remove reference to hppCore contained in hppCorbaServer.
+	1. New general KineoPathPlanner interface that deals with common
+	  functionalities like notification management. It is now
+	  recommended to make other KineoPathPlanner interfaces derive from
+	  this one.
 	
