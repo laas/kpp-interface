@@ -129,6 +129,12 @@ public:
   virtual void hppAddObstacle(const CkitNotificationConstShPtr& i_notification);
  
  /**
+     \brief Insert a list of obstacle to the interface
+     \param i_notification :
+  */	
+  void hppSetObstacleList(const CkitNotificationConstShPtr& i_notification);
+
+ /**
      @}
   */
 

@@ -95,8 +95,8 @@ ktStatus CkppInterface::activate()
   // Subscribe to HPP event ID_HPP_SET_OBSTACLE_LIST triggered when a list of obstacles is attached
   // to hppPlanner object.
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_SET_OBSTACLE_LIST,
-									this,
-									&CkppInterface::hppAddObstacle);
+								    this,
+								    &CkppInterface::hppSetObstacleList);
 
   // debug
   // cerr<<"kppInterface activated."<<endl;
@@ -210,7 +210,13 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
   CkppInsertComponentCommandShPtr insertCommand;
 
   unsigned int nbObstacles = obstacleList->size();
-  CkcdAssemblyShPtr kcdAssembly;
+
+  if (nbObstacles == 0) {
+    std::cerr << "CkppInterface::hppAddObstacle: obstacle list is empty." << std::endl;
+    return;
+  }
+
+  CkppKCDAssemblyShPtr kcdAssembly;
 
   unsigned int iObstacle = nbObstacles-1;
 
@@ -232,15 +238,83 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
 			      CkppComponentShPtr(poly->referencedSolidComponent()) );
     insertCommand->doExecute();
 
-  } else if (kcdAssembly = boost::dynamic_pointer_cast<CkcdAssembly>(obstacle)) {
-    cerr << "CkppInterface::setObstacleList: obstacle "
-	 << iObstacle << "is an assembly. Assembly is not supported yet." << endl;
+  } else if (kcdAssembly = boost::dynamic_pointer_cast<CkppKCDAssembly>(obstacle)) {
+      CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
+      insertCommand = CkppInsertSolidComponentCommand::create();
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+				CkppComponentShPtr(modelTree->geometryNode()) );
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+				CkppComponentShPtr(assembly->referencedSolidComponent()) );
+      insertCommand->doExecute();
+      
   } else {
     cerr << "CkppInterface::setObstacleList: obstacle "
 	 << iObstacle << "is of undefined type." << endl;
   }
 
   cout<<"obstacle added."<<endl;
+
+}
+
+
+// ==========================================================================
+
+void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notification)
+{
+  cout<<" adding obstacles ... "<<endl;
+
+  ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
+  std::vector<CkcdObjectShPtr>*  obstacleList(i_notification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
+  
+  CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
+  CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
+
+  CkppInsertComponentCommandShPtr insertCommand;
+
+  unsigned int nbObstacles = obstacleList->size();
+
+  if (nbObstacles == 0) {
+    std::cerr << "CkppInterface::hppSetObstacleList: obstacle list is empty." << std::endl;
+    return;
+  }
+
+  CkppKCDAssemblyShPtr kcdAssembly;
+
+  for (unsigned int iObstacle = 0; iObstacle < nbObstacles; iObstacle++) {
+
+    CkcdObjectShPtr obstacle = (*obstacleList)[iObstacle];
+    CkppKCDPolyhedronShPtr hppPolyhedron;
+
+    // cout<<"nbObstacles "<<nbObstacles<<endl;
+
+    // Test if obstacle is a polyhedron
+    if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
+      CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(hppPolyhedron);
+      // modelTree->geometryNode()->addChildComponent(poly);
+      // cerr<<" adding hppPolyhedron."<<endl;
+      
+      insertCommand = CkppInsertSolidComponentCommand::create();
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+				CkppComponentShPtr(modelTree->geometryNode()) );
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+				CkppComponentShPtr(poly->referencedSolidComponent()) );
+      insertCommand->doExecute();
+      
+    } else if (kcdAssembly = boost::dynamic_pointer_cast<CkppKCDAssembly>(obstacle)) {
+      CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
+      insertCommand = CkppInsertSolidComponentCommand::create();
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+				CkppComponentShPtr(modelTree->geometryNode()) );
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+				CkppComponentShPtr(assembly->referencedSolidComponent()) );
+      insertCommand->doExecute();
+      
+    } else {
+      cerr << "CkppInterface::setObstacleList: obstacle "
+	   << iObstacle << "is of undefined type." << endl;
+    }
+  }
+  cout<<"Obstacle list added."<<endl;
 
 }
 
