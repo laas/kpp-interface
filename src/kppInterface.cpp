@@ -34,9 +34,13 @@
 #include "KineoUtility/kitNotification.h"
 #include "KineoUtility/kitNotificator.h"
 
+#include "KineoWX/kwxIdleNotification.h"
+
 #include "kppInterface/kppInterface.h"
 
 #include <iostream>
+
+#include "KineoKCDModel/kppKCDBox.h"
 
 using namespace std;
 
@@ -98,8 +102,43 @@ ktStatus CkppInterface::activate()
 								    this,
 								    &CkppInterface::hppSetObstacleList);
 
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkwxIdleNotification::TYPE,
+								    this,
+								    &CkppInterface::onIdle);  
   // debug
   // cerr<<"kppInterface activated."<<endl;
+  return KD_OK;
+}
+
+// ==========================================================================
+
+ktStatus CkppInterface::startCorbaServer()
+{
+  int argc=1;
+  char *argv[1] = {"KineoPathPlanner"};
+
+  if (corbaServerRunning != 0) {
+    cerr << "CkppInterface: Corba Server already started" << endl;
+    return KD_ERROR;
+  }
+  if (!attHppPlanner) {
+    cerr << "You need to create a Planner object first." << endl;
+    return KD_ERROR;
+  }
+  attHppCorbaServer = new ChppciServer(attHppPlanner);
+  if (!attHppCorbaServer) {
+    cerr << "CkppInterface::startCorbaServer: allocation of ChppciServer object failed." << endl;
+    return KD_ERROR;
+  }
+
+  if (attHppCorbaServer->startCorbaServer(argc, argv) == KD_OK) {
+    corbaServerRunning = 1;
+    cout << "Corba server is now running." << endl;
+  } else {
+    corbaServerRunning = 0;
+    cerr << "CkppInterface: failed to start Corba server" << endl;
+    return KD_ERROR;
+  }
   return KD_OK;
 }
 
@@ -231,6 +270,11 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
     // modelTree->geometryNode()->addChildComponent(poly);
     // cerr<<" adding hppPolyhedron."<<endl;
 
+    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_INSERT_CHILD,
+						       hppPolyhedron.get());
+    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
+						       hppPolyhedron.get());
+
     insertCommand = CkppInsertSolidComponentCommand::create();
     insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
 			      CkppComponentShPtr(modelTree->geometryNode()) );
@@ -239,14 +283,20 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
     insertCommand->doExecute();
 
   } else if (kcdAssembly = boost::dynamic_pointer_cast<CkppKCDAssembly>(obstacle)) {
-      CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
-      insertCommand = CkppInsertSolidComponentCommand::create();
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
-				CkppComponentShPtr(modelTree->geometryNode()) );
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
-				CkppComponentShPtr(assembly->referencedSolidComponent()) );
-      insertCommand->doExecute();
-      
+    CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
+    
+    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_INSERT_CHILD,
+						       kcdAssembly.get());
+    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
+						       kcdAssembly.get());
+    
+    insertCommand = CkppInsertSolidComponentCommand::create();
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+			      CkppComponentShPtr(modelTree->geometryNode()) );
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+			      CkppComponentShPtr(assembly->referencedSolidComponent()) );
+    insertCommand->doExecute();
+    
   } else {
     cerr << "CkppInterface::setObstacleList: obstacle "
 	 << iObstacle << "is of undefined type." << endl;
@@ -316,6 +366,13 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notif
   }
   cout<<"Obstacle list added."<<endl;
 
+}
+
+void CkppInterface::onIdle(const CkitNotificationConstShPtr& i_notification)
+{
+  if (corbaServerRunning) {
+    attHppCorbaServer->processRequest(false);
+  }
 }
 
 

@@ -6,6 +6,7 @@ lib_LTLIBRARIES = libkppInterface.la
 libkppInterface_la_SOURCES = \
 	kppInterface.cpp \
 	kppCommandSolvePlanner.cpp \
+	kppCommandStartCorbaServer.cpp \
 	kwsGraphicRoadmap.cpp
 
 libkppInterface_la_LDFLAGS= \

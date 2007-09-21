@@ -53,6 +53,11 @@ public:
   ChppPlanner* hppPlanner() { return attHppPlanner;};
 
   /**
+     \brief Command to start corba server()
+  */
+  ktStatus startCorbaServer();
+
+  /**
      \brief Adds a graphical representation of a roadmap in the interface
      \param i_graphic_roadmap Graphic roadmap that should be displayed.
      \param i_isRealTimeUpdated Says if the graphic roadmap will be built at run time or not
@@ -133,6 +138,11 @@ public:
      \param i_notification :
   */	
   void hppSetObstacleList(const CkitNotificationConstShPtr& i_notification);
+
+  /**
+     \brief Called when the interface has nothing to do.
+  */
+  void onIdle(const CkitNotificationConstShPtr& i_notification);
 
  /**
      @}
