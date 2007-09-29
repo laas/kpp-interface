@@ -1,11 +1,13 @@
-$Id: ChangeLog 2007/08/27 19:13:36 mallet $
+2007/09/29
+	16. CkppInterface is not abstract anymore. As a consequence, this packages implements a minimal KPP module.
+	
 2007/09/21
-	1. Migrate "start corba server" command from kppInterfaceWalk to kppInterface
-	2. Added ON_IDLE notification to handle CORBA requests according to new hppCorbaServer thread policy.
+	15. Migrate "start corba server" command from kppInterfaceWalk to kppInterface
+	14. Added ON_IDLE notification to handle CORBA requests according to new hppCorbaServer thread policy.
 	
 2007/09/07
-	1. Correction in notification treatment: adding an obstacle is now different from inserting a new list of obstacles.
-	2. Assemblies are now supported.
+	13. Correction in notification treatment: adding an obstacle is now different from inserting a new list of obstacles.
+	12. Assemblies are now supported.
 	
 kppInterface 1.0 released August 27th, 2007
 

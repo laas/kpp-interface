@@ -36,16 +36,18 @@ class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface
   
 public:
   
+  static CkppInterfaceShPtr create();
+
   virtual ~CkppInterface();
   
   // methods inherited from CkppModuleInterface
   
   virtual ktStatus activate();
   
-  virtual std::string name() const = 0;
+  virtual std::string name() const {return std::string("kppInterface");};
   
   virtual void getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& i_commandFactory,
-				     std::vector<CkppUICommandListShPtr> & o_menuCommandListVector) = 0;
+				     std::vector<CkppUICommandListShPtr> & o_menuCommandListVector);
   
   /**
      \brief Get pointer to ChppPlanner object.
@@ -95,8 +97,8 @@ protected:
   
   CkppInterface();
 
-  /// command to Load HRP2
-  CkppUICommandShPtr attCommandLoadHRP2;
+  /// command to start corba server
+  CkppUICommandShPtr attStartCorbaServerCommand;
 
   ChppPlanner *attHppPlanner;
 
@@ -177,5 +179,8 @@ public:
   void removeAllRoadmaps(const CkitNotificationConstShPtr& i_notification);
 
 };
+
+// function use to compile the KPP license
+extern "C" KPP_ADDON_API int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface);
 
 #endif

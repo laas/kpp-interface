@@ -8,6 +8,8 @@
  INCLUDES
 *******************************************/
 
+#include <iostream>
+
 #include "hppProblem.h"
 
 #include "KineoGUI/kppMainWindowUICommandFactory.h"
@@ -37,8 +39,7 @@
 #include "KineoWX/kwxIdleNotification.h"
 
 #include "kppInterface/kppInterface.h"
-
-#include <iostream>
+#include "kppInterface/kppCommandStartCorbaServer.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
 
@@ -51,6 +52,18 @@ using namespace std;
 /*****************************************
  METHODS
 *******************************************/
+
+// ==========================================================================
+
+CkppInterfaceShPtr CkppInterface::create()
+{
+  CkppInterface* ptr = new CkppInterface();
+  ptr->attHppPlanner = new ChppPlanner();
+
+  CkppInterfaceShPtr shPtr(ptr);
+  return shPtr;
+}
+
 // ==========================================================================
 
 CkppInterface::CkppInterface()
@@ -71,6 +84,24 @@ CkppInterface::~CkppInterface()
   corbaServerRunning = 0;
   removeGraphicRoadmap();
   CkitNotificator::defaultNotificator()->unsubscribe(this);
+}
+
+// ==========================================================================
+
+void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& i_commandFactory,
+					  std::vector<CkppUICommandListShPtr> & o_menuCommandListVector)
+{
+  // ---  LIST --- //
+  CkppUICommandListShPtr hppUICommandList = CkppUICommandList::create("HPP");
+
+  attStartCorbaServerCommand = CkppUICommand::create(CkppCommandStartCorbaServer::create(this),
+						     i_commandFactory->environment(),
+						     "Start CORBA Server",
+						     "start corba server");
+
+  hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+  o_menuCommandListVector.push_back(hppUICommandList);
+
 }
 
 // ==========================================================================
@@ -502,6 +533,16 @@ void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& i_notifi
 
   removeGraphicRoadmap();
 
+}
+
+// ------------- initializing module ------------------
+// extern Function : First called by KineoWorks to Load the Module
+
+int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface)
+{
+  cerr<<" initializing module ... "<<endl;
+  o_moduleInterface = CkppInterface::create();
+  return 0;
 }
 
 // ==========================================================================
