@@ -1,5 +1,8 @@
 kppInterface 1.1 released October 10, 2007
 	
+2007/10/09
+	17. Modify kppInterface.pc.in to take into account the fact that libkppInterface.* is now installed in $(prefix)/lib/module/$(LICENSE_HOST).
+
 2007/09/29
 	16. CkppInterface is not abstract anymore. As a consequence, this packages implements a minimal KPP module.
 	

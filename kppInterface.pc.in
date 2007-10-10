@@ -7,5 +7,5 @@ Name: @PACKAGE@
 Description: 
 Version: @VERSION@
 Requires: @HPPCOBASERVER_REQD@, KineoPathPlanner
-Libs: -L${libdir} -lkppInterface
+Libs: -L${libdir}/modules/@LICENCE_HOST@ -lkppInterface
 Cflags: -I${includedir}
