@@ -15,7 +15,7 @@
 #include "KineoModel/kppSolidComponent.h"
 #include "KineoModel/kppConfigComponent.h"
 
-#include "hppPlanner.h"
+#include "hppCore/hppPlanner.h"
 #include "flicSteeringMethod.h"
 
 /*****************************************

@@ -10,8 +10,6 @@
 
 #include <iostream>
 
-#include "hppProblem.h"
-
 #include "KineoGUI/kppMainWindowUICommandFactory.h"
 #include "KineoController/kppUICommandList.h"
 #include "KineoController/kppUICommand.h"
@@ -37,6 +35,8 @@
 #include "KineoUtility/kitNotificator.h"
 
 #include "KineoWX/kwxIdleNotification.h"
+
+#include "hppCore/hppProblem.h"
 
 #include "kppInterface/kppInterface.h"
 #include "kppInterface/kppCommandStartCorbaServer.h"

@@ -20,7 +20,7 @@
 #include "KineoModel/kppDeviceNode.h"
 #include "KineoWorks2/kwsJointDof.h"
 
-#include "hppPlanner.h"
+#include "hppCore/hppPlanner.h"
 
 #include "KineoController/kppInsertComponentCommand.h"
 

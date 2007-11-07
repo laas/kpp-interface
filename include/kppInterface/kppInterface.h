@@ -21,7 +21,7 @@
 #include "KineoGUI/kppGUIModuleInterface.h"
 #include "KineoController/kppUICommand.h"
 
-#include "hppciServer.h"
+#include "hppCorbaServer/hppciServer.h"
 #include "kppInterface/kwsGraphicRoadmap.h"
 
 KIT_PREDEF_CLASS(CkppInterface);
