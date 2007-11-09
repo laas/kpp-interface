@@ -80,7 +80,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
  public:
 
   /**
-     \brief Rendering method for the roadmap
+     \brief Rendering method for the roadmap : this function draws segments from the roadmap vertices. It is automatically called by KPP.
    */
   virtual void 	render();
 
@@ -133,15 +133,15 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
    */
   ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapShPtr &i_roadmap);
 
-  /**
-     \brief draws an edge of the roadmap
-   */
-  void drawEdge(const CkwsEdgeShPtr& i_edge);
+//  /**
+//     \brief draws an edge of the roadmap
+//   */
+//  void drawEdge(const CkwsEdgeShPtr& i_edge);
 
-  /**
-     \brief draws the last added edge of the roadmap
-   */
-  void drawLastEdge();
+//  /**
+//     \brief draws the last added edge of the roadmap
+//   */
+//  void drawLastEdge();
 
   /**
      \brief draws the entire roadmap

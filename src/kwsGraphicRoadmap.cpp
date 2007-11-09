@@ -10,6 +10,9 @@
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsConfig.h"
 #include "KineoModel/kppColor.h"
+#include "KineoWorks2/kwsRoadmapBuilder.h"
+#include "KineoModel/kppJointComponent.h"
+#include "KineoWorks2/kwsJoint.h"
 
 /* GL includes */
 #include <GL/gl.h>
@@ -21,6 +24,9 @@ using namespace std;
 
 
 CkwsGraphicRoadmap::CkwsGraphicRoadmap(){
+
+
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -110,7 +116,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const Ckw
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-void CkwsGraphicRoadmap::drawEdge(const CkwsEdgeShPtr& i_edge){
+/*void CkwsGraphicRoadmap::drawEdge(const CkwsEdgeShPtr& i_edge){
 
   CkwsConfig Start = i_edge->startNode()->config();
   CkwsConfig End = i_edge->endNode()->config();
@@ -127,12 +133,12 @@ void CkwsGraphicRoadmap::drawEdge(const CkwsEdgeShPtr& i_edge){
   glEnd();
   
   glLineWidth(1.f);
-	
-}
+
+}*/
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-void CkwsGraphicRoadmap::drawLastEdge(){
+/*void CkwsGraphicRoadmap::drawLastEdge(){
 
   if(m_kwsRoadmap->countNodes()){
     CkwsNodeShPtr lastNode =m_kwsRoadmap->node(m_kwsRoadmap->countNodes()-2);
@@ -148,24 +154,70 @@ void CkwsGraphicRoadmap::drawLastEdge(){
   else cout<<"no nodes in the roadmap"<<endl;
 
 }
-
+*/
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 void CkwsGraphicRoadmap::drawRoadmap(){
 
-  for(int i=0; i<m_kwsRoadmap->countNodes(); i++){//throught the roadmap
-
-    CkwsNodeShPtr currentNode = m_kwsRoadmap->node(i);
-    
-    for(int j=0; j<currentNode->countOutEdges(); j++){//throught each node of the roadmap
-
-      CkwsEdgeShPtr currentEdge = currentNode->outEdge(j);
-      drawEdge(currentEdge);
-	
+  // Retrieve vector of joints that should be displayed. This is done here in order to allow users to choose to display or hide each joint's roadmap even after the end of building
+  CkwsDeviceShPtr rdmDevice = kwsRoadmap()->device();
+  CkwsDevice::TJointVector jointVector;
+  rdmDevice->getJointVector(jointVector);
+  std::vector<CkwsJointShPtr> displayJointVector;
+  for (unsigned int iJoint=0; iJoint<jointVector.size(); iJoint++) {
+    CkppJointComponentShPtr kppJoint = KIT_DYNAMIC_PTR_CAST(CkppJointComponent, jointVector[iJoint]);
+    if (kppJoint) {
+      if (kppJoint->doesDisplayPath()) {
+	displayJointVector.push_back(jointVector[iJoint]);
+      }
     }
-
+  }
+  if (displayJointVector.size() == 0) {
+    std::cout << "CkwsPlusRoadmap::compute: no joint to display." << std::endl;
+    return;
   }
 
+  //Drawing edges
+  for (unsigned int iJoint=0; iJoint < displayJointVector.size(); iJoint++) {
+    for(int i=0; i<kwsRoadmap()->countNodes(); i++){//throught the roadmap
+      
+      CkwsNodeShPtr currentNode = kwsRoadmap()->node(i);
+      
+      for(int j=0; j<currentNode->countOutEdges(); j++){//throught each node of the roadmap
+	
+	CkwsJointShPtr kwsJoint = displayJointVector[iJoint];
+	CkwsConfig current(kwsRoadmap()->node(i)->config());//current configuration : edge start
+	CkwsConfig next(kwsRoadmap()->node(i)->outEdge(j)->endNode()->config());//next configuration : edge end
+	
+	rdmDevice->setCurrentConfig(current);
+	CkitMat4 jointPosition = kwsJoint->currentPosition();
+	double x1 = jointPosition(0,3);
+	double y1 = jointPosition(1,3);
+	double z1 = jointPosition(2,3);
+	
+	rdmDevice->setCurrentConfig(next);
+	jointPosition = kwsJoint->currentPosition();
+	double x2 = jointPosition(0,3);
+	double y2 = jointPosition(1,3);
+	double z2 = jointPosition(2,3);
+	
+	glPushAttrib(GL_ENABLE_BIT);
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_BLEND);
+	
+	glColor4fv(&(CkppColor::DARK_RED)[0]);
+	
+	glBegin(GL_LINES);
+	glVertex3f(x1,y1,z1);
+	glVertex3f(x2,y2,z2);
+	glEnd();
+	
+	glLineWidth(1.f);
+		
+      }
+      
+    }
+  }
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -188,20 +240,17 @@ bool CkwsGraphicRoadmap::GetRealTimeUpdate(){
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 void CkwsGraphicRoadmap::drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification){
-
+    
   m_isDisplayed = true;
   CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
-
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& i_notification){
-    
   m_isDisplayed = true;
-  finished = true;
+  if(i_notification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) finished = true;
   CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
-
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------

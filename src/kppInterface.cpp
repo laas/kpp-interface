@@ -293,7 +293,7 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
   CkcdObjectShPtr obstacle = (*obstacleList)[iObstacle];
   CkppKCDPolyhedronShPtr hppPolyhedron;
 
-  // cout<<"nbObstacles "<<nbObstacles<<endl;
+//   cout<<"nbObstacles "<<nbObstacles<<endl;
 
   // Test if obstacle is a polyhedron
   if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
@@ -419,7 +419,7 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr i_graphic_
 
     cout<<"The Roadmap will be updated at run time"<<endl; 
     CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps.back() );   
-    CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, this , &CkppInterface::addEdge);
+    CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, this , &CkppInterface::addRoadmap);
 
   }
   else{
@@ -509,7 +509,7 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
 }
 
 // ==========================================================================
-void CkppInterface::addEdge(const CkitNotificationConstShPtr& i_notification){
+/*void CkppInterface::addEdge(const CkitNotificationConstShPtr& i_notification){
   
   bool found = false;
 
@@ -525,7 +525,7 @@ void CkppInterface::addEdge(const CkitNotificationConstShPtr& i_notification){
     if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap"<<endl;
   }
 
-}
+}*/
 
 // ==========================================================================
 
