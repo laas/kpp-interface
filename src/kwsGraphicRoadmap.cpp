@@ -105,6 +105,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const Ckw
   isRealTimeUpdated=false;
   finished = false;
   m_isDisplayed = false;
+  m_isJointDisplayed = false;
   success = CkppViewGraphic::init( i_ptr );
 
   m_kwsRoadmap = i_roadmap;
@@ -114,47 +115,6 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const Ckw
 }
 
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
-/*void CkwsGraphicRoadmap::drawEdge(const CkwsEdgeShPtr& i_edge){
-
-  CkwsConfig Start = i_edge->startNode()->config();
-  CkwsConfig End = i_edge->endNode()->config();
-	
-  glPushAttrib(GL_ENABLE_BIT);
-  glEnable(GL_LINE_SMOOTH);
-  glEnable(GL_BLEND);
-
-  glColor4fv(&(CkppColor::DARK_RED)[0]);
-
-  glBegin(GL_LINES);
-  glVertex3f(Start.dofValue(0),Start.dofValue(1),Start.dofValue(2));
-  glVertex3f(End.dofValue(0),End.dofValue(1),End.dofValue(2));
-  glEnd();
-  
-  glLineWidth(1.f);
-
-}*/
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
-/*void CkwsGraphicRoadmap::drawLastEdge(){
-
-  if(m_kwsRoadmap->countNodes()){
-    CkwsNodeShPtr lastNode =m_kwsRoadmap->node(m_kwsRoadmap->countNodes()-2);
-
-      if(lastNode->countOutEdges()){
-	CkwsEdgeShPtr lastEdge = lastNode->outEdge(lastNode->countOutEdges()-1);
-	drawEdge(lastEdge);	
-      }else if(lastNode->countInEdges()){
-	CkwsEdgeShPtr lastEdge = lastNode->inEdge(lastNode->countInEdges()-1);
-	drawEdge(lastEdge);
-      }
-  }
-  else cout<<"no nodes in the roadmap"<<endl;
-
-}
-*/
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 void CkwsGraphicRoadmap::drawRoadmap(){
@@ -207,13 +167,40 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 	
 	glColor4fv(&(CkppColor::DARK_RED)[0]);
 	
+	//drawing an edge 
 	glBegin(GL_LINES);
 	glVertex3f(x1,y1,z1);
 	glVertex3f(x2,y2,z2);
 	glEnd();
 	
+
+	//drawing a point for the current node
+	glBegin(GL_POINTS);
+	glVertex3f(x1,y1,z1);
+	glEnd();
+	glPointSize(4.f);
+
+/*	glBegin(GL_QUAD_STRIP);
+	glVertex3f(x1-1.,y1-1.,z1-1.);
+	glVertex3f(x1-1.,y1-1.,z1+1.);
+	glVertex3f(x1-1.,y1+1.,z1-1.);
+	glVertex3f(x1-1.,y1+1.,z1+1.);
+	glVertex3f(x1+1.,y1+1.,z1-1.);
+	glVertex3f(x1+1.,y1+1.,z1+1.);
+	glVertex3f(x1+1.,y1-1.,z1-1.);
+	glVertex3f(x1+1.,y1-1.,z1+1.);
+	glEnd();
+	glBegin(GL_QUAD_STRIP);
+	glVertex3f(x1-1.,y1+1.,z1+1.);
+	glVertex3f(x1+1.,y1+1.,z1+1.);
+	glVertex3f(x1-1.,y1-1.,z1+1.);
+	glVertex3f(x1+1.,y1-1.,z1+1.);
+	glVertex3f(x1-1.,y1-1.,z1-1.);
+	glVertex3f(x1+1.,y1-1.,z1-1.);
+	glVertex3f(x1-1.,y1+1.,z1-1.);
+	glVertex3f(x1+1.,y1+1.,z1-1.);
+	glEnd();*/
 	glLineWidth(1.f);
-		
       }
       
     }
@@ -235,14 +222,6 @@ bool CkwsGraphicRoadmap::GetRealTimeUpdate(){
 
   return isRealTimeUpdated;
 
-}
-
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-
-void CkwsGraphicRoadmap::drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification){
-    
-  m_isDisplayed = true;
-  CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------

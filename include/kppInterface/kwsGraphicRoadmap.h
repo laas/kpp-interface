@@ -112,11 +112,16 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   void isDisplayed(bool disp){m_isDisplayed = disp;}
   bool isDisplayed(){return m_isDisplayed;}
-  /**
-     \brief draws the last notified edge of the roadmap
-   */
-  void drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification);
 
+  void isJointDisplayed(bool disp){m_isJointDisplayed = disp;}
+  bool isJointDisplayed(){return m_isJointDisplayed;}
+
+
+  /*
+     \brief draws the last notified edge of the roadmap
+   /
+  void drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification);
+*/
   /**
      \brief draws the entire roadmap when the end of building is notified
    */
@@ -133,16 +138,6 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
    */
   ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapShPtr &i_roadmap);
 
-//  /**
-//     \brief draws an edge of the roadmap
-//   */
-//  void drawEdge(const CkwsEdgeShPtr& i_edge);
-
-//  /**
-//     \brief draws the last added edge of the roadmap
-//   */
-//  void drawLastEdge();
-
   /**
      \brief draws the entire roadmap
    */
@@ -152,6 +147,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   CkwsGraphicRoadmapWkPtr m_weakPtr;
   bool isRealTimeUpdated;
+  bool m_isJointDisplayed;
   bool finished;
   bool m_isDisplayed;
   CkwsRoadmapShPtr m_kwsRoadmap;
