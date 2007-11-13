@@ -1,7 +1,7 @@
 /*
   Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
 
-  Developed by David Flavigne
+  Developed by David Flavign\'e
 
 */
 
@@ -34,7 +34,7 @@
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
-/** This class allows users to display their roadmaps \c CkwsRoadmap. 
+/** This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
     giving a \c CkwsRoadmap, then add it to your kppInterface-derived class :
 
@@ -116,12 +116,6 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   void isJointDisplayed(bool disp){m_isJointDisplayed = disp;}
   bool isJointDisplayed(){return m_isJointDisplayed;}
 
-
-  /*
-     \brief draws the last notified edge of the roadmap
-   /
-  void drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification);
-*/
   /**
      \brief draws the entire roadmap when the end of building is notified
    */

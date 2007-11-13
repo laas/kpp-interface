@@ -180,26 +180,7 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 	glEnd();
 	glPointSize(4.f);
 
-/*	glBegin(GL_QUAD_STRIP);
-	glVertex3f(x1-1.,y1-1.,z1-1.);
-	glVertex3f(x1-1.,y1-1.,z1+1.);
-	glVertex3f(x1-1.,y1+1.,z1-1.);
-	glVertex3f(x1-1.,y1+1.,z1+1.);
-	glVertex3f(x1+1.,y1+1.,z1-1.);
-	glVertex3f(x1+1.,y1+1.,z1+1.);
-	glVertex3f(x1+1.,y1-1.,z1-1.);
-	glVertex3f(x1+1.,y1-1.,z1+1.);
-	glEnd();
-	glBegin(GL_QUAD_STRIP);
-	glVertex3f(x1-1.,y1+1.,z1+1.);
-	glVertex3f(x1+1.,y1+1.,z1+1.);
-	glVertex3f(x1-1.,y1-1.,z1+1.);
-	glVertex3f(x1+1.,y1-1.,z1+1.);
-	glVertex3f(x1-1.,y1-1.,z1-1.);
-	glVertex3f(x1+1.,y1-1.,z1-1.);
-	glVertex3f(x1-1.,y1+1.,z1-1.);
-	glVertex3f(x1+1.,y1+1.,z1-1.);
-	glEnd();*/
+
 	glLineWidth(1.f);
       }
       
