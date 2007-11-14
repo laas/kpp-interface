@@ -95,7 +95,7 @@ public:
 
 protected:
   
-  CkppInterface();
+  CkppInterface(ChppPlanner *inHppPlanner);
 
   /// command to start corba server
   CkppUICommandShPtr attStartCorbaServerCommand;

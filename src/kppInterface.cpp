@@ -57,8 +57,8 @@ using namespace std;
 
 CkppInterfaceShPtr CkppInterface::create()
 {
-  CkppInterface* ptr = new CkppInterface();
-  ptr->attHppPlanner = new ChppPlanner();
+  ChppPlanner *hppPlanner = new ChppPlanner();
+  CkppInterface* ptr = new CkppInterface(hppPlanner);
 
   CkppInterfaceShPtr shPtr(ptr);
   return shPtr;
@@ -66,7 +66,7 @@ CkppInterfaceShPtr CkppInterface::create()
 
 // ==========================================================================
 
-CkppInterface::CkppInterface()
+CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPlanner)
 {
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
@@ -78,6 +78,7 @@ CkppInterface::CkppInterface()
 
 CkppInterface::~CkppInterface()
 {
+  delete attHppPlanner;
   if (attHppCorbaServer != NULL) {
     delete attHppCorbaServer;
   }
