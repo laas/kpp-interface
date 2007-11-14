@@ -1,3 +1,11 @@
+2007/11/13
+	In KwsGraphicRoadmap, nodes are now displayed by a cube.
+	Minor Changes.
+2007/11/09
+	Modification of KwsGraphicRoadmap to allow drawing of each joint's
+	roadmap separately. Joints that will be drawn are selected via their
+	displayPath property
+
 2007/11/07
 	Reorganization of header files to solve some compilation problems.
 

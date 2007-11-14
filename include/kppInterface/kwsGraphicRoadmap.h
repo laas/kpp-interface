@@ -1,7 +1,7 @@
 /*
   Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
 
-  Developed by David Flavigne
+  Developed by David Flavign\'e
 
 */
 
@@ -34,7 +34,7 @@
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
-/** This class allows users to display their roadmaps \c CkwsRoadmap. 
+/** This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
     giving a \c CkwsRoadmap, then add it to your kppInterface-derived class :
 
@@ -80,7 +80,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
  public:
 
   /**
-     \brief Rendering method for the roadmap
+     \brief Rendering method for the roadmap : this function draws segments from the roadmap vertices. It is automatically called by KPP.
    */
   virtual void 	render();
 
@@ -112,10 +112,9 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   void isDisplayed(bool disp){m_isDisplayed = disp;}
   bool isDisplayed(){return m_isDisplayed;}
-  /**
-     \brief draws the last notified edge of the roadmap
-   */
-  void drawLastNotifEdge(const CkitNotificationConstShPtr& i_notification);
+
+  void isJointDisplayed(bool disp){m_isJointDisplayed = disp;}
+  bool isJointDisplayed(){return m_isJointDisplayed;}
 
   /**
      \brief draws the entire roadmap when the end of building is notified
@@ -134,16 +133,6 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapShPtr &i_roadmap);
 
   /**
-     \brief draws an edge of the roadmap
-   */
-  void drawEdge(const CkwsEdgeShPtr& i_edge);
-
-  /**
-     \brief draws the last added edge of the roadmap
-   */
-  void drawLastEdge();
-
-  /**
      \brief draws the entire roadmap
    */
   void drawRoadmap();
@@ -152,6 +141,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   CkwsGraphicRoadmapWkPtr m_weakPtr;
   bool isRealTimeUpdated;
+  bool m_isJointDisplayed;
   bool finished;
   bool m_isDisplayed;
   CkwsRoadmapShPtr m_kwsRoadmap;
