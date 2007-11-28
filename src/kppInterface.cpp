@@ -42,6 +42,8 @@
 #include "kppInterface/kppCommandStartCorbaServer.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
+#include "KineoKCDModel/kppKCDAssembly.h"
+
 
 using namespace std;
 
