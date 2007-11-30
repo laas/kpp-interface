@@ -102,7 +102,12 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 						     "Start CORBA Server",
 						     "start corba server");
 
-  hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+  if (attStartCorbaServerCommand) {
+    hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+  } else {
+    std::cerr << "CkppInterface: cannot create menu item \"Start CORBA Server\"." << std::endl;
+  }
+  std::cerr << "CkppInterface: create menu \"HPP\"." << std::endl;
   o_menuCommandListVector.push_back(hppUICommandList);
 
 }

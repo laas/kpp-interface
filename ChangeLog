@@ -1,3 +1,7 @@
+2007/11/30
+	Link with KineoPathPlanner.pc flags instead of KineoController.pc flags.
+	Added output when menu is created.
+	
 2007/11/13
 	In KwsGraphicRoadmap, nodes are now displayed by a cube.
 	Minor Changes.
