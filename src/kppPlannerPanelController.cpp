@@ -3,8 +3,6 @@
 
 #include "kppInterface/kppPlannerPanelController.h"
 #include "kppInterface/kppPlannerPanel.h"
-#include "hppRRTPlanner/hppRRTPlanner.h"
-#include "hppRRTPlanner/hppRRTShooter.h"
 
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoModel/kppConfigComponent.h"
@@ -391,7 +389,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     }
 
     if(ShowRdmCheckBox->IsChecked()){
-      CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(0),ROADMAP_NAME) ;
+      CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(0),"default graphic roadmap") ;
       panel->getInterface()->addGraphicRoadmap(kwsGraphicRoadmap,true);
       cout<<"Showing Roadmap"<<endl;
     }
