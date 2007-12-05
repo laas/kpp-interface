@@ -42,6 +42,7 @@
 #include "kppInterface/kppCommandStartCorbaServer.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
+
 #include "KineoKCDModel/kppKCDAssembly.h"
 
 using namespace std;
@@ -102,6 +103,7 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 						     "Start CORBA Server",
 						     "start corba server");
 
+<<<<<<< master
   attCommandPlannerPanel = CkppUICommand::create(CkppCommandPlannerPanel::create(this,i_commandFactory),
 					     i_commandFactory->environment(),
 					     "Planner Configuration",
@@ -109,6 +111,14 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 
   hppUICommandList->appendCommand(attStartCorbaServerCommand) ;
   hppUICommandList->appendCommand(attCommandPlannerPanel) ;
+=======
+  if (attStartCorbaServerCommand) {
+    hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+  } else {
+    std::cerr << "CkppInterface: cannot create menu item \"Start CORBA Server\"." << std::endl;
+  }
+  std::cerr << "CkppInterface: create menu \"HPP\"." << std::endl;
+>>>>>>> origin
   o_menuCommandListVector.push_back(hppUICommandList);
 
 }

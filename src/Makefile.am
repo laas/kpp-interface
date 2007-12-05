@@ -24,7 +24,8 @@ libkppInterface_la_SOURCES = \
 	kwsGraphicRoadmap.cpp
 
 libkppInterface_la_LDFLAGS= \
-	@HPPCORBASERVER_LIBS@		\
+	@HPPCORBASERVER_LIBS@ \
+	@KINEOPATHPLANNER_LIBS@
 	-release $(PACKAGE_VERSION)
 
 libkppInterface_la_CPPFLAGS = \
