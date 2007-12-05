@@ -17,6 +17,10 @@ libkppInterface_la_SOURCES = \
 	kppInterface.cpp \
 	kppCommandSolvePlanner.cpp \
 	kppCommandStartCorbaServer.cpp \
+	kppCommandPlannerPanel.cpp \
+	kppPlannerPanelController.cpp \
+	kppPlannerPanel.cpp \
+	kwsGraphicRoadmapDelegate.cpp \
 	kwsGraphicRoadmap.cpp
 
 libkppInterface_la_LDFLAGS= \

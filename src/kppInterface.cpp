@@ -42,6 +42,7 @@
 #include "kppInterface/kppCommandStartCorbaServer.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
+#include "KineoKCDModel/kppKCDAssembly.h"
 
 using namespace std;
 
@@ -93,6 +94,7 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 					  std::vector<CkppUICommandListShPtr> & o_menuCommandListVector)
 {
   // ---  LIST --- //
+
   CkppUICommandListShPtr hppUICommandList = CkppUICommandList::create("HPP");
 
   attStartCorbaServerCommand = CkppUICommand::create(CkppCommandStartCorbaServer::create(this),
@@ -100,7 +102,13 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 						     "Start CORBA Server",
 						     "start corba server");
 
-  hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+  attCommandPlannerPanel = CkppUICommand::create(CkppCommandPlannerPanel::create(this,i_commandFactory),
+					     i_commandFactory->environment(),
+					     "Planner Configuration",
+					     "Displays a configuration panel for Path Planning");
+
+  hppUICommandList->appendCommand(attStartCorbaServerCommand) ;
+  hppUICommandList->appendCommand(attCommandPlannerPanel) ;
   o_menuCommandListVector.push_back(hppUICommandList);
 
 }
@@ -508,25 +516,6 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
   }
 
 }
-
-// ==========================================================================
-/*void CkppInterface::addEdge(const CkitNotificationConstShPtr& i_notification){
-  
-  bool found = false;
-
-  if(i_notification->objectShPtr< CkwsRoadmapBuilder >()){
-    //We are searching in the vector for the graphic roadmap that has his intern kwsRoadmap shared pointer identical to the modified roadmap
-    for(std::vector<CkwsGraphicRoadmapShPtr>::iterator it = m_graphic_roadmaps.begin() ; it<m_graphic_roadmaps.end() ; it++){
-      CkwsRoadmapBuilderShPtr rdmBuilder = i_notification->objectShPtr< CkwsRoadmapBuilder >();
-      if((*it)->kwsRoadmap() == rdmBuilder->roadmap()){
-	found = true;
-	(*it)->drawLastNotifEdge(i_notification);
-      }
-    }
-    if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap"<<endl;
-  }
-
-}*/
 
 // ==========================================================================
 

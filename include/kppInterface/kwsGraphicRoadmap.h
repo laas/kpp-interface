@@ -19,6 +19,7 @@
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoGUI/kppGraphicWindowController.h"
 #include "KineoWorks2/kwsRoadmap.h"
+#include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsEdge.h"
 #include "KineoWorks2/kwsDevice.h"
 #include "KineoUtility/kitNotification.h"
@@ -31,6 +32,7 @@
 #include "KineoModel/kppPathComponent.h"
 #include "KineoModel/kppPathNode.h"
 
+#include "kppInterface/kwsGraphicRoadmapDelegate.h"
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
@@ -51,7 +53,7 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
     the roadmaps of the instance of \c CkppInterface.
 
     However, if you want your roadmap to be updated at run-time, you need to verify three things :
-    - A \c CkppProgressDelegate has been set for the used roadmap builder (see class \link #CkitProgressDelegate CkitProgressDelegate\endlink for more details).
+    - A \c CkppProgressDelegate has been set for the used roadmap builder (see class \link #CkitProgressDelegate CkitProgressDelegate\endlink for more details). This class is already provided in kppInterface.
     It allows the graphic window to be refreshed at run-time
     - The \link #CkppPlanPathCommand CkppPlanPathCommand\endlink ::DID_ADD_EDGE_TO_ROADMAP notification has been sent with a \link #CkwsRoadmapBuilder CkwsRoadmapBuilder\endlink object.
     You should send it by yourself when needed, since default behaviour is to send the notification with a CkppCommand object. See code below for an example.
@@ -87,7 +89,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief Create method.
    */
-  static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapShPtr & i_roadmap,const std::string &inName = "");
+  static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & i_roadmap,const std::string &inName = "");
 
   /**
      \brief Destructor
@@ -130,7 +132,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief initialization method
    */
-  ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapShPtr &i_roadmap);
+  ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapBuilderShPtr &i_roadmap);
 
   /**
      \brief draws the entire roadmap

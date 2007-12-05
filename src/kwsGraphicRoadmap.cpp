@@ -6,6 +6,7 @@
 */
 
 #include "kppInterface/kwsGraphicRoadmap.h"
+#include "kppInterface/kwsGraphicRoadmapDelegate.h"
 
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsConfig.h"
@@ -80,12 +81,12 @@ void CkwsGraphicRoadmap::render(){
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapShPtr & i_roadmap,const std::string &inName){
+CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & i_roadmapBuilder,const std::string &inName){
 
   CkwsGraphicRoadmap * roadmapPtr = new CkwsGraphicRoadmap();
   CkwsGraphicRoadmapShPtr inRoadmap(roadmapPtr);
 
-  if(inRoadmap ->init( inRoadmap, i_roadmap ) != KD_OK ){
+  if(inRoadmap ->init( inRoadmap, i_roadmapBuilder ) != KD_OK ){
    
     inRoadmap.reset();
     
@@ -98,7 +99,7 @@ CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapShPtr & i_ro
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapShPtr & i_roadmap){
+ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapBuilderShPtr & i_roadmapBuilder){
 
   ktStatus success = KD_ERROR;
   m_weakPtr = i_ptr;
@@ -108,8 +109,15 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const Ckw
   m_isJointDisplayed = false;
   success = CkppViewGraphic::init( i_ptr );
 
-  m_kwsRoadmap = i_roadmap;
+  //kwsGraphicRoadmapDelegate = CkwsGraphicRoadmapDelegate::create("default delegate");
+  //i_roadmapBuilder->delegate(kwsGraphicRoadmapDelegate.get());
+
+  i_roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("default delegate"));
+
+  m_kwsRoadmap = i_roadmapBuilder->roadmap();
     
+  cout<<"Initializing GraphicRoadmap - Done"<<endl;
+
   return success;
 
 }

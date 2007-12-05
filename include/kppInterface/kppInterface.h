@@ -23,6 +23,7 @@
 
 #include "hppCorbaServer/hppciServer.h"
 #include "kppInterface/kwsGraphicRoadmap.h"
+#include "kppInterface/kppCommandPlannerPanel.h"
 
 KIT_PREDEF_CLASS(CkppInterface);
 
@@ -100,17 +101,20 @@ protected:
   /// command to start corba server
   CkppUICommandShPtr attStartCorbaServerCommand;
 
+  CkppUICommandShPtr attCommandPlannerPanel;
+
   ChppPlanner *attHppPlanner;
 
   /// Object that implements Corba interface of module "Stochastic Environment Path Planning"
   ChppciServer *attHppCorbaServer;
   
   bool corbaServerRunning;
-  
-  //vector of graphic roadmaps
+
   std::vector<CkwsGraphicRoadmapShPtr> m_graphic_roadmaps;
+  
 
 public:
+
 
   /**
      \name Treat Notifications
@@ -162,15 +166,6 @@ public:
   */
   void addRoadmap(const CkitNotificationConstShPtr& i_notification);
 
-  
-  /*
-     \brief Draws the roadmap at its current state when the associated notification is received
-     \param i_notification Received notification.
-
-     \note the notification must be sent with a Shared pointer on a CkwsRoadmapBuilder object in order
-     to know which roadmap have to be updated.
-  */
-  //void addEdge(const CkitNotificationConstShPtr& i_notification);
 
   /**
      \brief Removes all graphic roadmaps from the vector of roadmaps

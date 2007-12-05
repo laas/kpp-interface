@@ -1,3 +1,6 @@
+2007/12/05	
+	Added a panel for configuring planners.
+	Added a default delegate for roadmaps graphical display.
 2007/11/13
 	In KwsGraphicRoadmap, nodes are now displayed by a cube.
 	Minor Changes.
