@@ -441,6 +441,16 @@ void CkppPlannerPanelController::OpenButtonEventHandler(wxCommandEvent& cancel){
 /*_________________________________________________________*/
 void CkppPlannerPanelController::AddPbButtonEventHandler(wxCommandEvent& cancel){//Add a problem at the end of hppProblemVector
   //TODO : add a hppproblem in the vector of problems (how to initialize this specific problem? how to choose the device parameter needed?)
+
+  if(panel->getInterface()->attCommandInitBase != NULL){
+    if(panel->getInterface()->attCommandInitBase->execute() == KD_ERROR) cout<<"can't add a problem (init exec error)"<<endl;
+  }
+  else cout<<"no init command"<<endl;
+  if(panel->getInterface()->attCommandSetConfigBase != NULL) {
+    if(panel->getInterface()->attCommandSetConfigBase->execute() == KD_ERROR) cout<<"can't add a problem (set config exec error)"<<endl;
+  }
+  else cout<<"can't add a problem (no set config command)"<<endl;
+
 }
 
 /*_________________________________________________________*/

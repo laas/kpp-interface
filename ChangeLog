@@ -1,5 +1,6 @@
 2007/12/06
 	Added selections for kwsPlus steering methods.
+	Adding problems via the configuration Panel.
 2007/12/05	
 	Added a panel for configuring planners.
 	Added a default delegate for roadmaps graphical display.

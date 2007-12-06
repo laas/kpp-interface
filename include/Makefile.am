@@ -8,6 +8,8 @@ kppInterface_HEADERS = \
 	kppInterface/kppCommandSolvePlanner.h \
 	kppInterface/kppCommandStartCorbaServer.h \
 	kppInterface/kppCommandPlannerPanel.h \
+	kppInterface/kppCommandInit.h \
+	kppInterface/kppCommandSetConfig.h \
 	kppInterface/kppPlannerPanelController.h \
 	kppInterface/kppPlannerPanel.h \
 	kppInterface/kwsGraphicRoadmapDelegate.h \

@@ -94,6 +94,10 @@ public:
   */
   void hideRoadmap(unsigned int i_rank);
 
+  CkppUICommandShPtr attCommandInitBase;
+
+  CkppUICommandShPtr attCommandSetConfigBase;
+
 protected:
   
   CkppInterface(ChppPlanner *inHppPlanner);

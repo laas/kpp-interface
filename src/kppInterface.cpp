@@ -40,6 +40,8 @@
 
 #include "kppInterface/kppInterface.h"
 #include "kppInterface/kppCommandStartCorbaServer.h"
+#include "kppInterface/kppCommandSetConfig.h"
+#include "kppInterface/kppCommandInit.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
 
@@ -107,6 +109,16 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 					     i_commandFactory->environment(),
 					     "Planner Configuration",
 					     "Displays a configuration panel for Path Planning");
+
+  attCommandSetConfigBase = CkppUICommand::create(CkppCommandSetConfig::create(this),
+						  i_commandFactory->environment(),
+						  "Set INIT/GOAL config",
+						  "");
+
+  attCommandInitBase = CkppUICommand::create(CkppCommandInit::create(this),
+						  i_commandFactory->environment(),
+						  "initialize Planner",
+						  "");
 
   hppUICommandList->appendCommand(attCommandPlannerPanel) ;
   if (attStartCorbaServerCommand) {
