@@ -35,10 +35,11 @@ CkppPlannerPanel::~CkppPlannerPanel(){
 
 void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
 
-  const wxArrayString buildersArray(3,builders);
+  //these wxArrayStrings are for the comboBoxes. If you want to add choices in one of these combo boxes, you must increment the first argument.
+  const wxArrayString buildersArray(4,builders);
   const wxArrayString shootersArray(7,shooters);
   const wxArrayString pickersArray(2,pickers);
-  const wxArrayString steeringsArray(1,steerings);
+  const wxArrayString steeringsArray(3,steerings);
   const wxArrayString delegatesArray(1,delegates);
   const wxArrayString optimizersArray(3,optimizers);
 
@@ -189,8 +190,11 @@ CkppPlannerPanel::CkppPlannerPanel(wxWindow *i_parent, const CkppPlannerPanelCon
   builders[0] = wxString("Basic Rdm Builder");
   builders[1] = wxString("Diffusing Rdm builder");
   builders[2] = wxString("IPP Rdm Builder");
+  builders[3] = wxString("Visibility Rdm Builder");
 
   steerings[0] = wxString("Linear");
+  steerings[1] = wxString("Flic");
+  steerings[2] = wxString("Reeds & Shepp");
 
   delegates[0] = wxString("Graphic Roadmap Delegate");
 

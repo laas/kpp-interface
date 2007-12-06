@@ -17,6 +17,11 @@
 #include "KineoWorks2/kwsClearOptimizer.h"
 #include "KineoWorks2/kwsAdaptiveShortcutOptimizer.h"
 #include "KineoWorks2/kwsRandomOptimizer.h"
+
+#include "kwsPlus/flicSteeringMethod.h"
+#include "kwsPlus/reedsSheppSteeringMethod.h"
+#include "kwsPlus/hppVisRdmBuilder.h"
+
 #include "kppInterface/kppInterface.h"
 
 #include "wx/sizer.h"
@@ -96,9 +101,9 @@ class CkppPlannerPanel : public CkppPanel
 
   /*for comboBoxes -> initialized in the constructor*/
   wxString pickers[2];
-  wxString builders[3];
+  wxString builders[4];
   wxString shooters[8];
-  wxString steerings[1];
+  wxString steerings[3];
   wxString delegates[1];
   wxString optimizers[3];
 

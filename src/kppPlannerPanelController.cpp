@@ -178,7 +178,24 @@ void CkppPlannerPanelController::pickerComboBoxEventHandler(wxCommandEvent& canc
 /*_________________________________________________________*/
 void CkppPlannerPanelController::steeringComboBoxEventHandler(wxCommandEvent& cancel){
 //TODO : create an instance of the chosen steering method and add it to the problem
-// specific behaviour for reed & sheep (open a new tab) -> ask mathieu + make this as an example
+// specific behaviour for reed & sheep and flic.
+
+  wxComboBox * steeringCombo = dynamic_cast<wxComboBox*>(cancel.GetEventObject());
+  switch(steeringCombo->GetSelection()){
+  case 1 : cout<<"choose flic steering method"<<endl;
+    if(!panel->FindWindowByName("IsOriented",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"Is Oriented",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IsOriented" ));
+    break;
+  case 2 : cout<<"choose Reeds & Shepp steering method"<<endl;
+    if(!panel->FindWindowByName("IsOriented",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY, "Is Oriented",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IsOriented" ));
+    if(!panel->FindWindowByName("RSRadius",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxSpinCtrl(panel->getNotebook()->GetPage(0),wxID_ANY,"R & S Radius",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"RSRadius"));
+    break;
+  default:
+    break;
+  }
+
 }
 
 /*_________________________________________________________*/
@@ -312,6 +329,8 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     wxComboBox* OptimizerComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Path Optimizer",panel.get()));
     wxCheckBox* biDiffuseCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("BiDiff Chk",panel.get()));
     wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("H/S Rdm Chk",panel.get()));
+    wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IsOriented",panel.get()));
+    wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("RSRadius",panel.get()));
     
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
     case 0 : RdmBuilder = CkwsBasicRdmBuilder::create(CkwsRoadmap::create(Device),1.0 );
@@ -326,6 +345,10 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
     panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
       break;
+    case 3 : RdmBuilder = ChppVisRdmBuilder::create(CkwsRoadmap::create(Device),1.0 );
+    panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,RdmBuilder);
+    isDiffusing = false;
+      break; 
     default : 
       break;
     }
@@ -365,6 +388,10 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 
     switch(SteeringMethodComboBox->GetCurrentSelection()){//To set the chosen steering Method
     case 0 : Device->steeringMethod(CkwsSMLinear::create());
+      break;
+    case 1 : Device->steeringMethod(CflicSteeringMethod::create(IsOrientedCheckBox->IsChecked()));
+      break;
+    case 2 : Device->steeringMethod(CreedsSheppSteeringMethod::create(RSRadiusSpinCtrl->GetValue(),IsOrientedCheckBox->IsChecked()));
       break;
     default: 
       break;
