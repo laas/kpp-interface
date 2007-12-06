@@ -19,7 +19,7 @@
 #include "kppInterface/kppCommandInit.h"
 #include "kppInterface/kwsGraphicRoadmap.h"
 #include "kppInterface/kwsGraphicRoadmapDelegate.h"
-#include "hppRRTPlanner/hppRRTPlanner.h"
+
 
 #include "KineoController/kppSetPropertyCommand.h"
 #include "KineoModel/kppComponentParameter.h"
