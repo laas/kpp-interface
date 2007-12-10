@@ -116,8 +116,24 @@ void CkppPlannerPanelController::loadWindow(){
 /*_________________________________________________________*/
 
 void CkppPlannerPanelController::builderComboBoxEventHandler(wxCommandEvent& cancel){
-//TODO : create an instance of the chosen builder (using the vector defined in kppPlannerPanel.h?)
+//TODO : create an instance of the chosen builder
 //  Add this builder to the selected problem
+
+  
+  wxComboBox* builderCombo = dynamic_cast<wxComboBox*>(cancel.GetEventObject());
+  
+  switch(builderCombo->GetSelection()){
+  case 4 : cout<<"choose PCA builder : you must choose one of the builders that appears in the bottom tab"<<endl;
+    
+    if(!panel->FindWindowByName("DiffusingBuilder",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"Dif. Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"DiffusingBuilder" ));
+    if(!panel->FindWindowByName("IPPBuilder",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"IPP Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IPPBuilder" ));
+   
+    break;
+  default:
+    break;
+  }
 
 }
 
@@ -190,7 +206,7 @@ void CkppPlannerPanelController::steeringComboBoxEventHandler(wxCommandEvent& ca
     if(!panel->FindWindowByName("IsOriented",panel.get()))
       panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY, "Is Oriented",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IsOriented" ));
     if(!panel->FindWindowByName("RSRadius",panel.get()))
-      panel->addControl(panel->getNotebook()->GetPage(0),new wxSpinCtrl(panel->getNotebook()->GetPage(0),wxID_ANY,"R & S Radius",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"RSRadius"));
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxSpinCtrl(panel->getNotebook()->GetPage(0),wxID_ANY,"R & S Radius",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,200,0,"RSRadius"));
     break;
   default:
     break;
@@ -330,6 +346,8 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     wxCheckBox* biDiffuseCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("BiDiff Chk",panel.get()));
     wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("H/S Rdm Chk",panel.get()));
     wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IsOriented",panel.get()));
+    wxCheckBox* DiffusingBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("DiffusingBuilder",panel.get()));
+    wxCheckBox* IPPBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IPPBuilder",panel.get()));
     wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("RSRadius",panel.get()));
     
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
@@ -349,10 +367,14 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,RdmBuilder);
     isDiffusing = false;
       break; 
+    case 4 : if(DiffusingBuilderCheckBox->IsChecked()) DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+      else DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+      DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
+      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
     default : 
       break;
     }
-
+    cout<<"Builder - DONE"<<endl;
     if(isDiffusing){
       CkwsShooterConfigListShPtr configList = CkwsShooterConfigList::create();
       switch(ShooterComboBox->GetCurrentSelection()){//To set the chosen shooter
@@ -375,6 +397,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	break;
       }
 
+    cout<<"Shooter - DONE"<<endl;
 
       switch(PickerComboBox->GetCurrentSelection()){//To set the chosen picker
       case 0 : DiffusingRdmBuilder->diffusionNodePicker(CkwsPickerBasic::create());
@@ -385,6 +408,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	break;
       }
     }
+    cout<<"Picker - DONE"<<endl;
 
     switch(SteeringMethodComboBox->GetCurrentSelection()){//To set the chosen steering Method
     case 0 : Device->steeringMethod(CkwsSMLinear::create());
@@ -397,6 +421,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
+    cout<<"Steering Method - DONE"<<endl;
     switch(DelegateComboBox->GetCurrentSelection()){//To set the chosen delegate
     case 0 : if(isDiffusing) DiffusingRdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("Default Delegate")) ; else RdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("Default Delegate"));
       break;
@@ -404,6 +429,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
+    cout<<"Delegate - DONE"<<endl;
     switch(OptimizerComboBox->GetCurrentSelection()){//To set the chosen optimizer
     case 0 : panel->getInterface()->hppPlanner()->pathOptimizerIthProblem(i,CkwsClearOptimizer::create());
       break;
@@ -415,12 +441,14 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
+    cout<<"Optimizer - DONE"<<endl;
     if(ShowRdmCheckBox->IsChecked()){
       CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(0),"default graphic roadmap") ;
       panel->getInterface()->addGraphicRoadmap(kwsGraphicRoadmap,true);
       cout<<"Showing Roadmap"<<endl;
     }
 
+    cout<<"Roadmap Display - DONE"<<endl;
   }
   cout<<"RRT Configuration - Done"<<endl;
   panel->Hide();

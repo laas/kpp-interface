@@ -21,6 +21,7 @@
 #include "kwsPlus/flicSteeringMethod.h"
 #include "kwsPlus/reedsSheppSteeringMethod.h"
 #include "kwsPlus/hppVisRdmBuilder.h"
+#include "kwsPlus/kwsPlusPCARdmBuilder.h"
 
 #include "kppInterface/kppInterface.h"
 
@@ -101,7 +102,7 @@ class CkppPlannerPanel : public CkppPanel
 
   /*for comboBoxes -> initialized in the constructor*/
   wxString pickers[2];
-  wxString builders[4];
+  wxString builders[5];
   wxString shooters[8];
   wxString steerings[3];
   wxString delegates[1];
