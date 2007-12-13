@@ -618,6 +618,11 @@ void CkppInterface::insertChild(const CkitNotificationConstShPtr& i_notification
 		    }
 		}
 	    }
+	    const std::vector<CkcdObjectShPtr> obstacles
+		= planner->obstacleList();
+	    for (unsigned int i=0; i<obstacles.size(); i++){
+		if (obstacles[i] == obj) return;
+	    }
 	    planner->addObstacle(obj);
 	}
     }
