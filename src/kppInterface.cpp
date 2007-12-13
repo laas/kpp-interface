@@ -75,7 +75,7 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
 
-
+  CkitNotificator::defaultNotificator()->subscribe<CkppInterface>(CkppComponent::DID_INSERT_CHILD, this , &CkppInterface::insertChild);
 }
 
 // ==========================================================================
@@ -318,6 +318,21 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
   unsigned int iObstacle = nbObstacles-1;
 
   CkcdObjectShPtr obstacle = (*obstacleList)[iObstacle];
+
+  CkppGeometryNodeShPtr geomNode = modelTree->geometryNode();
+  
+  CkppGeometryComponentShPtr geomComponent;
+  for (unsigned int i=0; i<geomNode->countChildComponents(); i++){
+      geomComponent = KIT_DYNAMIC_PTR_CAST( 
+	  CkppGeometryComponent, geomNode->childComponent(i));
+      CkcdObjectShPtr obj;
+      obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
+      if (obj && (obj == obstacle)){
+	  //std::cout << "the obstacle is already registered" << std::endl; 
+	  return;
+      }
+  }
+
   CkppKCDPolyhedronShPtr hppPolyhedron;
 
 //   cout<<"nbObstacles "<<nbObstacles<<endl;
@@ -569,3 +584,41 @@ int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface)
 // 	<<outer.size()<<" exact outer objects"<<endl;
 //   }
 //-------------------------------------------------------------------
+
+void CkppInterface::insertChild(const CkitNotificationConstShPtr& i_notification)
+{
+    //std::cout << "DID_INSERT_CHILD received"  << std::endl;
+
+    CkppComponentShPtr child(i_notification->shPtrValue< CkppComponent >(CkppComponent::CHILD_KEY)); 
+
+    CkppGeometryComponentShPtr geomComponent;
+    geomComponent = KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, child);
+    
+    if (geomComponent){
+	CkcdObjectShPtr obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
+	if (obj){
+	    // check whether obj is a part of robots
+	    ChppPlanner *planner = hppPlanner();
+	    for (unsigned int i=0; i<planner->getNbHppProblems(); i++){
+		CkppDeviceComponentShPtr robot;
+		robot = planner->robotIthProblem(i);
+		if (robot){
+		    for (unsigned int j=0; j<robot->countSolidComponentRefs();
+			 j++){
+			CkppSolidComponentRefShPtr scref;
+			scref = robot->solidComponentRef(j);
+			CkppSolidComponentShPtr solid;
+			solid = scref->referencedSolidComponent();
+			CkcdObjectShPtr obj2;
+			obj2 = KIT_DYNAMIC_PTR_CAST(CkcdObject, solid);
+			if (obj == obj2){
+			    //std::cout << "obj was a part of robot" << std::endl;
+			    return;
+			}
+		    }
+		}
+	    }
+	    planner->addObstacle(obj);
+	}
+    }
+}

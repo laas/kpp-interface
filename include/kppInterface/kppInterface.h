@@ -126,6 +126,12 @@ public:
   */
 
   /**
+     \brief call ChppPlanner::addObstacle() if a new geometry is added 
+     \param i_notification notification from the interface
+   */
+
+  virtual void insertChild(const CkitNotificationConstShPtr& i_notification);
+  /**
      \brief Add a Robot (device) to the interface
      \param i_notification :
      
