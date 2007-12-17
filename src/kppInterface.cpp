@@ -296,13 +296,15 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& i_notification)
 
 void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notification)
 {
-  cout<<" adding obstacles ... "<<endl;
+  cout<<" adding an obstacle ... "<<endl;
 
   ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
   std::vector<CkcdObjectShPtr>*  obstacleList(i_notification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
   CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
-  CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
+  CkppDocumentShPtr document = wincontroller->document();
+  if (!document) return;
+  CkppModelTreeShPtr modelTree = document->modelTree();
 
   CkppInsertComponentCommandShPtr insertCommand;
 
@@ -320,7 +322,10 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
   CkcdObjectShPtr obstacle = (*obstacleList)[iObstacle];
 
   CkppGeometryNodeShPtr geomNode = modelTree->geometryNode();
-  
+#if 0
+  std::cout << "the number of child = " << geomNode->countChildComponents()
+					<< std::endl;
+#endif  
   CkppGeometryComponentShPtr geomComponent;
   for (unsigned int i=0; i<geomNode->countChildComponents(); i++){
       geomComponent = KIT_DYNAMIC_PTR_CAST( 
@@ -595,6 +600,7 @@ void CkppInterface::insertChild(const CkitNotificationConstShPtr& i_notification
     geomComponent = KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, child);
     
     if (geomComponent){
+	//std::cout << geomComponent->name() << " is inserted" << std::endl;
 	CkcdObjectShPtr obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
 	if (obj){
 	    // check whether obj is a part of robots
@@ -621,7 +627,10 @@ void CkppInterface::insertChild(const CkitNotificationConstShPtr& i_notification
 	    const std::vector<CkcdObjectShPtr> obstacles
 		= planner->obstacleList();
 	    for (unsigned int i=0; i<obstacles.size(); i++){
-		if (obstacles[i] == obj) return;
+		if (obstacles[i] == obj) {
+		    //std::cout << "obj was one of obstacles" << std::endl;
+		    return;
+		}
 	    }
 	    planner->addObstacle(obj);
 	}
