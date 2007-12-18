@@ -22,6 +22,7 @@
 #include "kwsPlus/reedsSheppSteeringMethod.h"
 #include "kwsPlus/hppVisRdmBuilder.h"
 #include "kwsPlus/kwsPlusPCARdmBuilder.h"
+#include "kwsPlus/kwsPlusLTRdmBuilder.h"
 
 #include "kppInterface/kppInterface.h"
 
@@ -71,20 +72,25 @@ KIT_PREDEF_CLASS( CkppPlannerPanelController );
 
 /*****************************CLASS*************************/
 
-/** This class is aimed to create graphical elements in the kpp interface, for displaying a Panel at the right of the window.
-    If you want to add elements, first get a look to the wxWidgets homepage at http://wiki.wxwidgets.org/docbrowse.html. 
+/** 
+   \addtogroup Panel
+   @{
+   \Section Panel_P Planner Configuration Panel
+   This class is aimed to create graphical elements in the kpp interface, for displaying a Panel at the right of the window.
+   If you want to add elements, first get a look to the wxWidgets homepage at http://wiki.wxwidgets.org/docbrowse.html 
     
 
     To define behavior of your elements, please refer to the \link #CkppPlannerPanelController CkppPlannerPanelController\endlink class. If you only want
     to add choices in the combo boxes there are lot of things to do : 
     - For each combo box, there is a String Array and a "StringArray" to modify:
-    - - Increment size of the String Array in the header file.
-    - - Same for the StringArray in the "build()" function in the source file.
-    - - Add Corresponding Lines in the constructor function (see source file).
+    - Increment size of the String Array in the header file.
+    - Same for the StringArray in the "build()" function in the source file.
+    - Add Corresponding Lines in the constructor function (see source file).
 
     - In the CkppPlannerPanelController class :
-    - - you must create the corresponding class in the "StartButtonEventHandler", in the appropriate case in the desired "switch" structure (There is one "switch" for each combo box).
-    - - if needed, you can define action to perform when your choice is selected in the corresponding function (The ones that are suffixed "ComboBoxEventHandler")
+    - you must create the corresponding class in the "StartButtonEventHandler", in the appropriate case in the desired "switch" structure (There is one "switch" for each combo box).
+    - if needed, you can define action to perform when your choice is selected in the corresponding function (The ones that are suffixed "ComboBoxEventHandler")
+    @}
 */
 
 class CkppPlannerPanel : public CkppPanel
@@ -92,7 +98,9 @@ class CkppPlannerPanel : public CkppPanel
 
  private:
   
-  CkwsRoadmapBuilderShPtr rdm;//associated rdmBuilder
+  //associated rdmBuilder
+  CkwsRoadmapBuilderShPtr rdm;
+  ///Interface associated with the panel
   CkppInterface * attKpp;
   bool isRdmSet;
   bool isInterfaceSet;
@@ -102,9 +110,9 @@ class CkppPlannerPanel : public CkppPanel
 
   /*for comboBoxes -> initialized in the constructor*/
   wxString pickers[2];
-  wxString builders[5];
+  wxString builders[6];
   wxString shooters[8];
-  wxString steerings[3];
+  wxString steerings[4];
   wxString delegates[1];
   wxString optimizers[3];
 

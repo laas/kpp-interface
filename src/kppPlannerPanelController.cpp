@@ -8,6 +8,7 @@
 #include "KineoModel/kppConfigComponent.h"
 #include "KineoController/kppDocument.h"
 #include "KineoModel/kppModelTree.h"
+#include "KineoWorks2/kwsSMSlerp.h"
 
 #include "wx/sizer.h"
 #include "wx/bmpcbox.h"
@@ -52,6 +53,10 @@ using namespace std;
 /*************************METHODS***************************/
 /*_________________________________________________________*/
 CkppPlannerPanelController::~CkppPlannerPanelController(){
+
+  panel.reset();
+  m_weakPtr.reset();
+  problemId = 0;
 
 }
 
@@ -129,8 +134,20 @@ void CkppPlannerPanelController::builderComboBoxEventHandler(wxCommandEvent& can
       panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"Dif. Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"DiffusingBuilder" ));
     if(!panel->FindWindowByName("IPPBuilder",panel.get()))
       panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"IPP Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IPPBuilder" ));
+    if(!panel->FindWindowByName("LTBuilder",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"LT Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"LTBuilder" ));
    
     break;
+
+  case 5 :cout<<"choose Local Trees builder : you must choose one of the builders that appears in the bottom tab"<<endl;
+    
+    if(!panel->FindWindowByName("DiffusingBuilder",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"Dif. Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"DiffusingBuilder" ));
+    if(!panel->FindWindowByName("IPPBuilder",panel.get()))
+      panel->addControl(panel->getNotebook()->GetPage(0),new wxCheckBox(panel->getNotebook()->GetPage(0), wxID_ANY,"IPP Builder",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"IPPBuilder" ));
+ 
+    break;
+
   default:
     break;
   }
@@ -228,14 +245,6 @@ void CkppPlannerPanelController::optimizerComboBoxEventHandler(wxCommandEvent& c
 /*_________________________________________________________*/
 void CkppPlannerPanelController::RoadmapCheckBoxEventHandler(wxCommandEvent& cancel){
 //TODO : enable roadmap display.
- /*  if(panel->interfaceIsSet() && panel->getInterface()){
-
-      if(cancel.IsChecked()){
-	panel->getInterface()->showRoadmap(problemId);
-	cout<<"Showing Roadmap"<<endl;
-      }
-      else panel->getInterface()->hideRoadmap(problemId);
-    }*/
 }
 
 /*_________________________________________________________*/
@@ -319,22 +328,23 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 
   wxCheckBox * SolveAllCheckBox = dynamic_cast<wxCheckBox*>(panel->FindWindowByName("SolveAll Chk",panel.get()));
   int FirstProblem, LastProblem;
+  bool isDiffusing = true;
+  CkwsRoadmapBuilderShPtr RdmBuilder;
+  CkwsDiffusingRdmBuilderShPtr DiffusingRdmBuilder;
   if(SolveAllCheckBox->IsChecked()){
-  cout<<"Solve All"<<problemId<<endl;
+  cout<<"Solve All"<<endl;
     FirstProblem = 0;
     LastProblem = panel->getInterface()->hppPlanner()->getNbHppProblems();
   }else{
-  cout<<"Solve Only Problem "<<problemId<<endl;
+    problemId = 0;
     FirstProblem = problemId;
     LastProblem = problemId+1;
+    cout<<"Solve Only Problem "<<problemId <<endl;
   }
 
   for(int i=FirstProblem; i<LastProblem; i++){
 
-    cout<<"Configuring Problem "<<problemId<<endl;
-    CkwsRoadmapBuilderShPtr RdmBuilder;
-    CkwsDiffusingRdmBuilderShPtr DiffusingRdmBuilder;
-    bool isDiffusing = true;
+    cout<<"Configuring Problem "<<i<<endl;
     CkwsDeviceShPtr Device = panel->getInterface()->hppPlanner()->robotIthProblem(i);
     
     wxComboBox* RoadmapBuilderComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Roadmap Builder",panel.get()));
@@ -348,6 +358,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IsOriented",panel.get()));
     wxCheckBox* DiffusingBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("DiffusingBuilder",panel.get()));
     wxCheckBox* IPPBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IPPBuilder",panel.get()));
+    wxCheckBox* LTBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("LTBuilder",panel.get()));
     wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("RSRadius",panel.get()));
     
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
@@ -367,14 +378,26 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,RdmBuilder);
     isDiffusing = false;
       break; 
-    case 4 : if(DiffusingBuilderCheckBox->IsChecked()) DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
-      else DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+    case 4 : 
+      if(LTBuilderCheckBox->IsChecked()){
+	if(DiffusingBuilderCheckBox->IsChecked()) DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder> >::create(CkwsRoadmap::create(Device),1.0);
+	else DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> >::create(CkwsRoadmap::create(Device),1.0);
+      }else{ 
+	if(DiffusingBuilderCheckBox->IsChecked()) DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+	else DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+      }
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
       panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
+      break;
+    case 5 : if(DiffusingBuilderCheckBox->IsChecked()) DiffusingRdmBuilder = CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+      else DiffusingRdmBuilder = CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device),1.0);
+      DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
+      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
+      break;
     default : 
       break;
     }
-    cout<<"Builder - DONE"<<endl;
+
     if(isDiffusing){
       CkwsShooterConfigListShPtr configList = CkwsShooterConfigList::create();
       switch(ShooterComboBox->GetCurrentSelection()){//To set the chosen shooter
@@ -397,8 +420,6 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	break;
       }
 
-    cout<<"Shooter - DONE"<<endl;
-
       switch(PickerComboBox->GetCurrentSelection()){//To set the chosen picker
       case 0 : DiffusingRdmBuilder->diffusionNodePicker(CkwsPickerBasic::create());
 	break;
@@ -408,7 +429,6 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	break;
       }
     }
-    cout<<"Picker - DONE"<<endl;
 
     switch(SteeringMethodComboBox->GetCurrentSelection()){//To set the chosen steering Method
     case 0 : Device->steeringMethod(CkwsSMLinear::create());
@@ -417,19 +437,18 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     case 2 : Device->steeringMethod(CreedsSheppSteeringMethod::create(RSRadiusSpinCtrl->GetValue(),IsOrientedCheckBox->IsChecked()));
       break;
+    case 3 : Device->steeringMethod(CkwsSMSlerp::create());
     default: 
       break;
     }
 
-    cout<<"Steering Method - DONE"<<endl;
     switch(DelegateComboBox->GetCurrentSelection()){//To set the chosen delegate
-    case 0 : if(isDiffusing) DiffusingRdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("Default Delegate")) ; else RdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("Default Delegate"));
+    case 0 : if(isDiffusing) DiffusingRdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate()) ; else RdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
       break;
     default: 
       break;
     }
 
-    cout<<"Delegate - DONE"<<endl;
     switch(OptimizerComboBox->GetCurrentSelection()){//To set the chosen optimizer
     case 0 : panel->getInterface()->hppPlanner()->pathOptimizerIthProblem(i,CkwsClearOptimizer::create());
       break;
@@ -441,18 +460,30 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
-    cout<<"Optimizer - DONE"<<endl;
     if(ShowRdmCheckBox->IsChecked()){
-      CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(0),"default graphic roadmap") ;
+      CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i),"default graphic roadmap") ;
       panel->getInterface()->addGraphicRoadmap(kwsGraphicRoadmap,true);
-      cout<<"Showing Roadmap"<<endl;
+      cout<<"Showing Roadmap for problem "<<i<<endl;
     }
 
-    cout<<"Roadmap Display - DONE"<<endl;
   }
   cout<<"RRT Configuration - Done"<<endl;
   panel->Hide();
+  CkwsRdmBuilderDelegate * delegateToErase;
   panel->getInterface()->hppPlanner()->solve() ;
+  if(isDiffusing){
+    delegateToErase = DiffusingRdmBuilder->delegate();
+    while(DiffusingRdmBuilder->delegate()) DiffusingRdmBuilder->removeDelegate(DiffusingRdmBuilder->delegate()) ; 
+    DiffusingRdmBuilder.reset();
+  }
+  else{
+    delegateToErase = RdmBuilder->delegate();
+    while(RdmBuilder->delegate()) RdmBuilder->removeDelegate(RdmBuilder->delegate());
+    RdmBuilder.reset();
+  }
+  
+  delete delegateToErase;
+  
 
 }
 
@@ -472,6 +503,13 @@ void CkppPlannerPanelController::AddPbButtonEventHandler(wxCommandEvent& cancel)
 
   if(panel->getInterface()->attCommandInitBase != NULL){
     if(panel->getInterface()->attCommandInitBase->execute() == KD_ERROR) cout<<"can't add a problem (init exec error)"<<endl;
+    else{
+      
+      wxSpinCtrl* PbNumberSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("Problem number",panel.get()));
+      PbNumberSpinCtrl->SetRange(0,panel->getInterface()->hppPlanner()->getNbHppProblems()-1); 
+      PbNumberSpinCtrl->Refresh();
+      problemId = panel->getInterface()->hppPlanner()->getNbHppProblems()-1;
+    }
   }
   else cout<<"no init command"<<endl;
   if(panel->getInterface()->attCommandSetConfigBase != NULL) {
@@ -486,8 +524,6 @@ void CkppPlannerPanelController::ProblemSpinCtrlEventHandler(wxSpinEvent& cancel
 //TODO : read each parameter of the problem in order to fill controls with their value
 
   wxSpinCtrl * ProblemSpinCtrl = dynamic_cast<wxSpinCtrl*>(cancel.GetEventObject());
-
-  ProblemSpinCtrl->SetRange(0,panel->getInterface()->hppPlanner()->getNbHppProblems());
 
   problemId = ProblemSpinCtrl->GetValue();
 

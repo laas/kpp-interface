@@ -74,6 +74,7 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
 {
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
+  m_graphic_roadmaps.clear();
 
   CkitNotificator::defaultNotificator()->subscribe<CkppInterface>(CkppComponent::DID_INSERT_CHILD, this , &CkppInterface::insertChild);
 }
@@ -86,8 +87,13 @@ CkppInterface::~CkppInterface()
   if (attHppCorbaServer != NULL) {
     delete attHppCorbaServer;
   }
+  attCommandInitBase.reset();
+  attCommandSetConfigBase.reset();
+  attStartCorbaServerCommand.reset();
+  attCommandPlannerPanel.reset();
   corbaServerRunning = 0;
   removeGraphicRoadmap();
+  m_graphic_roadmaps.clear();
   CkitNotificator::defaultNotificator()->unsubscribe(this);
 }
 
@@ -126,7 +132,6 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
   } else {
     std::cerr << "CkppInterface: cannot create menu item \"Start CORBA Server\"." << std::endl;
   }
-  std::cerr << "CkppInterface: create menu \"HPP\"." << std::endl;
   o_menuCommandListVector.push_back(hppUICommandList);
 
 }
@@ -550,7 +555,7 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
       }
     }
     
-    if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap"<<endl;
+    if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap ("<< m_graphic_roadmaps.size() <<" roadmaps in the vector)"<<endl;
   }
 
 }
@@ -560,6 +565,7 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
 void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& i_notification){
 
   removeGraphicRoadmap();
+  m_graphic_roadmaps.clear();
 
 }
 

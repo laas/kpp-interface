@@ -21,7 +21,13 @@ KIT_PREDEF_CLASS( CkppCommandSetConfig );
 /*****************************************
  CLASS
 *******************************************/
-
+/**
+   \addtogroup Panel
+   @{
+   \section Command_Set Set Configurations
+   This class is a default implementation for initializing a path for a given problem. It takes start and goal configurations from a selected path, and give them to the planner.
+   @}
+*/
 class CkppCommandSetConfig : public CkppCommand
 {
 

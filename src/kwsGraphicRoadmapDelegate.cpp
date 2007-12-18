@@ -9,6 +9,7 @@
 *******************************************/
 
 #include "kppInterface/kwsGraphicRoadmapDelegate.h"
+#include "KineoGUI/kppController.h"
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoGUI/kppMainFrame.h"
 #include <iostream>
@@ -21,21 +22,15 @@ using namespace std;
 KIT_PREDEF_CLASS( CkppComponent );
 
 //constructor
-CkwsGraphicRoadmapDelegate::CkwsGraphicRoadmapDelegate(const std::string& i_title, const StringArray& i_stepNames):CkppProgressDelegate(i_title,i_stepNames){
-
-  cout<<"Create Delegate ..."<<endl;
+CkwsGraphicRoadmapDelegate::CkwsGraphicRoadmapDelegate(){
   
 }
 
-//create method
-CkwsGraphicRoadmapDelegateShPtr CkwsGraphicRoadmapDelegate::create(const std::string& i_title, const StringArray& i_stepNames){
+//Destructor
+CkwsGraphicRoadmapDelegate::~CkwsGraphicRoadmapDelegate(){
 
-  CkwsGraphicRoadmapDelegate*  ptr = new CkwsGraphicRoadmapDelegate(i_title,i_stepNames);
-  CkwsGraphicRoadmapDelegateShPtr shPtr(ptr);
-  
-  cout<<"Creating Delegate - Done"<<endl;
-
-  return shPtr;
+  cout<<"reseting m_builder"<<endl;
+  m_builder.reset();
 
 }
 
@@ -45,9 +40,7 @@ void CkwsGraphicRoadmapDelegate::willStartBuilding (const CkwsRoadmapBuilderShPt
   nbSuccessfulShoots=0;
 
   m_builder = i_builder;
-  cancellable(true);
-  
-  start();
+  CkppController::yield();
 
   CkwsRdmBuilderDelegate::willStartBuilding (i_builder,io_path);
 }
@@ -57,17 +50,18 @@ void CkwsGraphicRoadmapDelegate::didFinishBuilding (const CkwsRoadmapBuilderShPt
     
   CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_FINISH_BUILDING, m_builder);
   CkitNotificator::defaultNotificator()->notify(notification);
+  CkppController::yield();
 
   CkwsRdmBuilderDelegate::didFinishBuilding (i_builder,io_path,i_success);
 
-  finish();
 
 }
 
 //allows user to stop the builder (called repeatedly during the process).
 bool CkwsGraphicRoadmapDelegate::shouldStopBuilding (const CkwsRoadmapBuilderConstShPtr &i_builder){
 
-  if(cancellable()){return cancelled();}
+
+  CkppController::yield();
   return CkwsRdmBuilderDelegate::shouldStopBuilding (i_builder);
 
 }
@@ -75,6 +69,7 @@ bool CkwsGraphicRoadmapDelegate::shouldStopBuilding (const CkwsRoadmapBuilderCon
 //allows user to prevent builder from expanding a node/configuration
 bool CkwsGraphicRoadmapDelegate::shouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsConfig &i_cfg){
 
+  CkppController::yield();
   return CkwsRdmBuilderDelegate::shouldExploreTowards (i_builder, i_cfg);
 
 }
@@ -82,18 +77,20 @@ bool CkwsGraphicRoadmapDelegate::shouldExploreTowards (const CkwsRoadmapBuilderC
 //what the delegate must do after the builder adds a node.
 void CkwsGraphicRoadmapDelegate::didAddNode (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsNodeConstShPtr &i_node){
 
-  nbSuccessfulShoots++;
-  std::stringstream display;
-  display << "Building Roadmap - ";
-  display << nbSuccessfulShoots;
-  display << " nodes added\n";
-  refresh();
-  report(nbSuccessfulShoots,display.str());
-
-  CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_NODE_TO_ROADMAP, m_builder);
-  CkitNotificator::defaultNotificator()->notify(notification);
-
-  CkwsRdmBuilderDelegate::didAddNode (i_builder,i_node);
+  if(i_builder && i_node){
+    nbSuccessfulShoots++;
+    std::stringstream display;
+    display << "Building Roadmap - ";
+    display << nbSuccessfulShoots;
+    display << " nodes added\n";
+    //if(!display.str().empty()) report(nbSuccessfulShoots,display.str());
+    
+    CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_NODE_TO_ROADMAP, m_builder);
+    CkitNotificator::defaultNotificator()->notify(notification);
+    CkppController::yield();
+    
+    CkwsRdmBuilderDelegate::didAddNode (i_builder,i_node);
+  }
 
 }
 
@@ -103,6 +100,7 @@ void CkwsGraphicRoadmapDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr 
   CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, m_builder);
   CkitNotificator::defaultNotificator()->notify(notification);
 
+  CkppController::yield();
   CkwsRdmBuilderDelegate::didAddEdge (i_builder,i_edge);
 
 }
@@ -110,6 +108,7 @@ void CkwsGraphicRoadmapDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr 
 //what the delegate must do after the builder modifies the path.
 void CkwsGraphicRoadmapDelegate::didModifyPath (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsPathConstShPtr &i_path){
 
+  CkppController::yield();
   CkwsRdmBuilderDelegate::didModifyPath (i_builder,i_path);
 
 }

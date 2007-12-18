@@ -38,10 +38,15 @@ KIT_PREDEF_CLASS( CkppPlannerPanel );
 /*****************************CLASS*************************/
 
 /**
-   This class is where the behaviour of a PlannerPanel is implemented. It implements particularly the
-   behaviour of the 2 buttons (OK & CANCEL/RESET), in the functions okClickHappens & cancelClickHappens.
-   Derived from /see CkppWindowController.
-   See also /see CkppPlannerPanel.
+   \addtogroup Panel
+   @{
+   \section Panel_C Planner Panel Controller
+   This class is where the behaviour of a PlannerPanel is implemented. It implements the behaviour of each control that you can interact with. For each control you have an event handler.
+   The start button behaviour is to create each object that you have chosen in the combo boxes with related options and launch the planner. Save and Open button are not implemented yet.
+   For this button to work you must have created a hpp Problem via your own function in your planner or via the button "add hpp Problem". If there is options needed for a particular object, related controls will appear in the tabs (only for default choices of combo boxes).
+   \see CkppWindowController.
+   \see CkppPlannerPanel.
+   @}
 */
 
 class CkppPlannerPanelController : public CkppWindowController

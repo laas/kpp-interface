@@ -36,7 +36,10 @@
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
-/** This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
+/** 
+    \addtogroup Graphic_Roadmap
+
+This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
     giving a \c CkwsRoadmap, then add it to your kppInterface-derived class :
 
@@ -73,6 +76,8 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
     \endcode
 
     Here, the class \c CmyRoadmapBuilderDelegate inherits from both CkwsRoadmapBuilderDelegate and CkppProgressDelegate.
+
+    Graphical roadmaps can also be set visible or not in the \link #CkppPlannerPanel Planner Configuration Panel \endlink , and a delegate can be added as well.
     
 
 */
@@ -88,6 +93,8 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   /**
      \brief Create method.
+     \param i_roadmap The roadmap to display
+     \param inName Name of the graphic roadmap
    */
   static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & i_roadmap,const std::string &inName = "");
 
@@ -99,6 +106,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief Allows user to tell if the roadmap will be updated at run time or displayed at end of
      building.
+     \param rtu set it true if you want the roadmap to be real time updated
    */
   void SetRealTimeUpdate(bool rtu);
 
@@ -112,10 +120,25 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
    */
   CkwsRoadmapShPtr kwsRoadmap(){return m_kwsRoadmap;}
 
+  /**
+     \brief Change the graphic roadmap status (displayed or not)
+     \param disp Set this to true if you want the roadmap to be displayed
+   */
   void isDisplayed(bool disp){m_isDisplayed = disp;}
+  /**
+     \brief Returns the graphic roadmap status (displayed or not)
+   */
   bool isDisplayed(){return m_isDisplayed;}
 
+  /**
+     \brief Change the graphic roadmap status for a joint (displayed or not)
+     \param disp Set this to true if you want the roadmap to be displayed
+  */
   void isJointDisplayed(bool disp){m_isJointDisplayed = disp;}
+  
+  /**
+     \brief Returns the graphic roadmap status for a joint (displayed or not)
+   */
   bool isJointDisplayed(){return m_isJointDisplayed;}
 
   /**

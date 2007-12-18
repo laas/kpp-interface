@@ -1,3 +1,8 @@
+2007/12/18
+	Added LT roadmap builder and SLERP steering method (undocumented
+	kineoworks class) in the panel. 
+	Adding documentation for using the panel in kppInterface.
+	Minor Changes.
 2007/12/10
 	Added PCA roadmap builder in the configuration panel
 2007/12/06

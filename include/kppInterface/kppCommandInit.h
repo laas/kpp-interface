@@ -30,7 +30,13 @@ KIT_PREDEF_CLASS( CkppCommandInit );
 /*****************************************
  CLASS
 *******************************************/
-
+/**
+   \addtogroup Panel
+   @{
+   \section Command_Init Initialize Problem
+   This class is a default implementation for initializing a hpp problem. Actually, it only retrieves a device component from the model tree and give it for initialization to the planner
+   @}
+*/
 class CkppCommandInit : public CkppCommand
 {
 

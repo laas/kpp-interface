@@ -40,17 +40,20 @@ CLASS
    see class CkwsRdmBuilderDelegate in the KineoWorks Reference Guide
    
 */
-class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate, public CkppProgressDelegate {
+class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate{
 
  public : 
 
   /**
-     \brief Constructor
+     \brief Destructor
    */
-  CkwsGraphicRoadmapDelegate(const std::string& i_title, const StringArray& i_stepNames = StringArray());
+  ~CkwsGraphicRoadmapDelegate();
 
-  static CkwsGraphicRoadmapDelegateShPtr create(const std::string& i_title, 
-					  const StringArray& i_stepNames = StringArray());
+  /**
+     \brief Constructor
+   */ 
+  CkwsGraphicRoadmapDelegate();
+
   /**
      These methods are virtual methods from CkwsRdmBuilderDelegate, reimplemented.
    */

@@ -59,7 +59,7 @@ CkppCommandInit::CkppCommandInit(const CkppCommandInit& i_command) :
 
 CkppCommandInit::~CkppCommandInit()
 {
-  
+  attKpp = NULL;
 }
 
 
@@ -172,7 +172,7 @@ ktStatus CkppCommandInit::doExecute()
   deviceComponent = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent,paramValue(parameter(DEVICE)).componentValue());
     
 
-  attKpp->hppPlanner()->addHppProblem(deviceComponent);
+  attKpp->hppPlanner()->addHppProblemAtBeginning(deviceComponent);
 
   return KD_OK ;
  

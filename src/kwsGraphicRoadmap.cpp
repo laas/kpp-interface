@@ -38,6 +38,8 @@ CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
     cout<<"erasing roadmap"<<endl;
     CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_weakPtr.lock());
   }
+  m_kwsRoadmap.reset();
+  m_weakPtr.reset();
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -109,10 +111,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const Ckw
   m_isJointDisplayed = false;
   success = CkppViewGraphic::init( i_ptr );
 
-  //kwsGraphicRoadmapDelegate = CkwsGraphicRoadmapDelegate::create("default delegate");
-  //i_roadmapBuilder->delegate(kwsGraphicRoadmapDelegate.get());
-
-  i_roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate("default delegate"));
+  i_roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
 
   m_kwsRoadmap = i_roadmapBuilder->roadmap();
     

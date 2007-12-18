@@ -54,7 +54,8 @@ CkppCommandSetConfig::CkppCommandSetConfig(const CkppCommandSetConfig& i_command
 
 CkppCommandSetConfig::~CkppCommandSetConfig()
 {
-  
+  attKpp = NULL;
+  m_weakPtr.reset();
 }
 
 

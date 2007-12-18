@@ -53,7 +53,7 @@ CkppCommandPlannerPanel::CkppCommandPlannerPanel(const CkppCommandPlannerPanel& 
 
 CkppCommandPlannerPanel::~CkppCommandPlannerPanel()
 {
-  
+  attKpp = NULL;
 }
 
 

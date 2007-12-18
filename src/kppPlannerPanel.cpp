@@ -29,6 +29,12 @@ using namespace std;
 /*_________________________________________________________*/
 
 CkppPlannerPanel::~CkppPlannerPanel(){
+
+  rdm.reset();
+  attKpp = NULL;
+  delete notebook; 
+  delete pages; 
+
 }
 
 /*_________________________________________________________*/
@@ -36,10 +42,10 @@ CkppPlannerPanel::~CkppPlannerPanel(){
 void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
 
   //these wxArrayStrings are for the comboBoxes. If you want to add choices in one of these combo boxes, you must increment the first argument.
-  const wxArrayString buildersArray(5,builders);
+  const wxArrayString buildersArray(6,builders);
   const wxArrayString shootersArray(7,shooters);
   const wxArrayString pickersArray(2,pickers);
-  const wxArrayString steeringsArray(3,steerings);
+  const wxArrayString steeringsArray(4,steerings);
   const wxArrayString delegatesArray(1,delegates);
   const wxArrayString optimizersArray(3,optimizers);
 
@@ -97,7 +103,7 @@ void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
   wxSpinCtrl* weightRdmNodesBox = new wxSpinCtrl(tab2_shooters,RN_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"RdmNodes Wgt");
 
   wxSpinCtrl* ProblemSpinCtrl = new wxSpinCtrl(MainPage,PROBLEM_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"Problem number");
-  ProblemSpinCtrl->SetRange(1,1);
+  ProblemSpinCtrl->SetRange(0,0);
 
   wxButton * StartButton = new wxButton(MainPage, START_BUTTON,"Start");
   wxButton * SaveButton = new wxButton(MainPage, SAVE_BUTTON,"Save");
@@ -192,10 +198,12 @@ CkppPlannerPanel::CkppPlannerPanel(wxWindow *i_parent, const CkppPlannerPanelCon
   builders[2] = wxString("IPP Rdm Builder");
   builders[3] = wxString("Visibility Rdm Builder");
   builders[4] = wxString("PCA Rdm Builder");
+  builders[5] = wxString("LocalTrees Rdm Builder");
 
   steerings[0] = wxString("Linear");
   steerings[1] = wxString("Flic");
   steerings[2] = wxString("Reeds & Shepp");
+  steerings[3] = wxString("SLERP");
 
   delegates[0] = wxString("Graphic Roadmap Delegate");
 
