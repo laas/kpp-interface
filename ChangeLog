@@ -1,3 +1,5 @@
+2007/12/19
+	Avoid duplication of devices when adding a problem.
 2007/12/18
 	Added LT roadmap builder and SLERP steering method (undocumented
 	kineoworks class) in the panel. 

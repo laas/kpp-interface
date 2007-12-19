@@ -220,43 +220,51 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification
   CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
   CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
   
+  //before adding device, we check if it's already in the model tree
+  CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
+  bool canAddDevice = true;
+  for(int i=0; i<deviceNode->countChildComponents(); i++){
+    if(device == KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent, deviceNode->childComponent(i)))
+      canAddDevice = false;
+  }
+
   //debug
   // cout<<"adding device..."<<endl;
-  
-  CkppInsertComponentCommandShPtr insertCommand;
-
-  // Get notificator instance
-  CkitNotificatorShPtr notificator = CkitNotificator::defaultNotificator();
-  
-  //debug
-  //cout<<" device solid components: "<<device->countSolidComponentRefs()<<endl;
-  
-   for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
-     {
-       notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, 
-				device->solidComponentRef(i)->referencedSolidComponent().get());
-       notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, 
-				device->solidComponentRef(i)->referencedSolidComponent().get());
-
-       insertCommand = CkppInsertSolidComponentCommand::create();
-       insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
- 				CkppComponentShPtr(modelTree->geometryNode()) );
-       insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
-				 CkppComponentShPtr(device->solidComponentRef(i)->referencedSolidComponent()));
-       insertCommand->doExecute() ;
-     }
-
-   // temporary: deactivate updating outer list
-   notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, device.get());
-   notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, device.get());
-
-   insertCommand = CkppInsertComponentCommand::create();
-   insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
-			     CkppComponentShPtr(modelTree->deviceNode()));
-   insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
-			     CkppComponentShPtr(device) );
-   insertCommand->doExecute();
- 
+  if(canAddDevice){
+    CkppInsertComponentCommandShPtr insertCommand;
+    
+    // Get notificator instance
+    CkitNotificatorShPtr notificator = CkitNotificator::defaultNotificator();
+    
+    //debug
+    //cout<<" device solid components: "<<device->countSolidComponentRefs()<<endl;
+    
+    for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
+      {
+	notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, 
+				 device->solidComponentRef(i)->referencedSolidComponent().get());
+	notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, 
+				 device->solidComponentRef(i)->referencedSolidComponent().get());
+	
+	insertCommand = CkppInsertSolidComponentCommand::create();
+	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+				  CkppComponentShPtr(modelTree->geometryNode()) );
+	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+				  CkppComponentShPtr(device->solidComponentRef(i)->referencedSolidComponent()));
+	insertCommand->doExecute() ;
+      }
+    
+    // temporary: deactivate updating outer list
+    notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, device.get());
+    notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, device.get());
+    
+    insertCommand = CkppInsertComponentCommand::create();
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+			      CkppComponentShPtr(modelTree->deviceNode()));
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+			      CkppComponentShPtr(device) );
+    insertCommand->doExecute();
+  }
 }
 
 
