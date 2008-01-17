@@ -473,7 +473,7 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr i_graphic_
 
   i_graphic_roadmap->SetRealTimeUpdate(i_isRealTimeUpdated);
 
-  m_graphic_roadmaps.push_back ( i_graphic_roadmap );
+  m_graphic_roadmaps.push_front ( i_graphic_roadmap );
 
   if(i_isRealTimeUpdated){
 
@@ -555,7 +555,7 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
 
   if(i_notification->objectShPtr< CkwsRoadmapBuilder >()){
     //We are searching in the vector for the graphic roadmap that has his intern kwsRoadmap shared pointer identical to the modified roadmap
-    for(std::vector<CkwsGraphicRoadmapShPtr>::iterator it = m_graphic_roadmaps.begin() ; it<m_graphic_roadmaps.end() ; it++){
+    for(std::deque<CkwsGraphicRoadmapShPtr>::iterator it = m_graphic_roadmaps.begin() ; it<m_graphic_roadmaps.end() ; it++){
       CkwsRoadmapBuilderShPtr rdmBuilder = i_notification->objectShPtr< CkwsRoadmapBuilder >();
       if((*it)->kwsRoadmap() == rdmBuilder->roadmap()){
 	found = true;
@@ -572,6 +572,7 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
 
 void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& i_notification){
 
+  cout<<"removing all roadmaps"<<endl;
   removeGraphicRoadmap();
   m_graphic_roadmaps.clear();
 

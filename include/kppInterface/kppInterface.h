@@ -25,6 +25,8 @@
 #include "kppInterface/kwsGraphicRoadmap.h"
 #include "kppInterface/kppCommandPlannerPanel.h"
 
+#include <deque>
+
 KIT_PREDEF_CLASS(CkppInterface);
 
 
@@ -114,7 +116,7 @@ protected:
   
   bool corbaServerRunning;
 
-  std::vector<CkwsGraphicRoadmapShPtr> m_graphic_roadmaps;
+  std::deque<CkwsGraphicRoadmapShPtr> m_graphic_roadmaps;
   
 
 public:

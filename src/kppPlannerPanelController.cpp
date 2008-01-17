@@ -63,6 +63,11 @@ CkppPlannerPanelController::~CkppPlannerPanelController(){
 /*_________________________________________________________*/
 
 CkppPlannerPanelController::CkppPlannerPanelController(){
+
+  panel.reset();
+  m_weakPtr.reset();
+  problemId = 0;
+
 }
 /*_________________________________________________________*/
 
@@ -233,8 +238,6 @@ void CkppPlannerPanelController::steeringComboBoxEventHandler(wxCommandEvent& ca
 
 /*_________________________________________________________*/
 void CkppPlannerPanelController::delegateComboBoxEventHandler(wxCommandEvent& cancel){
-//TODO : create an instance of the chosen steering method and add it to the problem
-// specific behaviour for reed & sheep (open a new tab) -> ask mathieu + make this as an example
 }
 
 /*_________________________________________________________*/
@@ -469,21 +472,8 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
   }
   cout<<"RRT Configuration - Done"<<endl;
   panel->Hide();
-  CkwsRdmBuilderDelegate * delegateToErase;
   panel->getInterface()->hppPlanner()->solve() ;
-  if(isDiffusing){
-    delegateToErase = DiffusingRdmBuilder->delegate();
-    while(DiffusingRdmBuilder->delegate()) DiffusingRdmBuilder->removeDelegate(DiffusingRdmBuilder->delegate()) ; 
-    DiffusingRdmBuilder.reset();
-  }
-  else{
-    delegateToErase = RdmBuilder->delegate();
-    while(RdmBuilder->delegate()) RdmBuilder->removeDelegate(RdmBuilder->delegate());
-    RdmBuilder.reset();
-  }
-  
-  delete delegateToErase;
-  
+  //panel->Destroy();
 
 }
 
