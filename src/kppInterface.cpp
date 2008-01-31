@@ -72,11 +72,15 @@ CkppInterfaceShPtr CkppInterface::create()
 
 CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPlanner)
 {
+  int argc=1;
+  char *argv[1] = {"KineoPathPlanner"};
+
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
   m_graphic_roadmaps.clear();
 
   CkitNotificator::defaultNotificator()->subscribe<CkppInterface>(CkppComponent::DID_INSERT_CHILD, this , &CkppInterface::insertChild);
+  attHppCorbaServer = new ChppciServer(inHppPlanner, argc, argv);
 }
 
 // ==========================================================================
@@ -86,6 +90,7 @@ CkppInterface::~CkppInterface()
   delete attHppPlanner;
   if (attHppCorbaServer != NULL) {
     delete attHppCorbaServer;
+    attHppCorbaServer = NULL;
   }
   attCommandInitBase.reset();
   attCommandSetConfigBase.reset();
@@ -177,8 +182,6 @@ ktStatus CkppInterface::activate()
 
 ktStatus CkppInterface::startCorbaServer()
 {
-  int argc=1;
-  char *argv[1] = {"KineoPathPlanner"};
 
   if (corbaServerRunning != 0) {
     cerr << "CkppInterface: Corba Server already started" << endl;
@@ -188,13 +191,7 @@ ktStatus CkppInterface::startCorbaServer()
     cerr << "You need to create a Planner object first." << endl;
     return KD_ERROR;
   }
-  attHppCorbaServer = new ChppciServer(attHppPlanner);
-  if (!attHppCorbaServer) {
-    cerr << "CkppInterface::startCorbaServer: allocation of ChppciServer object failed." << endl;
-    return KD_ERROR;
-  }
-
-  if (attHppCorbaServer->startCorbaServer(argc, argv) == KD_OK) {
+  if (attHppCorbaServer->startCorbaServer() == KD_OK) {
     corbaServerRunning = 1;
     cout << "Corba server is now running." << endl;
   } else {
