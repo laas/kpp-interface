@@ -156,18 +156,22 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 	CkwsConfig current(kwsRoadmap()->node(i)->config());//current configuration : edge start
 	CkwsConfig next(kwsRoadmap()->node(i)->outEdge(j)->endNode()->config());//next configuration : edge end
 	
-	rdmDevice->setCurrentConfig(current);
-	CkitMat4 jointPosition = kwsJoint->currentPosition();
-	double x1 = jointPosition(0,3);
-	double y1 = jointPosition(1,3);
-	double z1 = jointPosition(2,3);
-	
-	rdmDevice->setCurrentConfig(next);
-	jointPosition = kwsJoint->currentPosition();
-	double x2 = jointPosition(0,3);
-	double y2 = jointPosition(1,3);
-	double z2 = jointPosition(2,3);
-	
+	std::vector<CkitMat4> jointPositions;
+	double x1,y1,z1,x2,y2,z2 = 0;
+	if(KD_OK == current.getJointMatVector(jointPositions)){
+	  CkitMat4 jointPosition = jointPositions.at(iJoint);
+	  x1 = jointPosition(0,3);
+	  y1 = jointPosition(1,3);
+	  z1 = jointPosition(2,3);
+	}
+
+	if(KD_OK == next.getJointMatVector(jointPositions)){
+	  CkitMat4 jointPosition = jointPositions.at(iJoint);
+	  x2 = jointPosition(0,3);
+	  y2 = jointPosition(1,3);
+	  z2 = jointPosition(2,3);
+	}
+
 	glPushAttrib(GL_ENABLE_BIT);
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);

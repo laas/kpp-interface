@@ -569,9 +569,11 @@ void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification)
 
 void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& i_notification){
 
-  cout<<"removing all roadmaps"<<endl;
+  cout<<"removing all roadmaps and all problems"<<endl;
   removeGraphicRoadmap();
   m_graphic_roadmaps.clear();
+
+  while(KD_OK==hppPlanner()->removeHppProblem()){}
 
 }
 

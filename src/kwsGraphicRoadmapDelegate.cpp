@@ -61,7 +61,7 @@ void CkwsGraphicRoadmapDelegate::didFinishBuilding (const CkwsRoadmapBuilderShPt
 bool CkwsGraphicRoadmapDelegate::shouldStopBuilding (const CkwsRoadmapBuilderConstShPtr &i_builder){
 
 
-  CkppController::yield();
+  //CkppController::yield();
   return CkwsRdmBuilderDelegate::shouldStopBuilding (i_builder);
 
 }
@@ -69,7 +69,7 @@ bool CkwsGraphicRoadmapDelegate::shouldStopBuilding (const CkwsRoadmapBuilderCon
 //allows user to prevent builder from expanding a node/configuration
 bool CkwsGraphicRoadmapDelegate::shouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsConfig &i_cfg){
 
-  CkppController::yield();
+  //CkppController::yield();
   return CkwsRdmBuilderDelegate::shouldExploreTowards (i_builder, i_cfg);
 
 }
@@ -100,7 +100,7 @@ void CkwsGraphicRoadmapDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr 
   CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, m_builder);
   CkitNotificator::defaultNotificator()->notify(notification);
 
-  CkppController::yield();
+  //CkppController::yield();
   CkwsRdmBuilderDelegate::didAddEdge (i_builder,i_edge);
 
 }
@@ -108,7 +108,7 @@ void CkwsGraphicRoadmapDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr 
 //what the delegate must do after the builder modifies the path.
 void CkwsGraphicRoadmapDelegate::didModifyPath (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsPathConstShPtr &i_path){
 
-  CkppController::yield();
+  //CkppController::yield();
   CkwsRdmBuilderDelegate::didModifyPath (i_builder,i_path);
 
 }
