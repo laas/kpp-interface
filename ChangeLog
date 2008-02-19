@@ -1,50 +1,38 @@
-2008/01/25
-	Minor Changes
-2007/12/19
-	Avoid duplication of devices when adding a problem.
-2007/12/18
-	Added LT roadmap builder and SLERP steering method (undocumented
-	kineoworks class) in the panel. 
-	Adding documentation for using the panel in kppInterface.
-	Minor Changes.
-2007/12/10
-	Added PCA roadmap builder in the configuration panel
-2007/12/06
-	Added selections for kwsPlus steering methods.
-	Adding problems via the configuration Panel.
-2007/12/05	
-	Added a panel for configuring planners.
-	Added a default delegate for roadmaps graphical display.
+$Id: ChangeLog 2008/02/19 12:18:34 mallet $
 	
-2007/11/30
-	Link with KineoPathPlanner.pc flags instead of KineoController.pc flags.
-	Added output when menu is created.
-	
-2007/11/13
-	In KwsGraphicRoadmap, nodes are now displayed by a cube.
-	Minor Changes.
-2007/11/09
-	Modification of KwsGraphicRoadmap to allow drawing of each joint's
-	roadmap separately. Joints that will be drawn are selected via their
-	displayPath property
+kppInterface 1.2 released February 19, 2008
 
-2007/11/07
-	Reorganization of header files to solve some compilation problems.
+	30. Avoid duplication of devices when adding a problem.
+	29. Added LT roadmap builder and SLERP steering method
+	    (undocumented kineoworks class) in the panel. 
+	28. Adding documentation for using the panel in kppInterface.
+	27. Added PCA roadmap builder in the configuration panel
+	26. Added selections for kwsPlus steering methods.
+	25. Adding problems via the configuration Panel.
+	24. Added a panel for configuring planners.
+	23. Added a default delegate for roadmaps graphical display.
+	22. Link with KineoPathPlanner.pc flags instead of
+	    KineoController.pc flags.
+	21. Added output when menu is created.
+	20. In KwsGraphicRoadmap, nodes are now displayed by a cube.
+	19. Modification of KwsGraphicRoadmap to allow drawing of each
+	    joint's roadmap separately. Joints that will be drawn are
+	    selected via their displayPath property
+	18. Reorganization of header files to solve some compilation problems.
 
 kppInterface 1.1 released October 10, 2007
 	
-2007/10/09
-	17. Modify kppInterface.pc.in to take into account the fact that libkppInterface.* is now installed in $(prefix)/lib/module/$(LICENSE_HOST).
-
-2007/09/29
-	16. CkppInterface is not abstract anymore. As a consequence, this packages implements a minimal KPP module.
-	
-2007/09/21
-	15. Migrate "start corba server" command from kppInterfaceWalk to kppInterface
-	14. Added ON_IDLE notification to handle CORBA requests according to new hppCorbaServer thread policy.
-	
-2007/09/07
-	13. Correction in notification treatment: adding an obstacle is now different from inserting a new list of obstacles.
+	17. Modify kppInterface.pc.in to take into account the fact that
+	    libkppInterface.* is now installed in
+	    $(prefix)/lib/module/$(LICENSE_HOST).
+	16. CkppInterface is not abstract anymore. As a consequence, this
+	    packages implements a minimal KPP module.
+	15. Migrate "start corba server" command from kppInterfaceWalk to
+	    kppInterface
+	14. Added ON_IDLE notification to handle CORBA requests according
+	    to new hppCorbaServer thread policy.
+	13. Correction in notification treatment: adding an obstacle is
+	    now different from inserting a new list of obstacles.
 	12. Assemblies are now supported.
 	
 kppInterface 1.0 released August 27th, 2007
