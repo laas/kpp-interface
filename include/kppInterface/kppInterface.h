@@ -160,7 +160,7 @@ public:
   /**
      \brief Called when the interface has nothing to do.
   */
-  void onIdle(const CkitNotificationConstShPtr& i_notification);
+  virtual void onIdle(const CkitNotificationConstShPtr& i_notification);
 
  /**
      @}
