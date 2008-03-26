@@ -464,11 +464,14 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     }
 
     if(ShowRdmCheckBox->IsChecked()){
+  cout<<"RRT Configuration - Done"<<endl;
       CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i),"default graphic roadmap") ;
+  cout<<"RRT Configuration - Done"<<endl;
       panel->getInterface()->addGraphicRoadmap(kwsGraphicRoadmap,true);
       cout<<"Showing Roadmap for problem "<<i<<endl;
     }
 
+  cout<<"RRT Configuration - Done"<<endl;
   }
   cout<<"RRT Configuration - Done"<<endl;
   panel->Hide();

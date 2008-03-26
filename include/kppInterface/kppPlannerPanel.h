@@ -18,11 +18,11 @@
 #include "KineoWorks2/kwsAdaptiveShortcutOptimizer.h"
 #include "KineoWorks2/kwsRandomOptimizer.h"
 
-#include "kwsPlus/flicSteeringMethod.h"
-#include "kwsPlus/reedsSheppSteeringMethod.h"
-#include "kwsPlus/hppVisRdmBuilder.h"
-#include "kwsPlus/kwsPlusPCARdmBuilder.h"
-#include "kwsPlus/kwsPlusLTRdmBuilder.h"
+#include "flicSteeringMethod.h"
+#include "reedsSheppSteeringMethod.h"
+#include "hppVisRdmBuilder.h"
+#include "kwsPlusPCARdmBuilder.h"
+#include "kwsPlusLTRdmBuilder.h"
 
 #include "kppInterface/kppInterface.h"
 

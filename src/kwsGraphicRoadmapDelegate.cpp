@@ -40,7 +40,7 @@ void CkwsGraphicRoadmapDelegate::willStartBuilding (const CkwsRoadmapBuilderShPt
   nbSuccessfulShoots=0;
 
   m_builder = i_builder;
-  CkppController::yield();
+  //CkppController::yield();
 
   CkwsRdmBuilderDelegate::willStartBuilding (i_builder,io_path);
 }
@@ -50,7 +50,7 @@ void CkwsGraphicRoadmapDelegate::didFinishBuilding (const CkwsRoadmapBuilderShPt
     
   CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_FINISH_BUILDING, m_builder);
   CkitNotificator::defaultNotificator()->notify(notification);
-  CkppController::yield();
+  //CkppController::yield();
 
   CkwsRdmBuilderDelegate::didFinishBuilding (i_builder,io_path,i_success);
 

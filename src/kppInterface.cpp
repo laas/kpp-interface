@@ -426,7 +426,7 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notif
     // cout<<"nbObstacles "<<nbObstacles<<endl;
 
     // Test if obstacle is a polyhedron
-    if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
+/*    if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
       CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(hppPolyhedron);
       // modelTree->geometryNode()->addChildComponent(poly);
       // cerr<<" adding hppPolyhedron."<<endl;
@@ -453,7 +453,22 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notif
     }
   }
   cout<<"Obstacle list added."<<endl;
+*/
 
+    if(CkppSolidComponentShPtr solid = KIT_DYNAMIC_PTR_CAST(CkppSolidComponent, obstacle))
+    {
+      insertCommand = CkppInsertSolidComponentCommand::create();
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+				CkppComponentShPtr(modelTree->geometryNode()) );
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+				CkppComponentShPtr(solid));
+      insertCommand->doExecute();
+    }
+    else
+    {
+      cerr << "CkppInterface::setObstacleList: obstacle is not a solid component." << endl;
+    }
+    }
 }
 
 void CkppInterface::onIdle(const CkitNotificationConstShPtr& i_notification)
