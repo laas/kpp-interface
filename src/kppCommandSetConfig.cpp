@@ -143,7 +143,7 @@ CkppParameterConstShPtr CkppCommandSetConfig::parameter(unsigned int i_rank) con
     result = CkppComponentParameter::create("selected path", CkppComponentClassFilter<CkppPathComponent>());
     break;
   default:
-    KPP_ASSERT( false );
+    KIT_ASSERT( false );
   }
   
   return result;

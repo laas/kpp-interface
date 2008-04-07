@@ -56,9 +56,9 @@ This class allows users to display their roadmaps \c CkwsRoadmap. It displays al
     the roadmaps of the instance of \c CkppInterface.
 
     However, if you want your roadmap to be updated at run-time, you need to verify three things :
-    - A \c CkppProgressDelegate has been set for the used roadmap builder (see class \link #CkitProgressDelegate CkitProgressDelegate\endlink for more details). This class is already provided in kppInterface.
+    - A \c CkppProgressDelegate has been set for the used roadmap builder (see class CkitProgressDelegate in KineoWorks documentation for more details). This class is already provided in kppInterface.
     It allows the graphic window to be refreshed at run-time
-    - The \link #CkppPlanPathCommand CkppPlanPathCommand\endlink ::DID_ADD_EDGE_TO_ROADMAP notification has been sent with a \link #CkwsRoadmapBuilder CkwsRoadmapBuilder\endlink object.
+    - The CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP notification has been sent with a CkwsRoadmapBuilder object.
     You should send it by yourself when needed, since default behaviour is to send the notification with a CkppCommand object. See code below for an example.
     - The graphic roadmap has to be created and added before solving the associated problem.
 

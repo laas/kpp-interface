@@ -526,9 +526,6 @@ void CkppPlannerPanelController::ProblemSpinCtrlEventHandler(wxSpinEvent& cancel
 
 void CkppPlannerPanelController::addConfigurations(){
 
-  //finding existing configurations
-  CkppModelTreeShPtr modelTree = CkppMainWindowController::getInstance()->document()->modelTree();
-
   wxWindow* magnetTab = panel->getNotebook()->GetPage(2);
   wxWindowList children = magnetTab->GetChildren();
   unsigned int nbTotalCheckBox = children.GetCount();

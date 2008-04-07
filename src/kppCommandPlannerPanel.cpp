@@ -148,7 +148,7 @@ CkppParameterConstShPtr CkppCommandPlannerPanel::parameter(unsigned int i_rank) 
       result = CkppComponentParameter::create( "Device", CkppComponentClassFilter< CkppDeviceComponent >());
       break; */
     default:
-      KPP_ASSERT( false );
+      KIT_ASSERT( false );
     }
   
   return result;

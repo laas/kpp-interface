@@ -154,7 +154,7 @@ CkppParameterConstShPtr CkppCommandInit::parameter(unsigned int i_rank) const
       result = CkppComponentParameter::create( "Device", CkppComponentClassFilter< CkppDeviceComponent >());
       break;
     default:
-      KPP_ASSERT( false );
+      KIT_ASSERT( false );
     }
   
   return result;

@@ -119,7 +119,7 @@ CkppParameterConstShPtr CkppCommandStartCorbaServer::parameter(unsigned int i_ra
       break;
 
     default:
-      KPP_ASSERT( false );
+      KIT_ASSERT( false );
     }
 
   return result;

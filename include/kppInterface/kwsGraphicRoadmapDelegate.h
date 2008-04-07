@@ -57,13 +57,13 @@ class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate{
   /**
      These methods are virtual methods from CkwsRdmBuilderDelegate, reimplemented.
    */
-  virtual void willStartBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path);
-  virtual void didFinishBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path, ktStatus i_success);
-  virtual bool shouldStopBuilding (const CkwsRoadmapBuilderConstShPtr &i_builder);
-  virtual bool shouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsConfig &i_cfg);
-  virtual void didAddNode (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsNodeConstShPtr &i_node);
-  virtual void didAddEdge (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsEdgeConstShPtr &i_edge);
-  virtual void didModifyPath (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsPathConstShPtr &i_path);
+  virtual void builderWillStartBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path);
+  virtual void builderDidFinishBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path, ktStatus i_success);
+  virtual bool plannerShouldStopPlanning (const CkwsRoadmapBuilderConstShPtr &i_builder);
+  virtual bool builderShouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsConfig &i_cfg);
+  virtual void builderDidAddNode (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsNodeConstShPtr &i_node);
+  virtual void builderDidAddEdge (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsEdgeConstShPtr &i_edge);
+  virtual void builderDidModifyPath (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsPathConstShPtr &i_path);
 
  protected : 
  private :

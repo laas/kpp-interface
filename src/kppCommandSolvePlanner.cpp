@@ -135,7 +135,7 @@ CkppParameterConstShPtr CkppCommandSolvePlanner::parameter(unsigned int i_rank) 
   switch(i_rank)
     {   
     default:
-      KPP_ASSERT( false );
+      KIT_ASSERT( false );
     }
   
   return result;
