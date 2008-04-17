@@ -208,7 +208,6 @@ ktStatus CkppInterface::startCorbaServer()
 void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification)
 {
   // retrieve the object with key
-  ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
   CkppDeviceComponentShPtr  device(i_notification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
   
   //debug
@@ -220,7 +219,7 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification
   //before adding device, we check if it's already in the model tree
   CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
   bool canAddDevice = true;
-  for(int i=0; i<deviceNode->countChildComponents(); i++){
+  for(unsigned int i=0; i<deviceNode->countChildComponents(); i++){
     if(device == KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent, deviceNode->childComponent(i)))
       canAddDevice = false;
   }
@@ -270,7 +269,6 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification
 void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& i_notification)
 {
   // retrieve the object with key
-  ChppProblem *problem = (ChppProblem*)(i_notification->objectPtr< ChppProblem >());
   CkwsPathShPtr  path(i_notification->shPtrValue<CkwsPath>(ChppProblem::PATH_KEY));
   CkppDeviceComponentShPtr hppDevice(i_notification->shPtrValue<CkppDeviceComponent>(ChppProblem::DEVICE_KEY));
   unsigned int path_id = i_notification->unsignedIntValue(ChppProblem::PATH_ID_KEY);
@@ -308,7 +306,6 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
 {
   cout<<" adding an obstacle ... "<<endl;
 
-  ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
   std::vector<CkcdObjectShPtr>*  obstacleList(i_notification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
   CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
@@ -513,7 +510,7 @@ void CkppInterface::removeGraphicRoadmap( int i_rank){
   if(i_rank >= (int)m_graphic_roadmaps.size()) cout<<"The rank "<< i_rank <<" is too high ( size of roadmaps vector is "<<m_graphic_roadmaps.size()<<" )"<<endl;
   else if(i_rank < 0){
 
-    for(int i=0; i<m_graphic_roadmaps.size();i++ ){
+    for(unsigned int i=0; i<m_graphic_roadmaps.size();i++ ){
       
       if(m_graphic_roadmaps[i]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps[i]);
       m_graphic_roadmaps.erase(m_graphic_roadmaps.begin()+i);

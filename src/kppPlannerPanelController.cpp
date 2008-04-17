@@ -360,7 +360,6 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("H/S Rdm Chk",panel.get()));
     wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IsOriented",panel.get()));
     wxCheckBox* DiffusingBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("DiffusingBuilder",panel.get()));
-    wxCheckBox* IPPBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IPPBuilder",panel.get()));
     wxCheckBox* LTBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("LTBuilder",panel.get()));
     wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("RSRadius",panel.get()));
     
@@ -532,14 +531,14 @@ void CkppPlannerPanelController::addConfigurations(){
 
   CkppDeviceComponentShPtr robot = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent, getPanel()->getInterface()->hppPlanner()->robotIthProblem(problemId));
 
-  for(int i=nbTotalCheckBox; i<robot->countConfigComponents();i++){
+  for(int unsigned i=nbTotalCheckBox; i<robot->countConfigComponents();i++){
     
     wxString* label = new wxString("configuration : (");
     
-    for(int j=0;j<robot->configComponent(i)->kwsConfig()->size();j++){//build label string for the checkbox
+    for(unsigned int j=0;j<robot->configComponent(i)->kwsConfig()->size();j++){//build label string for the checkbox
       
       *label<<floor(robot->configComponent(i)->kwsConfig()->dofValue(j));
-      if(i<robot->configComponent(i)->kwsConfig()->size()-1) *label<<",";
+      if(unsigned int i<robot->configComponent(i)->kwsConfig()->size()-1) *label<<",";
       
     }
     *label<<")";
@@ -567,7 +566,7 @@ void CkppPlannerPanelController::updateConfigList(CkwsShooterConfigListShPtr con
 
   if(nbTotalConfig == nbTotalCheckBox){
 
-    for(int i=0; i<nbTotalCheckBox;i++){
+    for(unsigned int i=0; i<nbTotalCheckBox;i++){
       if(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->IsChecked()){
 	configList->add(*(robot->configComponent(i)->kwsConfig().get()),100.0,0.2);
 	nbCheckedConf++;
@@ -599,7 +598,7 @@ CkwsShooterMulti::TWeightedShooterList CkppPlannerPanelController::updateShooter
 
   CkwsShooterConfigListShPtr configList = CkwsShooterConfigList::create(); //For the magnet shooter, if it is selected for the multi shooter.
 
-    for(int i=0; i<nbTotalShooters;i++){
+    for(unsigned int i=0; i<nbTotalShooters;i++){
       if(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->IsChecked()){
 
 	switch(i){
