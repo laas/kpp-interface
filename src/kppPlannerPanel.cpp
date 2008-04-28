@@ -1,5 +1,7 @@
 /*
-  David Flavigne
+  Copyright CNRS-LAAS
+
+  Authors: David Flavigne and Florent Lamiraux
 */
 
 /**************************INCLUDES*************************/
@@ -42,12 +44,12 @@ CkppPlannerPanel::~CkppPlannerPanel(){
 void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
 
   //these wxArrayStrings are for the comboBoxes. If you want to add choices in one of these combo boxes, you must increment the first argument.
-  const wxArrayString buildersArray(6,builders);
-  const wxArrayString shootersArray(7,shooters);
-  const wxArrayString pickersArray(2,pickers);
-  const wxArrayString steeringsArray(4,steerings);
-  const wxArrayString delegatesArray(1,delegates);
-  const wxArrayString optimizersArray(3,optimizers);
+  const wxArrayString buildersArray(6,attbuilders);
+  const wxArrayString shootersArray(7,attShooters);
+  const wxArrayString pickersArray(2,attPicker);
+  const wxArrayString steeringsArray(4,attSteeringMethods);
+  const wxArrayString delegatesArray(1,attRdmBuilderDelegates);
+  const wxArrayString optimizersArray(3,attPathOptimizers);
 
   wxPanel * MainPage = new wxPanel(this, wxID_ANY);
 
@@ -182,34 +184,34 @@ CkppPlannerPanel::CkppPlannerPanel(wxWindow *i_parent, const CkppPlannerPanelCon
   isRdmSet = false;
   isInterfaceSet = false;
 
-  pickers[0] = wxString("Basic Picker");
-  pickers[1] = wxString("Smallest Tree");
+  attPicker[CkppPlannerPanel::BASIC_PICKER] = wxString("Basic Picker");
+  attPicker[CkppPlannerPanel::SMALLEST_TREE] = wxString("Smallest Tree");
 
-  shooters[0] = wxString("Config Space");
-  shooters[1] = wxString("Config List");
-  shooters[2] = wxString("Paths");
-  shooters[3] = wxString("Roadmap Box");
-  shooters[4] = wxString("Roadmap Nodes");
-  shooters[5] = wxString("Multi Shooter");
-  shooters[6] = wxString("Adaptative Multi");
+  attShooters[CkppPlannerPanel::CONFIG_PATH] = wxString("Config Space");
+  attShooters[CkppPlannerPanel::CONFIG_LIST] = wxString("Config List");
+  attShooters[CkppPlannerPanel::PATHS] = wxString("Paths");
+  attShooters[CkppPlannerPanel::ROADMAP_BOX] = wxString("Roadmap Box");
+  attShooters[CkppPlannerPanel::ROADMAP_NODE] = wxString("Roadmap Nodes");
+  attShooters[CkppPlannerPanel::MULTI_SHHOTER] = wxString("Multi Shooter");
+  attShooters[CkppPlannerPanel::ADAPTIVE_MULTI] = wxString("Adaptative Multi");
 
-  builders[0] = wxString("Basic Rdm Builder");
-  builders[1] = wxString("Diffusing Rdm builder");
-  builders[2] = wxString("IPP Rdm Builder");
-  builders[3] = wxString("Visibility Rdm Builder");
-  builders[4] = wxString("PCA Rdm Builder");
-  builders[5] = wxString("LocalTrees Rdm Builder");
+  attbuilders[CkppPlannerPanel::BASIC_RDMBUILDER] = wxString("Basic Rdm Builder");
+  attbuilders[CkppPlannerPanel::DIFFUSING] = wxString("Diffusing Rdm builder");
+  attbuilders[CkppPlannerPanel::IPP] = wxString("IPP Rdm Builder");
+  attbuilders[CkppPlannerPanel::VISIBILITY] = wxString("Visibility Rdm Builder");
+  attbuilders[CkppPlannerPanel::PCA] = wxString("PCA Rdm Builder");
+  attbuilders[CkppPlannerPanel::LOCAL_TREES] = wxString("LocalTrees Rdm Builder");
 
-  steerings[0] = wxString("Linear");
-  steerings[1] = wxString("Flic");
-  steerings[2] = wxString("Reeds & Shepp");
-  steerings[3] = wxString("SLERP");
+  attSteeringMethods[CkppPlannerPanel::LINEAR] = wxString("Linear");
+  attSteeringMethods[CkppPlannerPanel::FLIC] = wxString("Flic");
+  attSteeringMethods[CkppPlannerPanel::RS] = wxString("Reeds & Shepp");
+  attSteeringMethods[CkppPlannerPanel::SLERP] = wxString("SLERP");
 
-  delegates[0] = wxString("Graphic Roadmap Delegate");
+  attRdmBuilderDelegates[CkppPlannerPanel::GRAPHIC] = wxString("Graphic Roadmap Delegate");
 
-  optimizers[0] = wxString("Clear Optimizer");
-  optimizers[1] = wxString("Random Optimizer");
-  optimizers[2] = wxString("Adaptive Shortcut Optimizer");
+  attPathOptimizers[CkppPlannerPanel::CLEAR] = wxString("Clear Optimizer");
+  attPathOptimizers[CkppPlannerPanel::RANDOM] = wxString("Random Optimizer");
+  attPathOptimizers[CkppPlannerPanel::ADAPTIVE_SHORTCUT] = wxString("Adaptive Shortcut Optimizer");
 
 }
 /*_________________________________________________________*/

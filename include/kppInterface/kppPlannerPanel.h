@@ -1,5 +1,7 @@
 /*
-  Developed by David Flavigne
+  Copyright CNRS-LAAS
+
+  Authors: David Flavigne and Florent Lamiraux
 */
 
 #ifndef KPP_PLANNER_PANEL_H
@@ -95,8 +97,73 @@ KIT_PREDEF_CLASS( CkppPlannerPanelController );
 
 class CkppPlannerPanel : public CkppPanel
 {
+public:
+  /**
+     \brief enumerator of Roadmap Builders
+  */
+  typedef enum {
+    BASIC_RDMBUILDER=0,
+    DIFFUSING,
+    IPP,
+    VISIBILITY,
+    PCA,
+    LOCAL_TREES,
+    NB_RDMBUILDER
+  } Erdmbuilder;
 
- private:
+  /**
+     \brief enumerator of Shooters
+  */
+  typedef enum {
+    CONFIG_PATH=0,
+    CONFIG_LIST,
+    PATHS,
+    ROADMAP_BOX,
+    ROADMAP_NODE,
+    MULTI_SHHOTER,
+    ADAPTIVE_MULTI,
+    NB_SHOOTER
+  } Eshooter;
+
+  /**
+     \brief enumerator of Pickers
+  */
+  typedef enum {
+    BASIC_PICKER=0,
+    SMALLEST_TREE,
+    NB_PICKERS
+  } Epicker ;
+
+  /**
+     \brief enumerator of SteeringMethods
+  */
+  typedef enum {
+    LINEAR=0,
+    FLIC,
+    RS,
+    SLERP,
+    NB_STEERINGMETHODS
+  } Esteeringmethod;
+
+  /**
+     \brief enumerator of RdmBuilderDelegates
+  */
+  typedef enum {
+    GRAPHIC=0,
+    NB_RDMBUILDERDELEGATE
+  } Erdmbuilderdelegate;
+
+  /**
+     \brief enumerator of PathOptimizers
+  */
+  typedef enum {
+    CLEAR=0,
+    RANDOM,
+    ADAPTIVE_SHORTCUT,
+    NB_PATHOPTIMIZER
+  } Epathoptimizer;
+
+private:
   
   //associated rdmBuilder
   CkwsRoadmapBuilderShPtr rdm;
@@ -109,12 +176,12 @@ class CkppPlannerPanel : public CkppPanel
   wxNotebook* notebook;
 
   /*for comboBoxes -> initialized in the constructor*/
-  wxString pickers[2];
-  wxString builders[6];
-  wxString shooters[8];
-  wxString steerings[4];
-  wxString delegates[1];
-  wxString optimizers[3];
+  wxString attPicker[NB_PICKERS];
+  wxString attbuilders[NB_RDMBUILDER];
+  wxString attShooters[NB_SHOOTER];
+  wxString attSteeringMethods[NB_STEERINGMETHODS];
+  wxString attRdmBuilderDelegates[NB_RDMBUILDERDELEGATE];
+  wxString attPathOptimizers[NB_PATHOPTIMIZER];
 
   const wxString wxDefaultString;///Empty String
   

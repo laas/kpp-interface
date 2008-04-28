@@ -31,6 +31,11 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmapDelegate);
 
 using namespace std ;
 
+/**
+   \addtogroup kppInterface_graphic_Roadmap
+   @{
+*/
+
 /*************************************
 CLASS
 **************************************/
@@ -72,4 +77,7 @@ class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate{
 
 };
 
+/**
+   @}
+*/
 #endif

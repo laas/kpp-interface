@@ -23,6 +23,18 @@
 
 using namespace std;
 
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "kwsGraphicRoadmap:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "kwsGraphicRoadmap:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "kwsGraphicRoadmap:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 
 CkwsGraphicRoadmap::CkwsGraphicRoadmap(){
 
@@ -85,35 +97,38 @@ void CkwsGraphicRoadmap::render(){
 
 CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & i_roadmapBuilder,const std::string &inName){
 
-  CkwsGraphicRoadmap * roadmapPtr = new CkwsGraphicRoadmap();
-  CkwsGraphicRoadmapShPtr inRoadmap(roadmapPtr);
+  CkwsGraphicRoadmap * graphicRoadmapPtr = new CkwsGraphicRoadmap();
+  CkwsGraphicRoadmapShPtr graphicRoadmapShPtr(graphicRoadmapPtr);
+  CkwsGraphicRoadmapWkPtr graphicRoadmapWkPtr(graphicRoadmapShPtr);
 
-  if(inRoadmap ->init( inRoadmap, i_roadmapBuilder ) != KD_OK ){
-   
-    inRoadmap.reset();
-    
+  if (graphicRoadmapPtr->init(graphicRoadmapWkPtr, i_roadmapBuilder ) != KD_OK ) {
+    graphicRoadmapShPtr.reset();
   }
-
-  return inRoadmap;
-
+  return graphicRoadmapShPtr;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapBuilderShPtr & i_roadmapBuilder){
+ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,const CkwsRoadmapBuilderShPtr & inRoadmapBuilder){
 
   ktStatus success = KD_ERROR;
-  m_weakPtr = i_ptr;
+  m_weakPtr = inGrRdmWkPtr;
   isRealTimeUpdated=false;
   finished = false;
   m_isDisplayed = false;
   m_isJointDisplayed = false;
-  success = CkppViewGraphic::init( i_ptr );
+  success = CkppViewGraphic::init(inGrRdmWkPtr);
 
-  i_roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
+  if (inRoadmapBuilder) {
+    inRoadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
+  }
+  else {
+    ODEBUG1(" kwsGraphicRoadmap: roadmap builder is NULL");
+    return KD_ERROR;
+  }
 
-  m_kwsRoadmap = i_roadmapBuilder->roadmap();
+  m_kwsRoadmap = inRoadmapBuilder->roadmap();
     
   cout<<"Initializing GraphicRoadmap - Done"<<endl;
 

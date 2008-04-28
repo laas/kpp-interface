@@ -37,7 +37,12 @@
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
 /** 
-    \addtogroup Graphic_Roadmap
+    \addtogroup kppInterface_graphic_Roadmap
+
+    @{
+*/
+
+/**
 
 This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
@@ -174,4 +179,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
 };
 
+/**
+   @}
+*/
 #endif /*KWS_GRAPHIC_ROADMAP_H*/

@@ -1,3 +1,11 @@
+2008/04/18
+	36. Set default penetration to 0.02. Can be changed by compilation 
+	    macro. 
+	35. Correction of a bug in planner panel: if no roadmap builder 
+	    was selected, and delegate was selected, kpp crashed.
+	34. Defined enum in class CkppPlannerPanel in order to deal 
+	    with arrays (roadmapbuilders, shooters, ...);
+	
 2008/04/17
 	33. If CXXFLAGS and CFLAGS are not defined at configuration, they are set to "-Wall".
 	

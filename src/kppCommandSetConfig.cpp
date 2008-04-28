@@ -154,8 +154,6 @@ CkppParameterConstShPtr CkppCommandSetConfig::parameter(unsigned int i_rank) con
 
 ktStatus CkppCommandSetConfig::doExecute()
 {
-
-  ktStatus success = KD_OK;
   CkppComponentShPtr component(paramValue(parameter(PATH)).componentValue());
 
   CkppPathComponentShPtr pathComponent = KIT_DYNAMIC_PTR_CAST(CkppPathComponent, component);
