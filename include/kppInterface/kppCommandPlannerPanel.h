@@ -47,18 +47,18 @@ public:
   /**
      \brief Create Method
      \param kpp The kppInterface that uses the command
-     \param i_commandFactory The command factory that will be used to build the UICommand (Menu item)
+     \param inCommandFactory The command factory that will be used to build the UICommand (Menu item)
      \return A Shared Pointer to the newly created command
    */
-  static CkppCommandPlannerPanelShPtr   create(CkppInterface *kpp, const CkppMainWindowUICommandFactoryConstShPtr& i_commandFactory);
+  static CkppCommandPlannerPanelShPtr   create(CkppInterface *kpp, const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory);
 
   /**
      \brief Copy creator. Uses a previously defined PlannerPanel Command to create a new one
-     \param i_command The previous command.
+     \param inCommand The previous command.
      \return  A Shared Pointer to the newly created command
      
    */
-  static CkppCommandPlannerPanelShPtr   createCopy(const CkppCommandPlannerPanelConstShPtr& i_command);
+  static CkppCommandPlannerPanelShPtr   createCopy(const CkppCommandPlannerPanelConstShPtr& inCommand);
 
   /**
      \brief Destructor
@@ -82,34 +82,34 @@ public:
 
   /**
      \brief Retrieves a parameter defined in EParameters (enum in the header file) from the model tree.
-     \param i_rank Rank in the enum structure of the parameter to retrieve.
+     \param inRank Rank in the enum structure of the parameter to retrieve.
    */
-  virtual CkppParameterConstShPtr	parameter(unsigned int i_rank) const;
+  virtual CkppParameterConstShPtr	parameter(unsigned int inRank) const;
 
 protected:
 
   /**
      \brief Constructor
    */
-  CkppCommandPlannerPanel(CkppInterface *kpp,const CkppMainWindowUICommandFactoryConstShPtr& i_commandFactory_arg);
+  CkppCommandPlannerPanel(CkppInterface *kpp,const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory);
 
   /**
      \brief Copy Constructor
    */
-  CkppCommandPlannerPanel(const CkppCommandPlannerPanel& i_command);
+  CkppCommandPlannerPanel(const CkppCommandPlannerPanel& inCommand);
 
   /**
      \brief Initialisation method.
    */
-  ktStatus init(const CkppCommandPlannerPanelWkPtr& i_weakPtr);
+  ktStatus init(const CkppCommandPlannerPanelWkPtr& inWeakPtr);
 
 private:
   
-  CkppCommandPlannerPanelWkPtr m_weakPtr;
+  CkppCommandPlannerPanelWkPtr attWeakPtr;
 
   CkppUICommandShPtr commandPlannerPanel;
 
-  CkppMainWindowUICommandFactoryConstShPtr i_commandFactory;
+  CkppMainWindowUICommandFactoryConstShPtr attCommandFactory;
 
   /// pointer to the interface
   CkppInterface *attKpp;

@@ -53,6 +53,18 @@ using namespace std;
  DEFINES
 *******************************************/
 
+// Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
+#if DEBUG==2
+#define ODEBUG2(x) std::cout << "CkppInterface:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkppInterface:" << x << std::endl
+#elif DEBUG==1
+#define ODEBUG2(x)
+#define ODEBUG1(x) std::cerr << "CkppInterface:" << x << std::endl
+#else
+#define ODEBUG2(x)
+#define ODEBUG1(x)
+#endif
+
 /*****************************************
  METHODS
 *******************************************/
@@ -77,7 +89,7 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
 
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
-  m_graphic_roadmaps.clear();
+  attGraphicRoadmaps.clear();
 
   CkitNotificator::defaultNotificator()->subscribe<CkppInterface>(CkppComponent::DID_INSERT_CHILD, this , &CkppInterface::insertChild);
   attHppCorbaServer = new ChppciServer(inHppPlanner, argc, argv);
@@ -98,36 +110,36 @@ CkppInterface::~CkppInterface()
   attCommandPlannerPanel.reset();
   corbaServerRunning = 0;
   removeGraphicRoadmap();
-  m_graphic_roadmaps.clear();
+  attGraphicRoadmaps.clear();
   CkitNotificator::defaultNotificator()->unsubscribe(this);
 }
 
 // ==========================================================================
 
-void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& i_commandFactory,
-					  std::vector<CkppUICommandListShPtr> & o_menuCommandListVector)
+void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory,
+					  std::vector<CkppUICommandListShPtr> & outMenuCommandListVector)
 {
   // ---  LIST --- //
 
   CkppUICommandListShPtr hppUICommandList = CkppUICommandList::create("HPP");
 
   attStartCorbaServerCommand = CkppUICommand::create(CkppCommandStartCorbaServer::create(this),
-						     i_commandFactory->environment(),
+						     inCommandFactory->environment(),
 						     "Start CORBA Server",
 						     "start corba server");
 
-  attCommandPlannerPanel = CkppUICommand::create(CkppCommandPlannerPanel::create(this,i_commandFactory),
-					     i_commandFactory->environment(),
+  attCommandPlannerPanel = CkppUICommand::create(CkppCommandPlannerPanel::create(this,inCommandFactory),
+					     inCommandFactory->environment(),
 					     "Planner Configuration",
 					     "Displays a configuration panel for Path Planning");
 
   attCommandSetConfigBase = CkppUICommand::create(CkppCommandSetConfig::create(this),
-						  i_commandFactory->environment(),
+						  inCommandFactory->environment(),
 						  "Set INIT/GOAL config",
 						  "");
 
   attCommandInitBase = CkppUICommand::create(CkppCommandInit::create(this),
-						  i_commandFactory->environment(),
+						  inCommandFactory->environment(),
 						  "initialize Planner",
 						  "");
 
@@ -137,7 +149,7 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
   } else {
     std::cerr << "CkppInterface: cannot create menu item \"Start CORBA Server\"." << std::endl;
   }
-  o_menuCommandListVector.push_back(hppUICommandList);
+  outMenuCommandListVector.push_back(hppUICommandList);
 
 }
 
@@ -205,10 +217,10 @@ ktStatus CkppInterface::startCorbaServer()
 
 // ==========================================================================
 
-void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification)
 {
   // retrieve the object with key
-  CkppDeviceComponentShPtr  device(i_notification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
+  CkppDeviceComponentShPtr  device(inNotification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
   
   //debug
   //cout<<"hppAddRobot called."<<endl;
@@ -266,12 +278,12 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& i_notification
 
 // ==========================================================================
 
-void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
 {
   // retrieve the object with key
-  CkwsPathShPtr  path(i_notification->shPtrValue<CkwsPath>(ChppProblem::PATH_KEY));
-  CkppDeviceComponentShPtr hppDevice(i_notification->shPtrValue<CkppDeviceComponent>(ChppProblem::DEVICE_KEY));
-  unsigned int path_id = i_notification->unsignedIntValue(ChppProblem::PATH_ID_KEY);
+  CkwsPathShPtr  path(inNotification->shPtrValue<CkwsPath>(ChppProblem::PATH_KEY));
+  CkppDeviceComponentShPtr hppDevice(inNotification->shPtrValue<CkppDeviceComponent>(ChppProblem::DEVICE_KEY));
+  unsigned int path_id = inNotification->unsignedIntValue(ChppProblem::PATH_ID_KEY);
 
   //debug
   //cout<<"hppAddPath called."<<endl;
@@ -302,11 +314,11 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& i_notification)
 
 // ==========================================================================
 
-void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotification)
 {
   cout<<" adding an obstacle ... "<<endl;
 
-  std::vector<CkcdObjectShPtr>*  obstacleList(i_notification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
+  std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
   CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
   CkppDocumentShPtr document = wincontroller->document();
@@ -394,12 +406,12 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& i_notificat
 
 // ==========================================================================
 
-void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotification)
 {
   cout<<" adding obstacles ... "<<endl;
 
-  ChppPlanner *planner = (ChppPlanner*)(i_notification->objectPtr< ChppPlanner >());
-  std::vector<CkcdObjectShPtr>*  obstacleList(i_notification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
+  ChppPlanner *planner = (ChppPlanner*)(inNotification->objectPtr< ChppPlanner >());
+  std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
   CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
   CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
@@ -468,7 +480,7 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& i_notif
     }
 }
 
-void CkppInterface::onIdle(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::onIdle(const CkitNotificationConstShPtr& inNotification)
 {
   if (corbaServerRunning) {
     attHppCorbaServer->processRequest(false);
@@ -478,50 +490,51 @@ void CkppInterface::onIdle(const CkitNotificationConstShPtr& i_notification)
 
 // ==========================================================================
 
-unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr i_graphic_roadmap, bool i_isRealTimeUpdated){
+unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicRoadmaps, bool inIsRealTimeUpdated)
+{
 
-  i_graphic_roadmap->SetRealTimeUpdate(i_isRealTimeUpdated);
+  inGraphicRoadmaps->SetRealTimeUpdate(inIsRealTimeUpdated);
 
-  m_graphic_roadmaps.push_front ( i_graphic_roadmap );
+  attGraphicRoadmaps.push_front ( inGraphicRoadmaps );
 
-  if(i_isRealTimeUpdated){
+  if(inIsRealTimeUpdated){
 
     cout<<"The Roadmap will be updated at run time"<<endl; 
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps.back() );   
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps.back() );   
     CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, this , &CkppInterface::addRoadmap);
 
   }
   else{
     cout<<"The Roadmap will be updated at the end of building"<<endl; 
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps.back() ); 
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps.back() ); 
     CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING, this, &CkppInterface::addRoadmap);
   }
 
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppWindowController::DID_CHANGE_DOCUMENT,this,&CkppInterface::removeAllRoadmaps);
 
-  return m_graphic_roadmaps.size();
+  return attGraphicRoadmaps.size();
 
 }
 
 // ==========================================================================
 
-void CkppInterface::removeGraphicRoadmap( int i_rank){
+void CkppInterface::removeGraphicRoadmap( int inRank){
 
-  if(i_rank >= (int)m_graphic_roadmaps.size()) cout<<"The rank "<< i_rank <<" is too high ( size of roadmaps vector is "<<m_graphic_roadmaps.size()<<" )"<<endl;
-  else if(i_rank < 0){
+  if(inRank >= (int)attGraphicRoadmaps.size()) cout<<"The rank "<< inRank <<" is too high ( size of roadmaps vector is "<<attGraphicRoadmaps.size()<<" )"<<endl;
+  else if(inRank < 0){
 
-    for(unsigned int i=0; i<m_graphic_roadmaps.size();i++ ){
+    for(unsigned int i=0; i<attGraphicRoadmaps.size();i++ ){
       
-      if(m_graphic_roadmaps[i]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps[i]);
-      m_graphic_roadmaps.erase(m_graphic_roadmaps.begin()+i);
+      if(attGraphicRoadmaps[i]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[i]);
+      attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+i);
 
     }
 
   }
   else{
 
-    if(m_graphic_roadmaps[i_rank]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps[i_rank]);
-    m_graphic_roadmaps.erase(m_graphic_roadmaps.begin()+i_rank);
+    if(attGraphicRoadmaps[inRank]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
+    attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+inRank);
 
   }
 
@@ -530,12 +543,12 @@ void CkppInterface::removeGraphicRoadmap( int i_rank){
 
 // ==========================================================================
 
-void CkppInterface::showRoadmap(unsigned int i_rank){
+void CkppInterface::showRoadmap(unsigned int inRank){
   
-  if(!m_graphic_roadmaps[i_rank]->isDisplayed()){
+  if(!attGraphicRoadmaps[inRank]->isDisplayed()){
 
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps[i_rank] );
-    m_graphic_roadmaps[i_rank]->isDisplayed(true);
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank] );
+    attGraphicRoadmaps[inRank]->isDisplayed(true);
     CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 
   }else cout<<"This roadmap is already displayed"<<endl;
@@ -545,12 +558,12 @@ void CkppInterface::showRoadmap(unsigned int i_rank){
 
 // ==========================================================================
 
-void CkppInterface::hideRoadmap(unsigned int i_rank){
+void CkppInterface::hideRoadmap(unsigned int inRank){
   
-  if(m_graphic_roadmaps[i_rank]->isDisplayed()){
+  if(attGraphicRoadmaps[inRank]->isDisplayed()){
     
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_graphic_roadmaps[i_rank]);
-    m_graphic_roadmaps[i_rank]->isDisplayed(false);
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
+    attGraphicRoadmaps[inRank]->isDisplayed(false);
     CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 
   }else cout<<"This roadmap is already hidden"<<endl;
@@ -558,32 +571,32 @@ void CkppInterface::hideRoadmap(unsigned int i_rank){
 
 // ==========================================================================
 
-void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& i_notification){
+void CkppInterface::addRoadmap(const CkitNotificationConstShPtr& inNotification){
 
   bool found = false;
 
-  if(i_notification->objectShPtr< CkwsRoadmapBuilder >()){
+  if(inNotification->objectShPtr< CkwsRoadmapBuilder >()){
     //We are searching in the vector for the graphic roadmap that has his intern kwsRoadmap shared pointer identical to the modified roadmap
-    for(std::deque<CkwsGraphicRoadmapShPtr>::iterator it = m_graphic_roadmaps.begin() ; it<m_graphic_roadmaps.end() ; it++){
-      CkwsRoadmapBuilderShPtr rdmBuilder = i_notification->objectShPtr< CkwsRoadmapBuilder >();
+    for(std::deque<CkwsGraphicRoadmapShPtr>::iterator it = attGraphicRoadmaps.begin() ; it<attGraphicRoadmaps.end() ; it++){
+      CkwsRoadmapBuilderShPtr rdmBuilder = inNotification->objectShPtr< CkwsRoadmapBuilder >();
       if((*it)->kwsRoadmap() == rdmBuilder->roadmap()){
 	found = true;
-	(*it)->drawNotifRoadmap(i_notification);
+	(*it)->drawNotifRoadmap(inNotification);
       }
     }
     
-    if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap ("<< m_graphic_roadmaps.size() <<" roadmaps in the vector)"<<endl;
+    if(!found) cout<<"There is no graphical roadmap for the modified kwsRoadmap ("<< attGraphicRoadmaps.size() <<" roadmaps in the vector)"<<endl;
   }
 
 }
 
 // ==========================================================================
 
-void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& i_notification){
+void CkppInterface::removeAllRoadmaps(const CkitNotificationConstShPtr& inNotification){
 
   cout<<"removing all roadmaps and all problems"<<endl;
   removeGraphicRoadmap();
-  m_graphic_roadmaps.clear();
+  attGraphicRoadmaps.clear();
 
   while(KD_OK==hppPlanner()->removeHppProblem()){}
 
@@ -616,11 +629,11 @@ int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface)
 //   }
 //-------------------------------------------------------------------
 
-void CkppInterface::insertChild(const CkitNotificationConstShPtr& i_notification)
+void CkppInterface::insertChild(const CkitNotificationConstShPtr& inNotification)
 {
     //std::cout << "DID_INSERT_CHILD received"  << std::endl;
 
-    CkppComponentShPtr child(i_notification->shPtrValue< CkppComponent >(CkppComponent::CHILD_KEY)); 
+    CkppComponentShPtr child(inNotification->shPtrValue< CkppComponent >(CkppComponent::CHILD_KEY)); 
 
     CkppGeometryComponentShPtr geomComponent;
     geomComponent = KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, child);

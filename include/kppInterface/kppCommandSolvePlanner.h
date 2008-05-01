@@ -34,7 +34,7 @@ public:
 
 	static CkppCommandSolvePlannerShPtr   create(CkppInterface *kpp);
 
-	static CkppCommandSolvePlannerShPtr   createCopy(const CkppCommandSolvePlannerConstShPtr& i_command);
+	static CkppCommandSolvePlannerShPtr   createCopy(const CkppCommandSolvePlannerConstShPtr& inCommand);
 
 	virtual ~CkppCommandSolvePlanner();
 
@@ -46,19 +46,19 @@ public:
 
 	virtual unsigned int	countParameters() const;
 
-	virtual CkppParameterConstShPtr	parameter(unsigned int i_rank) const;
+	virtual CkppParameterConstShPtr	parameter(unsigned int inRank) const;
 
 protected:
 
 	CkppCommandSolvePlanner(CkppInterface *kpp);
 
-	CkppCommandSolvePlanner(const CkppCommandSolvePlanner& i_command);
+	CkppCommandSolvePlanner(const CkppCommandSolvePlanner& inCommand);
 
-	ktStatus init(const CkppCommandSolvePlannerWkPtr& i_weakPtr);
+	ktStatus init(const CkppCommandSolvePlannerWkPtr& inWeakPtr);
 
 private:
 
-	CkppCommandSolvePlannerWkPtr m_weakPtr;
+	CkppCommandSolvePlannerWkPtr attWeakPtr;
 
 	CkppInterface *attKpp;
 

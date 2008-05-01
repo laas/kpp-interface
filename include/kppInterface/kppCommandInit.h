@@ -52,7 +52,7 @@ public:
 
   static CkppCommandInitShPtr   create(CkppInterface *kpp);
 
-  static CkppCommandInitShPtr   createCopy(const CkppCommandInitConstShPtr& i_command);
+  static CkppCommandInitShPtr   createCopy(const CkppCommandInitConstShPtr& inCommand);
 
   virtual ~CkppCommandInit();
 
@@ -67,19 +67,19 @@ public:
 
   virtual unsigned int	countParameters() const;
 
-  virtual CkppParameterConstShPtr	parameter(unsigned int i_rank) const;
+  virtual CkppParameterConstShPtr	parameter(unsigned int inRank) const;
 
 protected:
 
   CkppCommandInit(CkppInterface *kpp);
 
-  CkppCommandInit(const CkppCommandInit& i_command);
+  CkppCommandInit(const CkppCommandInit& inCommand);
 
-  ktStatus init(const CkppCommandInitWkPtr& i_weakPtr);
+  ktStatus init(const CkppCommandInitWkPtr& inWeakPtr);
 
 private:
 
-  CkppCommandInitWkPtr m_weakPtr;
+  CkppCommandInitWkPtr attWeakPtr;
 
   /// pointer to the interface
   CkppInterface *attKpp;

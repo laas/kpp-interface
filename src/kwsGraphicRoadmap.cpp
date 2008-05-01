@@ -46,19 +46,19 @@ CkwsGraphicRoadmap::CkwsGraphicRoadmap(){
 
 CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
 
-  if(m_isDisplayed){
+  if(attIsDisplayed){
     cout<<"erasing roadmap"<<endl;
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, m_weakPtr.lock());
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attWeakPtr.lock());
   }
-  m_kwsRoadmap.reset();
-  m_weakPtr.reset();
+  attKwsRoadmap.reset();
+  attWeakPtr.reset();
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 void CkwsGraphicRoadmap::render(){
 
-  if(m_isDisplayed){
+  if(attIsDisplayed){
     if(isRealTimeUpdated){
       glPushAttrib(GL_ENABLE_BIT);
       glEnable(GL_LINE_SMOOTH);
@@ -72,7 +72,7 @@ void CkwsGraphicRoadmap::render(){
       glPopAttrib();
       
     }else{
-      if(finished){
+      if(attFinished){
 	
 	// anti-aliasing
 	glPushAttrib(GL_ENABLE_BIT);
@@ -113,11 +113,11 @@ CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr
 ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,const CkwsRoadmapBuilderShPtr & inRoadmapBuilder){
 
   ktStatus success = KD_ERROR;
-  m_weakPtr = inGrRdmWkPtr;
+  attWeakPtr = inGrRdmWkPtr;
   isRealTimeUpdated=false;
-  finished = false;
-  m_isDisplayed = false;
-  m_isJointDisplayed = false;
+  attFinished = false;
+  attIsDisplayed = false;
+  attIsJointDisplayed = false;
   success = CkppViewGraphic::init(inGrRdmWkPtr);
 
   if (inRoadmapBuilder) {
@@ -128,7 +128,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,co
     return KD_ERROR;
   }
 
-  m_kwsRoadmap = inRoadmapBuilder->roadmap();
+  attKwsRoadmap = inRoadmapBuilder->roadmap();
     
   cout<<"Initializing GraphicRoadmap - Done"<<endl;
 
@@ -161,11 +161,11 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 
   //Drawing edges
   for (unsigned int iJoint=0; iJoint < displayJointVector.size(); iJoint++) {
-    for(int i=0; i<kwsRoadmap()->countNodes(); i++){//throught the roadmap
+    for(unsigned int i=0; i<kwsRoadmap()->countNodes(); i++){//throught the roadmap
       
       CkwsNodeShPtr currentNode = kwsRoadmap()->node(i);
       
-      for(int j=0; j<currentNode->countOutEdges(); j++){//throught each node of the roadmap
+      for(unsigned int j=0; j<currentNode->countOutEdges(); j++){//throught each node of the roadmap
 	
 	CkwsJointShPtr kwsJoint = displayJointVector[iJoint];
 	CkwsConfig current(kwsRoadmap()->node(i)->config());//current configuration : edge start
@@ -219,7 +219,7 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 void CkwsGraphicRoadmap::SetRealTimeUpdate(bool rtu){
 
   isRealTimeUpdated=rtu;
-  if(isRealTimeUpdated) m_isDisplayed=true;
+  if(isRealTimeUpdated) attIsDisplayed=true;
 
 }
 
@@ -233,9 +233,9 @@ bool CkwsGraphicRoadmap::GetRealTimeUpdate(){
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& i_notification){
-  m_isDisplayed = true;
-  if(i_notification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) finished = true;
+void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& inNotification){
+  attIsDisplayed = true;
+  if(inNotification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) attFinished = true;
   CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
 }
 

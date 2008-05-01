@@ -76,7 +76,7 @@ using namespace std;
 CkppPlannerPanelController::~CkppPlannerPanelController(){
 
   panel.reset();
-  m_weakPtr.reset();
+  attWeakPtr.reset();
   problemId = 0;
 
 }
@@ -86,7 +86,7 @@ CkppPlannerPanelController::~CkppPlannerPanelController(){
 CkppPlannerPanelController::CkppPlannerPanelController(){
 
   panel.reset();
-  m_weakPtr.reset();
+  attWeakPtr.reset();
   problemId = 0;
 
 }
@@ -106,14 +106,14 @@ CkppPlannerPanelControllerShPtr CkppPlannerPanelController::create(){
 }
 /*_________________________________________________________*/
 
-ktStatus CkppPlannerPanelController::init (const CkppPlannerPanelControllerWkPtr &i_weakPtr){
+ktStatus CkppPlannerPanelController::init (const CkppPlannerPanelControllerWkPtr &inWeakPtr){
 
   ktStatus success = KD_ERROR;
-  success = CkppWindowController::init( i_weakPtr );
+  success = CkppWindowController::init( inWeakPtr );
 
   if( success == KD_OK )
     {
-      m_weakPtr = i_weakPtr;
+      attWeakPtr = inWeakPtr;
       problemId = 0;
 
       doesSelfDeleteOnClose(true);
@@ -132,7 +132,7 @@ void CkppPlannerPanelController::loadWindow(){
   ODEBUG2(" Creating panel ...");
   CkppPlannerPanel* myPanel;
   
-  myPanel = new CkppPlannerPanel(parentWindow(), m_weakPtr.lock());
+  myPanel = new CkppPlannerPanel(parentWindow(), attWeakPtr.lock());
   myPanel->finalize();
 
   CkppPlannerPanelShPtr ptr(myPanel);

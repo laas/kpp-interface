@@ -123,33 +123,33 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief returns the kwsRoadmap
    */
-  CkwsRoadmapShPtr kwsRoadmap(){return m_kwsRoadmap;}
+  CkwsRoadmapShPtr kwsRoadmap(){return attKwsRoadmap;}
 
   /**
      \brief Change the graphic roadmap status (displayed or not)
      \param disp Set this to true if you want the roadmap to be displayed
    */
-  void isDisplayed(bool disp){m_isDisplayed = disp;}
+  void isDisplayed(bool disp){attIsDisplayed = disp;}
   /**
      \brief Returns the graphic roadmap status (displayed or not)
    */
-  bool isDisplayed(){return m_isDisplayed;}
+  bool isDisplayed(){return attIsDisplayed;}
 
   /**
      \brief Change the graphic roadmap status for a joint (displayed or not)
      \param disp Set this to true if you want the roadmap to be displayed
   */
-  void isJointDisplayed(bool disp){m_isJointDisplayed = disp;}
+  void isJointDisplayed(bool disp){attIsJointDisplayed = disp;}
   
   /**
      \brief Returns the graphic roadmap status for a joint (displayed or not)
    */
-  bool isJointDisplayed(){return m_isJointDisplayed;}
+  bool isJointDisplayed(){return attIsJointDisplayed;}
 
   /**
      \brief draws the entire roadmap when the end of building is notified
    */
-  void drawNotifRoadmap(const CkitNotificationConstShPtr& i_notification);
+  void drawNotifRoadmap(const CkitNotificationConstShPtr& inNotification);
 
  protected:
   /**
@@ -169,12 +169,12 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
  private:
 
-  CkwsGraphicRoadmapWkPtr m_weakPtr;
+  CkwsGraphicRoadmapWkPtr attWeakPtr;
   bool isRealTimeUpdated;
-  bool m_isJointDisplayed;
-  bool finished;
-  bool m_isDisplayed;
-  CkwsRoadmapShPtr m_kwsRoadmap;
+  bool attIsJointDisplayed;
+  bool attFinished;
+  bool attIsDisplayed;
+  CkwsRoadmapShPtr attKwsRoadmap;
 
 
 };

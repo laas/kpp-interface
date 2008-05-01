@@ -26,7 +26,7 @@ public:
 
 	static CkppCommandStartCorbaServerShPtr create(CkppInterface *kpp);
 
-	static CkppCommandStartCorbaServerShPtr createCopy(const CkppCommandStartCorbaServerConstShPtr& i_command);
+	static CkppCommandStartCorbaServerShPtr createCopy(const CkppCommandStartCorbaServerConstShPtr& inCommand);
 
 	virtual ~CkppCommandStartCorbaServer();
 
@@ -38,7 +38,7 @@ public:
 
 	virtual unsigned int									countParameters() const;
 
-	virtual CkppParameterConstShPtr				parameter(unsigned int i_rank) const;
+	virtual CkppParameterConstShPtr				parameter(unsigned int inRank) const;
 
 	  std::string commandStr() {return attCommandStr;};
 	  void commandStr(const std::string &i_str) {attCommandStr = i_str;};
@@ -49,14 +49,14 @@ protected:
 	// think about taking hppPlanner as argument
 	CkppCommandStartCorbaServer(CkppInterface *kpp);
 
-	CkppCommandStartCorbaServer(const CkppCommandStartCorbaServer& i_command);
+	CkppCommandStartCorbaServer(const CkppCommandStartCorbaServer& inCommand);
 
-	ktStatus init(const CkppCommandStartCorbaServerWkPtr& i_weakPtr);
+	ktStatus init(const CkppCommandStartCorbaServerWkPtr& inWeakPtr);
 
 
 private:
 
-	CkppCommandStartCorbaServerWkPtr		m_weakPtr;
+	CkppCommandStartCorbaServerWkPtr		attWeakPtr;
 
 	CkppInterface *attKpp;
 	std::string attCommandStr;

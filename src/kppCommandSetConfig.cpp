@@ -43,10 +43,10 @@ CkppCommandSetConfig::CkppCommandSetConfig(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandSetConfig::CkppCommandSetConfig(const CkppCommandSetConfig& i_command) :
-  CkppCommand(i_command)
+CkppCommandSetConfig::CkppCommandSetConfig(const CkppCommandSetConfig& inCommand) :
+  CkppCommand(inCommand)
 {
-  attKpp = i_command.attKpp;
+  attKpp = inCommand.attKpp;
 }
 
 
@@ -55,7 +55,7 @@ CkppCommandSetConfig::CkppCommandSetConfig(const CkppCommandSetConfig& i_command
 CkppCommandSetConfig::~CkppCommandSetConfig()
 {
   attKpp = NULL;
-  m_weakPtr.reset();
+  attWeakPtr.reset();
 }
 
 
@@ -76,9 +76,9 @@ CkppCommandSetConfigShPtr CkppCommandSetConfig::create(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandSetConfigShPtr CkppCommandSetConfig::createCopy(const CkppCommandSetConfigConstShPtr& i_command)
+CkppCommandSetConfigShPtr CkppCommandSetConfig::createCopy(const CkppCommandSetConfigConstShPtr& inCommand)
 {
-  CkppCommandSetConfig*  ptr = new CkppCommandSetConfig(*i_command);
+  CkppCommandSetConfig*  ptr = new CkppCommandSetConfig(*inCommand);
   CkppCommandSetConfigShPtr shPtr(ptr);
   
   if(KD_OK != ptr->init(shPtr))
@@ -92,13 +92,13 @@ CkppCommandSetConfigShPtr CkppCommandSetConfig::createCopy(const CkppCommandSetC
 
 // ==========================================================================
 
-ktStatus CkppCommandSetConfig::init(const CkppCommandSetConfigWkPtr& i_weakPtr)
+ktStatus CkppCommandSetConfig::init(const CkppCommandSetConfigWkPtr& inWeakPtr)
 {
-  ktStatus success = CkppCommand::init(i_weakPtr);
+  ktStatus success = CkppCommand::init(inWeakPtr);
   
   if(KD_OK == success)
 	{
-	  m_weakPtr = i_weakPtr;
+	  attWeakPtr = inWeakPtr;
 	}
 
   return success;
@@ -110,7 +110,7 @@ ktStatus CkppCommandSetConfig::init(const CkppCommandSetConfigWkPtr& i_weakPtr)
 
 CkppCommandShPtr CkppCommandSetConfig::clone() const
 {
-  return CkppCommandSetConfig::createCopy(m_weakPtr.lock());
+  return CkppCommandSetConfig::createCopy(attWeakPtr.lock());
 }
 
 
@@ -132,13 +132,13 @@ unsigned int CkppCommandSetConfig::countParameters() const
 
 // ==========================================================================
 
-CkppParameterConstShPtr CkppCommandSetConfig::parameter(unsigned int i_rank) const
+CkppParameterConstShPtr CkppCommandSetConfig::parameter(unsigned int inRank) const
 {
  
   CkppParameterShPtr result;
   CkppComponentShPtr nullComponent;
 
-  switch(i_rank) {   
+  switch(inRank) {   
   case PATH:
     result = CkppComponentParameter::create("selected path", CkppComponentClassFilter<CkppPathComponent>());
     break;

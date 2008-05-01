@@ -48,10 +48,10 @@ CkppCommandInit::CkppCommandInit(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandInit::CkppCommandInit(const CkppCommandInit& i_command) :
-  CkppCommand(i_command)
+CkppCommandInit::CkppCommandInit(const CkppCommandInit& inCommand) :
+  CkppCommand(inCommand)
 {
-  attKpp = i_command.attKpp;
+  attKpp = inCommand.attKpp;
 }
 
 
@@ -80,9 +80,9 @@ CkppCommandInitShPtr CkppCommandInit::create(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandInitShPtr CkppCommandInit::createCopy(const CkppCommandInitConstShPtr& i_command)
+CkppCommandInitShPtr CkppCommandInit::createCopy(const CkppCommandInitConstShPtr& inCommand)
 {
-  CkppCommandInit*  ptr = new CkppCommandInit(*i_command);
+  CkppCommandInit*  ptr = new CkppCommandInit(*inCommand);
   CkppCommandInitShPtr shPtr(ptr);
   
   if(KD_OK != ptr->init(shPtr))
@@ -96,13 +96,13 @@ CkppCommandInitShPtr CkppCommandInit::createCopy(const CkppCommandInitConstShPtr
 
 // ==========================================================================
 
-ktStatus CkppCommandInit::init(const CkppCommandInitWkPtr& i_weakPtr)
+ktStatus CkppCommandInit::init(const CkppCommandInitWkPtr& inWeakPtr)
 {
-  ktStatus success = CkppCommand::init(i_weakPtr);
+  ktStatus success = CkppCommand::init(inWeakPtr);
   
   if(KD_OK == success)
 	{
-	  m_weakPtr = i_weakPtr;
+	  attWeakPtr = inWeakPtr;
 	}
 
   return success;
@@ -114,7 +114,7 @@ ktStatus CkppCommandInit::init(const CkppCommandInitWkPtr& i_weakPtr)
 
 CkppCommandShPtr CkppCommandInit::clone() const
 {
-  return CkppCommandInit::createCopy(m_weakPtr.lock());
+  return CkppCommandInit::createCopy(attWeakPtr.lock());
 }
 
 
@@ -136,13 +136,13 @@ unsigned int CkppCommandInit::countParameters() const
 
 // ==========================================================================
 
-CkppParameterConstShPtr CkppCommandInit::parameter(unsigned int i_rank) const
+CkppParameterConstShPtr CkppCommandInit::parameter(unsigned int inRank) const
 {
  
   CkppParameterShPtr result;
   CkppComponentShPtr nullComponent;
 
-  switch(i_rank)
+  switch(inRank)
     {   
     case MODELTREE : 
       result = CkppComponentParameter::create( "Model Tree", CkppComponentClassFilter< CkppModelTree >());

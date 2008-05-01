@@ -40,10 +40,10 @@ CkppCommandStartCorbaServer::CkppCommandStartCorbaServer(CkppInterface *kpp)
     
 }
 
-CkppCommandStartCorbaServer::CkppCommandStartCorbaServer(const CkppCommandStartCorbaServer& i_command) :
-  CkppCommand(i_command)
+CkppCommandStartCorbaServer::CkppCommandStartCorbaServer(const CkppCommandStartCorbaServer& inCommand) :
+  CkppCommand(inCommand)
 {
-  attKpp = i_command.attKpp;
+  attKpp = inCommand.attKpp;
   // no op
 }
 
@@ -65,11 +65,11 @@ CkppCommandStartCorbaServerShPtr CkppCommandStartCorbaServer::create(CkppInterfa
   return shPtr;
 }
 
-CkppCommandStartCorbaServerShPtr CkppCommandStartCorbaServer::createCopy(const CkppCommandStartCorbaServerConstShPtr& i_command)
+CkppCommandStartCorbaServerShPtr CkppCommandStartCorbaServer::createCopy(const CkppCommandStartCorbaServerConstShPtr& inCommand)
 {
-  CkppCommandStartCorbaServer*	ptr = new CkppCommandStartCorbaServer(*i_command);
+  CkppCommandStartCorbaServer*	ptr = new CkppCommandStartCorbaServer(*inCommand);
   CkppCommandStartCorbaServerShPtr		shPtr(ptr);
-  ptr->attCommandStr = i_command->attCommandStr;
+  ptr->attCommandStr = inCommand->attCommandStr;
   if(KD_OK != ptr->init(shPtr))
     {
       shPtr.reset();
@@ -78,13 +78,13 @@ CkppCommandStartCorbaServerShPtr CkppCommandStartCorbaServer::createCopy(const C
   return shPtr;
 }
 
-ktStatus CkppCommandStartCorbaServer::init(const CkppCommandStartCorbaServerWkPtr& i_weakPtr)
+ktStatus CkppCommandStartCorbaServer::init(const CkppCommandStartCorbaServerWkPtr& inWeakPtr)
 {
-  ktStatus		success = CkppCommand::init(i_weakPtr);
+  ktStatus		success = CkppCommand::init(inWeakPtr);
 
   if(KD_OK == success)
     {
-      m_weakPtr = i_weakPtr;
+      attWeakPtr = inWeakPtr;
     }
 
   return success;
@@ -92,7 +92,7 @@ ktStatus CkppCommandStartCorbaServer::init(const CkppCommandStartCorbaServerWkPt
 
 CkppCommandShPtr CkppCommandStartCorbaServer::clone() const
 {
-  return CkppCommandStartCorbaServer::createCopy(m_weakPtr.lock());
+  return CkppCommandStartCorbaServer::createCopy(attWeakPtr.lock());
 }
 
 bool CkppCommandStartCorbaServer::isUndoable() const
@@ -105,12 +105,12 @@ unsigned int CkppCommandStartCorbaServer::countParameters() const
   return PARAMETER_COUNT;
 }
 
-CkppParameterConstShPtr CkppCommandStartCorbaServer::parameter(unsigned int i_rank) const
+CkppParameterConstShPtr CkppCommandStartCorbaServer::parameter(unsigned int inRank) const
 {
   CkppParameterShPtr				result;
   CkppComponentShPtr				nullComponent;
 
-  switch(i_rank)
+  switch(inRank)
     {
     case MODEL_TREE:
       result = CkppComponentParameter::create(

@@ -42,7 +42,7 @@ public:
 
 	static CkppCommandSetConfigShPtr   create(CkppInterface *kpp);
 
-	static CkppCommandSetConfigShPtr   createCopy(const CkppCommandSetConfigConstShPtr& i_command);
+	static CkppCommandSetConfigShPtr   createCopy(const CkppCommandSetConfigConstShPtr& inCommand);
 
 	virtual ~CkppCommandSetConfig();
 
@@ -54,19 +54,19 @@ public:
 
 	virtual unsigned int	countParameters() const;
 
-	virtual CkppParameterConstShPtr	parameter(unsigned int i_rank) const;
+	virtual CkppParameterConstShPtr	parameter(unsigned int inRank) const;
 
 protected:
 
 	CkppCommandSetConfig(CkppInterface *kpp);
 
-	CkppCommandSetConfig(const CkppCommandSetConfig& i_command);
+	CkppCommandSetConfig(const CkppCommandSetConfig& inCommand);
 
-	ktStatus init(const CkppCommandSetConfigWkPtr& i_weakPtr);
+	ktStatus init(const CkppCommandSetConfigWkPtr& inWeakPtr);
 
 private:
 
-	CkppCommandSetConfigWkPtr m_weakPtr;
+	CkppCommandSetConfigWkPtr attWeakPtr;
 
 	CkppInterface *attKpp;
 

@@ -38,10 +38,10 @@ CkppCommandSolvePlanner::CkppCommandSolvePlanner(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandSolvePlanner::CkppCommandSolvePlanner(const CkppCommandSolvePlanner& i_command) :
-  CkppCommand(i_command)
+CkppCommandSolvePlanner::CkppCommandSolvePlanner(const CkppCommandSolvePlanner& inCommand) :
+  CkppCommand(inCommand)
 {
-  attKpp = i_command.attKpp;
+  attKpp = inCommand.attKpp;
 }
 
 
@@ -70,9 +70,9 @@ CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::create(CkppInterface *kpp)
 
 // ==========================================================================
 
-CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::createCopy(const CkppCommandSolvePlannerConstShPtr& i_command)
+CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::createCopy(const CkppCommandSolvePlannerConstShPtr& inCommand)
 {
-  CkppCommandSolvePlanner*  ptr = new CkppCommandSolvePlanner(*i_command);
+  CkppCommandSolvePlanner*  ptr = new CkppCommandSolvePlanner(*inCommand);
   CkppCommandSolvePlannerShPtr shPtr(ptr);
   
   if(KD_OK != ptr->init(shPtr))
@@ -86,13 +86,13 @@ CkppCommandSolvePlannerShPtr CkppCommandSolvePlanner::createCopy(const CkppComma
 
 // ==========================================================================
 
-ktStatus CkppCommandSolvePlanner::init(const CkppCommandSolvePlannerWkPtr& i_weakPtr)
+ktStatus CkppCommandSolvePlanner::init(const CkppCommandSolvePlannerWkPtr& inWeakPtr)
 {
-  ktStatus success = CkppCommand::init(i_weakPtr);
+  ktStatus success = CkppCommand::init(inWeakPtr);
   
   if(KD_OK == success)
 	{
-	  m_weakPtr = i_weakPtr;
+	  attWeakPtr = inWeakPtr;
 	}
 
   return success;
@@ -104,7 +104,7 @@ ktStatus CkppCommandSolvePlanner::init(const CkppCommandSolvePlannerWkPtr& i_wea
 
 CkppCommandShPtr CkppCommandSolvePlanner::clone() const
 {
-  return CkppCommandSolvePlanner::createCopy(m_weakPtr.lock());
+  return CkppCommandSolvePlanner::createCopy(attWeakPtr.lock());
 }
 
 
@@ -126,13 +126,13 @@ unsigned int CkppCommandSolvePlanner::countParameters() const
 
 // ==========================================================================
 
-CkppParameterConstShPtr CkppCommandSolvePlanner::parameter(unsigned int i_rank) const
+CkppParameterConstShPtr CkppCommandSolvePlanner::parameter(unsigned int inRank) const
 {
  
   CkppParameterShPtr result;
   CkppComponentShPtr nullComponent;
 
-  switch(i_rank)
+  switch(inRank)
     {   
     default:
       KIT_ASSERT( false );

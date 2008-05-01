@@ -54,7 +54,7 @@ class CkppPlannerPanelController : public CkppWindowController
 
  private:
 
-  CkppPlannerPanelControllerWkPtr m_weakPtr;
+  CkppPlannerPanelControllerWkPtr attWeakPtr;
   CkppPlannerPanelShPtr panel;
   int problemId;
 
@@ -97,7 +97,7 @@ class CkppPlannerPanelController : public CkppWindowController
   /**
      \brief inherited from CkppWindowController. Initialization method
   */
-  ktStatus init (const CkppPlannerPanelControllerWkPtr &i_weakPtr);
+  ktStatus init (const CkppPlannerPanelControllerWkPtr &inWeakPtr);
   /**
      @}
   */

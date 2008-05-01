@@ -1,3 +1,6 @@
+2008/05/01
+	37. Renamed some attributes and method parameter in order to homogeneize the style.
+	
 2008/04/18
 	36. Set default penetration to 0.02. Can be changed by compilation 
 	    macro. 
