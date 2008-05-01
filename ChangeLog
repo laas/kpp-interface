@@ -1,4 +1,7 @@
 2008/05/01
+	38. Changed the way graphic roadmaps are handled :
+	    creation of graphic roadmap is triggered from ChppPlanner through a notification.
+	    CkppInterface subscribes to the notification and builds a graphic roadmap.
 	37. Renamed some attributes and method parameter in order to homogeneize the style.
 	
 2008/04/18

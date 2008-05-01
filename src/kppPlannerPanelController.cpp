@@ -404,7 +404,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
   wxCheckBox * SolveAllCheckBox = dynamic_cast<wxCheckBox*>(panel->FindWindowByName("SolveAll Chk",panel.get()));
   int FirstProblem, LastProblem;
   bool isDiffusing = false;
-  CkwsRoadmapBuilderShPtr RdmBuilder;
+  CkwsRoadmapBuilderShPtr rdmBuilder;
   CkwsDiffusingRdmBuilderShPtr DiffusingRdmBuilder;
   if(SolveAllCheckBox->IsChecked()) {
     ODEBUG1(" Solve All");
@@ -427,7 +427,9 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     wxComboBox* ShooterComboBox  = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Diffusion Shooter",panel.get()));
     wxComboBox* PickerComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Diffusion Picker",panel.get()));
     wxComboBox* SteeringMethodComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Steering Method",panel.get()));
+#if 0
     wxComboBox* DelegateComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Delegates",panel.get()));
+#endif
     wxComboBox* OptimizerComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Path Optimizer",panel.get()));
     wxCheckBox* biDiffuseCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("BiDiff Chk",panel.get()));
     wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("H/S Rdm Chk",panel.get()));
@@ -439,37 +441,33 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
     case CkppPlannerPanel::BASIC_RDMBUILDER : 
       ODEBUG2(" Basic roadmap builder selected.");
-      RdmBuilder = CkwsBasicRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,RdmBuilder);
+      rdmBuilder = CkwsBasicRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
       isDiffusing = false;
       break;
 
     case CkppPlannerPanel::DIFFUSING : 
       ODEBUG2(" Diffusing roadmap builder selected.");
       DiffusingRdmBuilder = CkwsDiffusingRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
-      RdmBuilder = DiffusingRdmBuilder;
+      rdmBuilder = DiffusingRdmBuilder;
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
       isDiffusing = true;
       break;
 
     case CkppPlannerPanel::IPP : 
       ODEBUG2(" IPP roadmap builder selected.");
       DiffusingRdmBuilder = CkwsIPPRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
-      RdmBuilder = DiffusingRdmBuilder;
+      rdmBuilder = DiffusingRdmBuilder;
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
       isDiffusing = true;
       break;
 
     case CkppPlannerPanel::VISIBILITY : 
       ODEBUG2(" Visibility roadmap builder selected.");
-      RdmBuilder = ChppVisRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
-      if (!RdmBuilder) {
+      rdmBuilder = ChppVisRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
+      if (!rdmBuilder) {
 	ODEBUG1(" Unable to create a visibility roadmap builder");
       }
       else {
-	panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,RdmBuilder);
 	isDiffusing = false;
       }
       break; 
@@ -480,27 +478,26 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	if(DiffusingBuilderCheckBox->IsChecked()) {
 	  DiffusingRdmBuilder = 
 	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder> >::create(CkwsRoadmap::create(Device), penetration);
-	  RdmBuilder = DiffusingRdmBuilder;
+	  rdmBuilder = DiffusingRdmBuilder;
 	  
 	}
 	else {
 	  DiffusingRdmBuilder = 
 	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> >::create(CkwsRoadmap::create(Device), penetration);
-	  RdmBuilder = DiffusingRdmBuilder;
+	  rdmBuilder = DiffusingRdmBuilder;
 	}
       } 
       else { 
 	if(DiffusingBuilderCheckBox->IsChecked()) {
 	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
-	  RdmBuilder = DiffusingRdmBuilder;
+	  rdmBuilder = DiffusingRdmBuilder;
 	}
 	else {
 	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
-	  RdmBuilder = DiffusingRdmBuilder;
+	  rdmBuilder = DiffusingRdmBuilder;
 	}
       }
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i,DiffusingRdmBuilder);
       break;
 
     case CkppPlannerPanel::LOCAL_TREES : 
@@ -508,23 +505,21 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       isDiffusing = true;
       if(DiffusingBuilderCheckBox->IsChecked()) {
 	DiffusingRdmBuilder = CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
-	RdmBuilder = DiffusingRdmBuilder;
       }
       else {
 	DiffusingRdmBuilder = CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
-	RdmBuilder = DiffusingRdmBuilder;
       }
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i, DiffusingRdmBuilder);
+      rdmBuilder = DiffusingRdmBuilder;
       break;
     default: 
       ODEBUG2(" No roadmap builder selected.");
       isDiffusing = false;
-      RdmBuilder = panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i);
-      if (DiffusingRdmBuilder = KIT_DYNAMIC_PTR_CAST(CkwsDiffusingRdmBuilder, RdmBuilder)) {
+      rdmBuilder = panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i);
+      if (DiffusingRdmBuilder = KIT_DYNAMIC_PTR_CAST(CkwsDiffusingRdmBuilder, rdmBuilder)) {
 	isDiffusing = true;
       }
-      if (RdmBuilder) {
+      if (rdmBuilder) {
 	ODEBUG2(" Taking existing roadmap builder.");
       }
       break;
@@ -587,19 +582,21 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
+#if 0
     switch(DelegateComboBox->GetCurrentSelection()){//To set the chosen delegate
     case CkppPlannerPanel::GRAPHIC : 
-      if(!RdmBuilder) { 
+      if(!rdmBuilder) { 
 	ODEBUG1(" No roadmap builder selected or existing.");
       }
       else {
 	ODEBUG2("Adding a graphic delegate to roadmap builder");
-	RdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
+	rdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
       }
       break;
     default: 
       break;
     }
+#endif
 
     switch(OptimizerComboBox->GetCurrentSelection()){//To set the chosen optimizer
     case CkppPlannerPanel::CLEAR : 
@@ -615,22 +612,9 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       break;
     }
 
-    if(ShowRdmCheckBox->IsChecked()){
-      CkwsRoadmapBuilderShPtr roadmapBuilder = panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i);
-      if (!roadmapBuilder) {
-	ODEBUG1(" Cannot insert graphic roadmap since roadmap builder is not set");
-      }
-      else {
-	CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = 
-	  CkwsGraphicRoadmap::create(roadmapBuilder, "default graphic roadmap") ;
-	if (kwsGraphicRoadmap) {
-	  panel->getInterface()->addGraphicRoadmap(kwsGraphicRoadmap,true);
-	  ODEBUG1("Displaying Roadmap for problem " << i);
-	}
-	else {
-	  ODEBUG1(" Unable to create graphic roadmap");
-	}
-      }
+    if (rdmBuilder) {
+      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i, rdmBuilder, 
+								    ShowRdmCheckBox->IsChecked());
     }
   }
   panel->Hide();

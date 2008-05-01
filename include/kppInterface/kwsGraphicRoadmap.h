@@ -46,12 +46,12 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
 This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
-    giving a \c CkwsRoadmap, then add it to your kppInterface-derived class :
+    giving a \c CkwsRoadmapBuilder, then add it to your kppInterface object:
 
     \code
 
     bool is_Graphic_Roadmap_Updated_At_RunTime = false;
-    CkwsGraphicRoadmapShPtr myGraphicRoadmap = CkwsGraphicRoadmap::create(anyCkwsRoadmap);
+    CkwsGraphicRoadmapShPtr myGraphicRoadmap = CkwsGraphicRoadmap::create(anyCkwsRoadmapBuilder);
     myKppInterface->addGraphicRoadmap(myGraphicRoadmap, is_Graphic_Roadmap_Updated_At_RunTime);
 
     \endcode
@@ -90,7 +90,10 @@ This class allows users to display their roadmaps \c CkwsRoadmap. It displays al
 class CkwsGraphicRoadmap : public CkppViewGraphic {
 
  public:
-
+  /**
+     \brief Get name
+  */
+  inline const std::string& name() { return attName;};
   /**
      \brief Rendering method for the roadmap : this function draws segments from the roadmap vertices. It is automatically called by KPP.
    */
@@ -155,7 +158,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief Constructor
   */
-  CkwsGraphicRoadmap();
+  CkwsGraphicRoadmap(const std::string& inName);
 
   /**
      \brief initialization method
@@ -175,6 +178,11 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   bool attFinished;
   bool attIsDisplayed;
   CkwsRoadmapShPtr attKwsRoadmap;
+
+  /**
+     \brief name
+  */
+  std::string attName;
 
 
 };

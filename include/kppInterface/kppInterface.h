@@ -64,14 +64,14 @@ public:
 
   /**
      \brief Adds a graphical representation of a roadmap in the interface
-     \param inGraphicRoadmaps Graphic roadmap that should be displayed.
+     \param inGraphicRoadmap Graphic roadmap that should be displayed.
      \param inIsRealTimeUpdated Says if the graphic roadmap will be built at run time or not
 
      \note If you want to see the roadmap building at run-time, you must add a CkppProgressDelegate to your roadmap builder.
 
      \return The graphic roadmap rank in the vector.
   */
-  unsigned int addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicRoadmaps, bool inIsRealTimeUpdated = false);
+  unsigned int addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicRoadmap, bool inIsRealTimeUpdated = false);
 
   /**
      \brief Removes the graphic roadmap at the given rank in the vector
@@ -116,11 +116,8 @@ protected:
   
   bool corbaServerRunning;
 
-  std::deque<CkwsGraphicRoadmapShPtr> attGraphicRoadmaps;
-  
 
-public:
-
+protected:
 
   /**
      \name Treat Notifications
@@ -155,7 +152,24 @@ public:
      \brief Insert a list of obstacle to the interface
      \param inNotification :
   */	
-  void hppSetObstacleList(const CkitNotificationConstShPtr& inNotification);
+  virtual void hppSetObstacleList(const CkitNotificationConstShPtr& inNotification);
+
+  /**						
+     \brief Delete a roadmap builder
+     \param inNotification notification sent by ChppPlanner object.
+
+     This notification is sent each time a roadmap builder is destroyed.
+  */
+  virtual void hppRemoveRoadmapBuilder(const CkitNotificationConstShPtr& inNotification);
+
+  /**
+     \brief Insert a graphic roadmap in the interface
+     \param inNotification notification sent by ChppPlanner object.
+
+     This method is called each time a new roadmap builder is created 
+     the roadmap of which is required to be displayed.
+  */
+  virtual void hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNotification);
 
   /**
      \brief Called when the interface has nothing to do.
@@ -169,6 +183,33 @@ public:
  private :
 
   /**
+     \brief Store graphic existing roadmaps
+  */
+  std::deque<CkwsGraphicRoadmapShPtr> attGraphicRoadmaps;
+
+  /**
+     \brief Mapping between CkwsRoadmap and CkwsGraphicRoadmap.
+
+     This mapping is used when a roadmap is deleted. It enables the object to retrieve the 
+     corresponding graphic roadmap if any.
+  */
+  std::map <CkwsRoadmapShPtr, CkwsGraphicRoadmapShPtr> attRoadmapMapping;
+
+  /**
+     \brief Retrieve rank in CkppInterface::attGraphicRoadmaps of given roadmap
+
+     \param inRoadmap A shared pointer to a standard roadmap
+     \retval outRank the rank of graphic roadmap corresponding to CkppInterface::attGraphicRoadmaps if any.
+     \return true if the input roadmap corresponds to a graphic roadmap, false otherwise.
+     
+     This function tries to solve the following equation:
+
+     attGraphicRoadmaps[outRank] = attRoadmapMapping[inRoadmap]
+     
+  */
+  bool isRoadmapStoredAsGraphic(const CkwsRoadmapShPtr& inRoadmap, unsigned int& outRank);
+  
+  /**
      \brief Draws the entire roadmap when the associated notification is received
      \param inNotification Received notification. 
 
@@ -176,14 +217,15 @@ public:
      to know which roadmap have to be updated.
 
   */
-  void addRoadmap(const CkitNotificationConstShPtr& inNotification);
+  void graphicRoadmapHasBeenModified(const CkitNotificationConstShPtr& inNotification);
 
 
   /**
-     \brief Removes all graphic roadmaps from the vector of roadmaps
+     \brief Removes all graphic roadmaps and all ChppProblem objects
+
      \param inNotification received notification
   */
-  void removeAllRoadmaps(const CkitNotificationConstShPtr& inNotification);
+  void removeAllRoadmapsAndProblems(const CkitNotificationConstShPtr& inNotification);
 
 };
 

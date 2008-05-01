@@ -36,10 +36,9 @@ using namespace std;
 #endif
 
 
-CkwsGraphicRoadmap::CkwsGraphicRoadmap(){
-
-
-
+CkwsGraphicRoadmap::CkwsGraphicRoadmap(const std::string& inName) : 
+  attName(inName)
+{
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -95,13 +94,13 @@ void CkwsGraphicRoadmap::render(){
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & i_roadmapBuilder,const std::string &inName){
+CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,const std::string &inName){
 
-  CkwsGraphicRoadmap * graphicRoadmapPtr = new CkwsGraphicRoadmap();
+  CkwsGraphicRoadmap * graphicRoadmapPtr = new CkwsGraphicRoadmap(inName);
   CkwsGraphicRoadmapShPtr graphicRoadmapShPtr(graphicRoadmapPtr);
   CkwsGraphicRoadmapWkPtr graphicRoadmapWkPtr(graphicRoadmapShPtr);
 
-  if (graphicRoadmapPtr->init(graphicRoadmapWkPtr, i_roadmapBuilder ) != KD_OK ) {
+  if (graphicRoadmapPtr->init(graphicRoadmapWkPtr, inRoadmapBuilder ) != KD_OK ) {
     graphicRoadmapShPtr.reset();
   }
   return graphicRoadmapShPtr;
