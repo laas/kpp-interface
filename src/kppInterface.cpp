@@ -625,8 +625,14 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
 				 this, &CkppInterface::graphicRoadmapHasBeenModified);
   }
 
+#if 0
+  /* 
+     Do not delete all roadmap and problems each time somthing has changed since
+     this causes erratic behaviors using hppCorbaServer
+  */
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppWindowController::DID_CHANGE_DOCUMENT,
 								    this,&CkppInterface::removeAllRoadmapsAndProblems);
+#endif
 
   // Get CkwsRoadmap object corresponding to input graphic roadmap
   // and store it in mapping.
@@ -733,7 +739,7 @@ void CkppInterface::graphicRoadmapHasBeenModified(const CkitNotificationConstShP
 void CkppInterface::removeAllRoadmapsAndProblems(const CkitNotificationConstShPtr& inNotification)
 {
 
-  ODEBUG2("removing all roadmaps and all problems");
+  ODEBUG1("removing all roadmaps and all problems");
   removeGraphicRoadmap();
   attGraphicRoadmaps.clear();
 
