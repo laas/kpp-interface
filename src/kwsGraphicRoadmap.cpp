@@ -1,7 +1,7 @@
 /*
-  Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
+  Copyright 2008 CNRS-LAAS
 
-  Developed by David Flavigne
+  Authors: David Flavigne and Florent Lamiraux
 
 */
 
@@ -21,15 +21,17 @@
 
 #include <iostream>
 
+unsigned int CkwsGraphicRoadmap::nbObjects = 0;
+
 using namespace std;
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2
-#define ODEBUG2(x) std::cout << "kwsGraphicRoadmap:" << x << std::endl
-#define ODEBUG1(x) std::cerr << "kwsGraphicRoadmap:" << x << std::endl
+#define ODEBUG2(x) std::cout << "CkwsGraphicRoadmap:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsGraphicRoadmap:" << x << std::endl
 #elif DEBUG==1
 #define ODEBUG2(x)
-#define ODEBUG1(x) std::cerr << "kwsGraphicRoadmap:" << x << std::endl
+#define ODEBUG1(x) std::cerr << "CkwsGraphicRoadmap:" << x << std::endl
 #else
 #define ODEBUG2(x)
 #define ODEBUG1(x)
@@ -39,17 +41,20 @@ using namespace std;
 CkwsGraphicRoadmap::CkwsGraphicRoadmap(const std::string& inName) : 
   attName(inName)
 {
+  nbObjects++;
+  ODEBUG2(" constructor: nb existing objects: " << nbObjects);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
 
+  nbObjects--;
+  ODEBUG2(" destructor: nb existing objects: " << nbObjects);
   if(attIsDisplayed){
-    cout<<"erasing roadmap"<<endl;
+    ODEBUG2("erasing roadmap");
     CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attWeakPtr.lock());
   }
-  attKwsRoadmap.reset();
   attWeakPtr.reset();
 }
 
@@ -57,6 +62,7 @@ CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
 
 void CkwsGraphicRoadmap::render(){
 
+  ODEBUG2(":render called");
   if(attIsDisplayed){
     if(isRealTimeUpdated){
       glPushAttrib(GL_ENABLE_BIT);
@@ -116,7 +122,6 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,co
   isRealTimeUpdated=false;
   attFinished = false;
   attIsDisplayed = false;
-  attIsJointDisplayed = false;
   success = CkppViewGraphic::init(inGrRdmWkPtr);
 
   if (inRoadmapBuilder) {
@@ -129,7 +134,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,co
 
   attKwsRoadmap = inRoadmapBuilder->roadmap();
     
-  cout<<"Initializing GraphicRoadmap - Done"<<endl;
+  ODEBUG2(":init - Done");
 
   return success;
 
@@ -154,7 +159,7 @@ void CkwsGraphicRoadmap::drawRoadmap(){
     }
   }
   if (displayJointVector.size() == 0) {
-    std::cout << "CkwsPlusRoadmap::compute: no joint to display." << std::endl;
+    ODEBUG2(":drawRoadmap: no joint to display.");
     return;
   }
 
@@ -232,9 +237,13 @@ bool CkwsGraphicRoadmap::GetRealTimeUpdate(){
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& inNotification){
+void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& inNotification)
+{
+  ODEBUG2(":drawNotifRoadmap called");
   attIsDisplayed = true;
-  if(inNotification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) attFinished = true;
+  if(inNotification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) {
+    attFinished = true;
+  }
   CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
 }
 

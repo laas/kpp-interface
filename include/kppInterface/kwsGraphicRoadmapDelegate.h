@@ -1,5 +1,7 @@
 /*
-  Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
+  Copyright CNRS-LAAS
+
+  Authors: David Flavigne, Florent Lamiraux
  
 */
 
@@ -45,9 +47,24 @@ CLASS
    see class CkwsRdmBuilderDelegate in the KineoWorks Reference Guide
    
 */
-class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate{
+class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate {
 
  public : 
+  /**
+     \brief Notification Identificator
+     
+     Sent when an edge has been added to the roadmap
+  */
+  static const CkitNotification::TType DID_MODIFY_THE_ROADMAP;
+
+  /**
+     \brief Notification parameter string indentifier
+
+     This key identifies the roadmap builder argument of notification 
+     CkwsRdmBuilderDelegate::DID_MODIFY_THE_ROADMAP.
+  */
+  static const std::string ROADMAPBUILDER_KEY;
+
 
   /**
      \brief Destructor
@@ -60,21 +77,84 @@ class CkwsGraphicRoadmapDelegate : public CkwsRdmBuilderDelegate{
   CkwsGraphicRoadmapDelegate();
 
   /**
-     These methods are virtual methods from CkwsRdmBuilderDelegate, reimplemented.
+     \name Methods reimplemented from CkwsRdmBuilderDelegate
+
+     @{
    */
-  virtual void builderWillStartBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path);
-  virtual void builderDidFinishBuilding (const CkwsRoadmapBuilderShPtr &i_builder, CkwsPathShPtr &io_path, ktStatus i_success);
-  virtual bool plannerShouldStopPlanning (const CkwsRoadmapBuilderConstShPtr &i_builder);
-  virtual bool builderShouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsConfig &i_cfg);
-  virtual void builderDidAddNode (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsNodeConstShPtr &i_node);
-  virtual void builderDidAddEdge (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsEdgeConstShPtr &i_edge);
-  virtual void builderDidModifyPath (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsPathConstShPtr &i_path);
 
- protected : 
+  /**
+     \brief Called before roadmap construction.
+
+     \param inRdmBuilder Roadmap builder the delegate is attached to.
+     \param inOutPath Input path, used to enrich the roadmap.
+
+     Store weak pointer to roadmap builder the delegate is attached to.
+  */
+  virtual void builderWillStartBuilding (const CkwsRoadmapBuilderShPtr &inRdmBuilder, 
+					 CkwsPathShPtr &inOutPath);
+
+  /**
+     \brief Called after end of roadmap construction.
+
+     \param inRdmBuilder Roadmap builder the delegate is attached to.
+     \param inOutPath Path found in case of success.
+     \param inSuccess whether the roadmap builder succeeded in finding a path.
+
+     Send notification CkppPlanPathCommand::DID_FINISH_BUILDING.
+  */
+  virtual void builderDidFinishBuilding (const CkwsRoadmapBuilderShPtr &inRdmBuilder, 
+					 CkwsPathShPtr &inOutPath, ktStatus inSuccess);
+
+  /**
+     \brief Called repeatedly during the process to allow to interrupt planning
+  */
+  virtual bool plannerShouldStopPlanning (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder);
+
+  /**
+     \brief Called repeatedly during the building process to allow the implementer to prevent the builder from expanding the roadmap towards a configuration
+  */
+  virtual bool builderShouldExploreTowards (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder, 
+					    const CkwsConfig &inConfig);
+
+  /**
+     \brief Called whenever a new node is added to the roadmap
+  */
+  virtual void builderDidAddNode (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder, 
+				  const CkwsNodeConstShPtr &inNode);
+
+  /**
+     \brief Called whenever a new edge is added to the roadmap 
+  */
+  virtual void builderDidAddEdge (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder, 
+				  const CkwsEdgeConstShPtr &inEdge);
+
+  /**
+     \brief Called whenever a path is modified by the builder
+  */
+  virtual void builderDidModifyPath (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder, 
+				     const CkwsPathConstShPtr &i_path);
+
+  /**
+     @}
+  */
  private :
-  long int nbSuccessfulShoots;
-  CkwsRoadmapBuilderShPtr m_builder;
 
+  long int nbSuccessfulShoots;
+
+  /**
+     \brief Weak pointer to roadmap builder
+  */
+  CkwsRoadmapBuilderWkPtr attRoadmapBuilderWkPtr;
+
+  /**
+     \if 0
+     \brief Counter of objects of this class
+  */
+  static unsigned int nbObjects;
+
+  /**
+     \endif
+  */
 };
 
 /**

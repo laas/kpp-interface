@@ -545,7 +545,8 @@ void CkppInterface::hppRemoveRoadmapBuilder(const CkitNotificationConstShPtr& in
   unsigned int roadmapRank;
   if (isRoadmapStoredAsGraphic(roadmap, roadmapRank)) {
     ODEBUG2(":hppRemoveRoadmapBuilder removing roadmap: " << attGraphicRoadmaps[roadmapRank]->name());
-    attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+roadmapRank);
+    removeGraphicRoadmap(roadmapRank);
+    attRoadmapMapping.erase(roadmap);
   }
   return;
 }
@@ -580,7 +581,7 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   CkwsGraphicRoadmapShPtr graphicRoadmap = 
     CkwsGraphicRoadmap::create(roadmapBuilder, roadmapName.str());
 
-  roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate);
+  //roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate);
   addGraphicRoadmap(graphicRoadmap, true);
 
   ODEBUG2(":hppAddGraphicRoadmap: " << roadmapName.str() << " created");
@@ -609,16 +610,19 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
     ODEBUG2("The Roadmap will be updated at run time");
     CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::OVERLAY_3D, 
 								 attGraphicRoadmaps.back() );   
-    CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, 
-								      this , &CkppInterface::graphicRoadmapHasBeenModified);
+    CkitNotificator::defaultNotificator()->
+      subscribe<CkppInterface>(CkwsGraphicRoadmapDelegate::DID_MODIFY_THE_ROADMAP, 
+			       this , 
+			       &CkppInterface::graphicRoadmapHasBeenModified);
 
   }
   else{
     ODEBUG2("The Roadmap will be updated at the end of building");
     CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, 
 								  attGraphicRoadmaps.back() ); 
-    CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING, 
-								      this, &CkppInterface::graphicRoadmapHasBeenModified);
+    CkitNotificator::defaultNotificator()->
+      subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING, 
+				 this, &CkppInterface::graphicRoadmapHasBeenModified);
   }
 
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkppWindowController::DID_CHANGE_DOCUMENT,
@@ -697,9 +701,12 @@ void CkppInterface::hideRoadmap(unsigned int inRank){
 
 void CkppInterface::graphicRoadmapHasBeenModified(const CkitNotificationConstShPtr& inNotification)
 {
+  ODEBUG2(":graphicRoadmapHasBeenModified called");
   bool found = false;
   
-  CkwsRoadmapBuilderShPtr rdmBuilder = inNotification->objectShPtr< CkwsRoadmapBuilder >();
+  CkwsRoadmapBuilderConstShPtr rdmBuilder = 
+    inNotification->constShPtrValue<CkwsRoadmapBuilder>(CkwsGraphicRoadmapDelegate::ROADMAPBUILDER_KEY);
+
   if(rdmBuilder) {
     /* We look in the vector for the graphic roadmap that has his intern 
        kwsRoadmap shared pointer identical to the modified roadmap */
@@ -715,6 +722,9 @@ void CkppInterface::graphicRoadmapHasBeenModified(const CkitNotificationConstShP
       ODEBUG1(":graphicRoadmapHasBeenModified:    No graphical roadmap for the modified kwsRoadmap,");
       ODEBUG1(":graphicRoadmapHasBeenModified:    " << attGraphicRoadmaps.size() <<" roadmaps in vector.");
     }
+  } 
+  else {
+    ODEBUG1(":graphicRoadmapHasBeenModified: no roadmap builder in notification");
   }
 }
 

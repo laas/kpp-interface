@@ -1,7 +1,7 @@
 /*
-  Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
+  Copyright 2008 CNRS-LAAS
 
-  Developed by David Flavign\'e
+  Authors: David Flavigne and Florent Lamiraux
 
 */
 
@@ -44,7 +44,8 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
 /**
 
-This class allows users to display their roadmaps \c CkwsRoadmap. It displays all the joint configurations, for joints that are their displayPath property set to true.
+This class allows users to display their roadmaps \c CkwsRoadmap. It displays 
+all the joints with displayPath property set to true.
     In order to do so, you just have to create an instance of CkwsGraphicRoadmap
     giving a \c CkwsRoadmapBuilder, then add it to your kppInterface object:
 
@@ -69,22 +70,26 @@ This class allows users to display their roadmaps \c CkwsRoadmap. It displays al
 
     \code
 
-    void CmyRoadmapBuilderDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr &i_builder, const CkwsEdgeConstShPtr &i_edge){
+    void CmyRoadmapBuilderDelegate::didAddEdge (const CkwsRoadmapBuilderConstShPtr &inRdmBuilder, 
+                                                const CkwsEdgeConstShPtr &inEdge)
+    {
 
-         CkitNotificationShPtr notification = CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, m_builder);
+         CkitNotificationShPtr notification = 
+           CkitNotification::createWithShPtr<CkwsRoadmapBuilder>(CkppPlanPathCommand::DID_ADD_EDGE_TO_ROADMAP, 
+	   m_builder);
          CkitNotificator::defaultNotificator()->notify(notification);
 
-         CkwsRdmBuilderDelegate::didAddEdge (i_builder,i_edge);
+         CkwsRdmBuilderDelegate::didAddEdge (inRdmBuilder, inEdge);
 
     }
 
     \endcode
 
-    Here, the class \c CmyRoadmapBuilderDelegate inherits from both CkwsRoadmapBuilderDelegate and CkppProgressDelegate.
+    Here, the class \c CmyRoadmapBuilderDelegate inherits from both CkwsRoadmapBuilderDelegate and 
+    CkppProgressDelegate.
 
-    Graphical roadmaps can also be set visible or not in the \link #CkppPlannerPanel Planner Configuration Panel \endlink , and a delegate can be added as well.
-    
-
+    Graphical roadmaps can also be set visible or not in the \link #CkppPlannerPanel Planner Configuration 
+    Panel \endlink , and a delegate can be added as well.
 */
 
 class CkwsGraphicRoadmap : public CkppViewGraphic {
@@ -101,10 +106,11 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   /**
      \brief Create method.
-     \param i_roadmap The roadmap to display
-     \param inName Name of the graphic roadmap
+     \param inRoadmapBuilder the roadmap builder owning the roadmap to display.
+     \param inName Name of the graphic roadmap.
    */
-  static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & i_roadmap,const std::string &inName = "");
+  static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,
+					const std::string &inName = "");
 
   /**
      \brief Destructor
@@ -126,28 +132,23 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief returns the kwsRoadmap
    */
-  CkwsRoadmapShPtr kwsRoadmap(){return attKwsRoadmap;}
+  CkwsRoadmapShPtr kwsRoadmap() {
+    return attKwsRoadmap.lock();
+  }
 
   /**
      \brief Change the graphic roadmap status (displayed or not)
      \param disp Set this to true if you want the roadmap to be displayed
    */
-  void isDisplayed(bool disp){attIsDisplayed = disp;}
+  void isDisplayed(bool disp) {
+    attIsDisplayed = disp;
+  }
   /**
      \brief Returns the graphic roadmap status (displayed or not)
    */
-  bool isDisplayed(){return attIsDisplayed;}
-
-  /**
-     \brief Change the graphic roadmap status for a joint (displayed or not)
-     \param disp Set this to true if you want the roadmap to be displayed
-  */
-  void isJointDisplayed(bool disp){attIsJointDisplayed = disp;}
-  
-  /**
-     \brief Returns the graphic roadmap status for a joint (displayed or not)
-   */
-  bool isJointDisplayed(){return attIsJointDisplayed;}
+  bool isDisplayed() {
+    return attIsDisplayed;
+  }
 
   /**
      \brief draws the entire roadmap when the end of building is notified
@@ -163,7 +164,8 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
   /**
      \brief initialization method
    */
-  ktStatus init(const CkwsGraphicRoadmapWkPtr& i_ptr,const CkwsRoadmapBuilderShPtr &i_roadmap);
+  ktStatus init(const CkwsGraphicRoadmapWkPtr& inWkPtr,
+		const CkwsRoadmapBuilderShPtr &inRoadmapBuilder);
 
   /**
      \brief draws the entire roadmap
@@ -172,19 +174,45 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
  private:
 
+  /**
+     \brief Weak pointer to itself
+  */
   CkwsGraphicRoadmapWkPtr attWeakPtr;
+  
+  /**
+     \brief Whether the display is updated at run time.
+  */
   bool isRealTimeUpdated;
-  bool attIsJointDisplayed;
+
+  /**
+     \brief Whether the roadmap builder has finished the roadmap construction.
+  */
   bool attFinished;
+  
+  /**
+     \brief Whether the roadmap shoudl be displayed
+  */
   bool attIsDisplayed;
-  CkwsRoadmapShPtr attKwsRoadmap;
+
+  /**
+     \brief The roadmap that is displayed
+  */
+  CkwsRoadmapWkPtr attKwsRoadmap;
 
   /**
      \brief name
   */
   std::string attName;
 
+  /**
+     \if 0
+     \brief Counter of objects of this class
+  */
+  static unsigned int nbObjects;
 
+  /**
+     \endif
+  */
 };
 
 /**

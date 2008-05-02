@@ -1,3 +1,10 @@
+2008/05/02
+	39. Replaced shared pointer to CkwsRoadmapBuilder by weak pointer in 
+	    class CkwsGraphicRoadmapDelegate. 
+	    Shared pointer loops imply that some objects are never deleted. 
+	    However, a memory leak is remaining. Currently, CkwsGraphicRoadmapDelegate
+	    objects are not deleted.
+	
 2008/05/01
 	38. Changed the way graphic roadmaps are handled :
 	    creation of graphic roadmap is triggered from ChppPlanner through a notification.

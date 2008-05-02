@@ -210,10 +210,10 @@ protected:
   bool isRoadmapStoredAsGraphic(const CkwsRoadmapShPtr& inRoadmap, unsigned int& outRank);
   
   /**
-     \brief Draws the entire roadmap when the associated notification is received
+     \brief Draws the entire roadmap upon notification.
      \param inNotification Received notification. 
 
-     \note the notification must be sent with a Shared pointer on a CkwsRoadmapBuilder object in order
+     \note notification CkppPlanPathCommand::DID_FINISH_BUILDING must be sent with a Shared pointer on a CkwsRoadmapBuilder object in order
      to know which roadmap have to be updated.
 
   */
