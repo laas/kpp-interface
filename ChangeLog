@@ -1,3 +1,13 @@
+200/05/06
+	41. Store weak pointer to main window controller when method 
+	    getMenuUICommandLists() is called.
+	    This pointer replaces calls to deprecated 
+	    CkppMainWindowController::getInstance().
+	    As a consequence, when redefining method getMenuUICommandLists() 
+	    in a class deriving from CkppInterface, function 
+	    CkppInterface::getMainWindowController() should be called.
+	40. Made attribute attHppPlanner private with protected access methods
+	
 2008/05/02
 	39. Replaced shared pointer to CkwsRoadmapBuilder by weak pointer in 
 	    class CkwsGraphicRoadmapDelegate. 

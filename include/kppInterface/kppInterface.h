@@ -43,15 +43,34 @@ public:
 
   virtual ~CkppInterface();
   
-  // methods inherited from CkppModuleInterface
-  
+  /**
+     \brief Initialize the module.
+
+     This methods implements CkppModuleInterface::activate.
+     This method subscribes to notifications triggered in hppCore.
+  */  
   virtual ktStatus activate();
   
+  /**
+     \brief Name of the module
+
+     This methods implements CkppModuleInterface::name.
+  */
   virtual std::string name() const {return std::string("kppInterface");};
   
+  /**
+     \brief Add a new menu in KPP
+
+     This methods implements CkppGUIModuleInterface::getMenuUICommandLists.
+  */
   virtual void getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory,
 				     std::vector<CkppUICommandListShPtr> & outMenuCommandListVector);
   
+  /**
+     \brief Set pointer to ChppPlanner object.
+  */
+  void hppPlanner(ChppPlanner* inHppPlanner) {attHppPlanner = inHppPlanner;};
+
   /**
      \brief Get pointer to ChppPlanner object.
   */
@@ -109,12 +128,28 @@ protected:
 
   CkppUICommandShPtr attCommandPlannerPanel;
 
-  ChppPlanner *attHppPlanner;
-
   /// Object that implements Corba interface of module "Stochastic Environment Path Planning"
   ChppciServer *attHppCorbaServer;
   
   bool corbaServerRunning;
+
+  /**
+     \name Acess to main window controller
+     @{
+  */
+
+  /**
+     \brief Get pointer to main window controller
+
+     To get access to the model tree and other entities of the interface, we need to store
+     a pointer to the main window controller. This is done in method CkppInterface::getMenuUICommandLists().
+  */
+  void getMainWindowController(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory);
+
+  /**
+     \brief Access to the main window controller
+  */
+  CkppMainWindowControllerShPtr mainWindowController();
 
 
 protected:
@@ -181,6 +216,18 @@ protected:
   */
 
  private :
+
+  /**
+     \brief ChppPlanner object associated to the interface
+
+     Given at construction.
+  */
+  ChppPlanner *attHppPlanner;
+
+  /**
+     \brief Store weak pointer to main window controller
+  */
+  CkppMainWindowControllerWkPtr attMainWindowControllerWkPtr;
 
   /**
      \brief Store graphic existing roadmaps

@@ -117,9 +117,38 @@ CkppInterface::~CkppInterface()
 
 // ==========================================================================
 
+void CkppInterface::getMainWindowController(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory)
+{
+  attMainWindowControllerWkPtr = inCommandFactory->mainWindowController();
+}
+
+// ==========================================================================
+
+CkppMainWindowControllerShPtr CkppInterface::mainWindowController()
+{
+  CkppMainWindowControllerShPtr mainWindowController = attMainWindowControllerWkPtr.lock();
+  if (!mainWindowController) {
+    ODEBUG1(":mainWindowController: Cannot get the main window controller.");
+    ODEBUG1(":mainWindowController:  One possible cause of this problem is that");
+    ODEBUG1(":mainWindowController:  you redefined method getMenuUICommandLists() in ");
+    ODEBUG1(":mainWindowController:  a class deriving from CkppInterface but did");
+    ODEBUG1(":mainWindowController:  not call CkppInterface::getMainWindowController().");
+    exit(-1);
+  }
+  return mainWindowController;
+}
+
+// ==========================================================================
+
 void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory,
 					  std::vector<CkppUICommandListShPtr> & outMenuCommandListVector)
 {
+  /*
+    Get and store pointer to the main window controller. This is the only place where we
+    have access to this object
+  */
+  getMainWindowController(inCommandFactory);
+
   // ---  LIST --- //
 
   CkppUICommandListShPtr hppUICommandList = CkppUICommandList::create("HPP");
@@ -237,8 +266,7 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
   //debug
   //cout<<"hppAddRobot called."<<endl;
  
-  CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
-  CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
+  CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
   
   //before adding device, we check if it's already in the model tree
   CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
@@ -300,8 +328,7 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
   //debug
   //cout<<"hppAddPath called."<<endl;
  
-  CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
-  CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
+  CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
 
   CkppInsertComponentCommandShPtr insertCommand;
 
@@ -332,8 +359,7 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 
   std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
-  CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
-  CkppDocumentShPtr document = wincontroller->document();
+  CkppDocumentShPtr document = mainWindowController()->document();
   if (!document) return;
   CkppModelTreeShPtr modelTree = document->modelTree();
 
@@ -423,8 +449,7 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotif
 
   std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
   
-  CkppMainWindowController* wincontroller = CkppMainWindowController::getInstance() ; // temporary function KPP
-  CkppModelTreeShPtr modelTree = wincontroller->document()->modelTree();
+  CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
 
   CkppInsertComponentCommandShPtr insertCommand;
 
@@ -680,7 +705,7 @@ void CkppInterface::showRoadmap(unsigned int inRank){
 
     CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank] );
     attGraphicRoadmaps[inRank]->isDisplayed(true);
-    CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
+    mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 
   }else {
     ODEBUG1("This roadmap is already displayed");
@@ -696,7 +721,7 @@ void CkppInterface::hideRoadmap(unsigned int inRank){
     
     CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
     attGraphicRoadmaps[inRank]->isDisplayed(false);
-    CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
+    mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 
   } else {
     ODEBUG1("This roadmap is already hidden");
