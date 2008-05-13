@@ -1,4 +1,5 @@
-200/05/06
+kppInterface 1.3 released May 13, 2008
+
 	41. Store weak pointer to main window controller when method 
 	    getMenuUICommandLists() is called.
 	    This pointer replaces calls to deprecated 
@@ -7,35 +8,23 @@
 	    in a class deriving from CkppInterface, function 
 	    CkppInterface::getMainWindowController() should be called.
 	40. Made attribute attHppPlanner private with protected access methods
-	
-2008/05/02
 	39. Replaced shared pointer to CkwsRoadmapBuilder by weak pointer in 
 	    class CkwsGraphicRoadmapDelegate. 
 	    Shared pointer loops imply that some objects are never deleted. 
 	    However, a memory leak is remaining. Currently, CkwsGraphicRoadmapDelegate
 	    objects are not deleted.
-	
-2008/05/01
 	38. Changed the way graphic roadmaps are handled :
 	    creation of graphic roadmap is triggered from ChppPlanner through a notification.
 	    CkppInterface subscribes to the notification and builds a graphic roadmap.
 	37. Renamed some attributes and method parameter in order to homogeneize the style.
-	
-2008/04/18
 	36. Set default penetration to 0.02. Can be changed by compilation 
 	    macro. 
 	35. Correction of a bug in planner panel: if no roadmap builder 
 	    was selected, and delegate was selected, kpp crashed.
 	34. Defined enum in class CkppPlannerPanel in order to deal 
 	    with arrays (roadmapbuilders, shooters, ...);
-	
-2008/04/17
 	33. If CXXFLAGS and CFLAGS are not defined at configuration, they are set to "-Wall".
-	
-2008/04/07
-
 	32. Adaptation to KPP version 2.04.500.
-	
         31. Simplify CkppInterface::hppSetObstacleList
 	
 kppInterface 1.2 released February 19, 2008
