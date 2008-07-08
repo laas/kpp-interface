@@ -1,3 +1,6 @@
+2008/07/08
+	42. Graphic roadmap is no longer displayed on overlay but inserted
+	    in the Main 3D scene.
 kppInterface 1.3 released May 13, 2008
 
 	41. Store weak pointer to main window controller when method 

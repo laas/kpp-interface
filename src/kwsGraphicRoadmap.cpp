@@ -53,7 +53,7 @@ CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
   ODEBUG2(" destructor: nb existing objects: " << nbObjects);
   if(attIsDisplayed){
     ODEBUG2("erasing roadmap");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attWeakPtr.lock());
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::SCENE_3D, attWeakPtr.lock());
   }
   attWeakPtr.reset();
 }
@@ -123,7 +123,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,co
   attFinished = false;
   attIsDisplayed = false;
   success = CkppViewGraphic::init(inGrRdmWkPtr);
-
+//  CkppViewGraphic::isAlwaysDisplayed(false);
   if (inRoadmapBuilder) {
     inRoadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
   }
@@ -195,7 +195,7 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
 	
-	glColor4fv(&(CkppColor::DARK_RED)[0]);
+	glColor4fv(&(CkppColor::DARK_GREEN)[0]);
 	
 	//drawing an edge 
 	glBegin(GL_LINES);

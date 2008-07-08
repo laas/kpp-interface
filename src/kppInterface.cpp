@@ -43,6 +43,7 @@
 #include "kppInterface/kppCommandStartCorbaServer.h"
 #include "kppInterface/kppCommandSetConfig.h"
 #include "kppInterface/kppCommandInit.h"
+#include "kppInterface/kppCommandOpenFile.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
 
@@ -173,7 +174,13 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 						  "initialize Planner",
 						  "");
 
+  attCommandOpenFile = CkppUICommand::create(KIT_DYNAMIC_PTR_CAST(CkppCommand,CkppCommandOpenFile::create(this)),
+						  inCommandFactory->environment(),
+						  "load a Geometry File",
+						  "");
+
   hppUICommandList->appendCommand(attCommandPlannerPanel) ;
+  hppUICommandList->appendCommand(attCommandOpenFile) ;
   if (attStartCorbaServerCommand) {
     hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
   } else {
@@ -633,7 +640,7 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
   if(inIsRealTimeUpdated){
 
     ODEBUG2("The Roadmap will be updated at run time");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::OVERLAY_3D, 
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::SCENE_3D, 
 								 attGraphicRoadmaps.back() );   
     CkitNotificator::defaultNotificator()->
       subscribe<CkppInterface>(CkwsGraphicRoadmapDelegate::DID_MODIFY_THE_ROADMAP, 

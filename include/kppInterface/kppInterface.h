@@ -127,6 +127,7 @@ protected:
   CkppUICommandShPtr attStartCorbaServerCommand;
 
   CkppUICommandShPtr attCommandPlannerPanel;
+  CkppUICommandShPtr attCommandOpenFile;
 
   /// Object that implements Corba interface of module "Stochastic Environment Path Planning"
   ChppciServer *attHppCorbaServer;

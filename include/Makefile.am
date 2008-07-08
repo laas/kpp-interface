@@ -13,5 +13,6 @@ kppInterface_HEADERS = \
 	kppInterface/kppPlannerPanelController.h \
 	kppInterface/kppPlannerPanel.h \
 	kppInterface/kwsGraphicRoadmapDelegate.h \
-	kppInterface/kwsGraphicRoadmap.h
+	kppInterface/kwsGraphicRoadmap.h \
+	kppInterface/kppCommandOpenFile.h
 

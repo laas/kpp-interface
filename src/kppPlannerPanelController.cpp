@@ -618,7 +618,17 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     }
   }
   panel->Hide();
+
+  time_t start, end;
+  double planningTime;
+
+  time(&start);
   panel->getInterface()->hppPlanner()->solve() ;
+  time(&end);
+  planningTime = difftime(end, start);
+
+  cout<<"Planning Time = "<<planningTime <<endl;
+
   //panel->Destroy();
 }
 

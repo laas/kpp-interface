@@ -144,12 +144,6 @@ CkppParameterConstShPtr CkppCommandInit::parameter(unsigned int inRank) const
 
   switch(inRank)
     {   
-    case MODELTREE : 
-      result = CkppComponentParameter::create( "Model Tree", CkppComponentClassFilter< CkppModelTree >());
-      break;
-    case PATH : 
-      result = CkppComponentParameter::create( "Path", CkppComponentClassFilter< CkppPathComponent >());
-      break;
     case DEVICE : 
       result = CkppComponentParameter::create( "Device", CkppComponentClassFilter< CkppDeviceComponent >());
       break;

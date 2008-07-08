@@ -44,9 +44,7 @@ public:
 
   enum EParameters
     {
-      MODELTREE = 0,
-      PATH,
-      DEVICE,
+      DEVICE = 0,
       PARAMETER_COUNT
     };
 
