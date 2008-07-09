@@ -23,8 +23,7 @@ libkppInterface_la_SOURCES = \
 	kppPlannerPanelController.cpp \
 	kppPlannerPanel.cpp \
 	kwsGraphicRoadmapDelegate.cpp \
-	kwsGraphicRoadmap.cpp \
-	kppCommandOpenFile.cpp
+	kwsGraphicRoadmap.cpp 
 
 libkppInterface_la_LDFLAGS= \
 	@HPPCORBASERVER_LIBS@ \

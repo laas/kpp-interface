@@ -43,7 +43,6 @@
 #include "kppInterface/kppCommandStartCorbaServer.h"
 #include "kppInterface/kppCommandSetConfig.h"
 #include "kppInterface/kppCommandInit.h"
-#include "kppInterface/kppCommandOpenFile.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
 
@@ -174,13 +173,8 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 						  "initialize Planner",
 						  "");
 
-  attCommandOpenFile = CkppUICommand::create(KIT_DYNAMIC_PTR_CAST(CkppCommand,CkppCommandOpenFile::create(this)),
-						  inCommandFactory->environment(),
-						  "load a Geometry File",
-						  "");
-
   hppUICommandList->appendCommand(attCommandPlannerPanel) ;
-  hppUICommandList->appendCommand(attCommandOpenFile) ;
+
   if (attStartCorbaServerCommand) {
     hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
   } else {
