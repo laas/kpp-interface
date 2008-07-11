@@ -130,9 +130,9 @@ ktStatus CkppCommandOpenFile::doExecute()
       
       cout<<i<<" "<<endl;
       
-      CkppKCDPolyhedronShPtr kppKcdPolyhedron = KIT_DYNAMIC_PTR_CAST(CkppKCDPolyhedron, modelTree->geometryNode()->childComponent(i));
-      if(kppKcdPolyhedron) attInterface->hppPlanner()->addObstacle(kppKcdPolyhedron);
-      else cout<<"Cannot cast component to kppKCDPolyhedron"<<endl;
+      CkcdObjectShPtr kcdObject = KIT_DYNAMIC_PTR_CAST(CkcdObject, modelTree->geometryNode()->childComponent(i));
+      if(kcdPolyhedron) attInterface->hppPlanner()->addObstacle(kcdObject);
+      else cout<<"Cannot cast component to kcdPolyhedron"<<endl;
     }
   }
   
