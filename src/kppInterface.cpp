@@ -91,8 +91,6 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
   attGraphicRoadmaps.clear();
-
-  CkitNotificator::defaultNotificator()->subscribe<CkppInterface>(CkppComponent::DID_INSERT_CHILD, this , &CkppInterface::insertChild);
   attHppCorbaServer = new ChppciServer(inHppPlanner, argc, argv);
 }
 
@@ -385,8 +383,8 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 
   CkppGeometryComponentShPtr geomComponent;
   for (unsigned int i=0; i<geomNode->countChildComponents(); i++){
-      geomComponent = KIT_DYNAMIC_PTR_CAST( 
-	  CkppGeometryComponent, geomNode->childComponent(i));
+      geomComponent = 
+	KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, geomNode->childComponent(i));
       CkcdObjectShPtr obj;
       obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
       if (obj && (obj == obstacle)){
@@ -399,16 +397,16 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 
 //   cout<<"nbObstacles "<<nbObstacles<<endl;
 
+  CkppSolidComponentShPtr solidComp;
   // Test if obstacle is a polyhedron
-  if (hppPolyhedron = boost::dynamic_pointer_cast<CkppKCDPolyhedron>(obstacle)) {
-    CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(hppPolyhedron);
+  if (solidComp = boost::dynamic_pointer_cast<CkppSolidComponent>(obstacle)) {
+    CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(solidComp);
     // modelTree->geometryNode()->addChildComponent(poly);
-    // cerr<<" adding hppPolyhedron."<<endl;
-
+    // cerr<<" adding solidComp."<<endl;
     CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_INSERT_CHILD,
-						       hppPolyhedron.get());
+						       solidComp.get());
     CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
-						       hppPolyhedron.get());
+						       solidComp.get());
 
     insertCommand = CkppInsertSolidComponentCommand::create();
     insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
@@ -416,29 +414,10 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
     insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
 			      CkppComponentShPtr(poly->referencedSolidComponent()) );
     insertCommand->doExecute();
-
-  } else if (kcdAssembly = boost::dynamic_pointer_cast<CkppKCDAssembly>(obstacle)) {
-    CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
-    
-    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_INSERT_CHILD,
-						       kcdAssembly.get());
-    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
-						       kcdAssembly.get());
-    
-    insertCommand = CkppInsertSolidComponentCommand::create();
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
-			      CkppComponentShPtr(modelTree->geometryNode()) );
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
-			      CkppComponentShPtr(assembly->referencedSolidComponent()) );
-    insertCommand->doExecute();
-    
+    ODEBUG2("obstacle added.");
   } else {
-    cerr << "CkppInterface::setObstacleList: obstacle "
-	 << iObstacle << "is of undefined type." << endl;
+    ODEBUG1(":hppAddObstacle: obstacle " << iObstacle << "is of undefined type.");
   }
-
-  ODEBUG2("obstacle added.");
-
 }
 
 
@@ -784,66 +763,3 @@ int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface)
   return 0;
 }
 
-// ==========================================================================
-
-// DEBUG BLOC - Keep For Eiichi
-// CkppJointComponentShPtr kppJoint;
-// ChppBodyShPtr hppBody;
-// std::vector< CkcdObjectShPtr > outer;
-// cout<<"1. device has "<<device->countJointComponents()<<" joints."<<endl;
-// for(unsigned int i=0; i<device->countJointComponents(); i++){
-//     kppJoint = device->jointComponent(i);
-//     // hppBody = KIT_DYNAMIC_PTR_CAST(ChppBody, kppJoint->kwsKCDBody());
-//     hppBody = KIT_DYNAMIC_PTR_CAST(ChppBody, kppJoint->kwsJoint()->attachedBody());
-//     hppBody->getOuterObjects(outer);
-//     cout<<"body "<<hppBody->name()<<" has "<<hppBody->outerObjects().size()<<" outer objects and "
-// 	<<outer.size()<<" exact outer objects"<<endl;
-//   }
-//-------------------------------------------------------------------
-
-void CkppInterface::insertChild(const CkitNotificationConstShPtr& inNotification)
-{
-    //std::cout << "DID_INSERT_CHILD received"  << std::endl;
-
-    CkppComponentShPtr child(inNotification->shPtrValue< CkppComponent >(CkppComponent::CHILD_KEY)); 
-
-    CkppGeometryComponentShPtr geomComponent;
-    geomComponent = KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, child);
-    
-    if (geomComponent){
-	//std::cout << geomComponent->name() << " is inserted" << std::endl;
-	CkcdObjectShPtr obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
-	if (obj){
-	    // check whether obj is a part of robots
-	    ChppPlanner *planner = hppPlanner();
-	    for (unsigned int i=0; i<planner->getNbHppProblems(); i++){
-		CkppDeviceComponentShPtr robot;
-		robot = planner->robotIthProblem(i);
-		if (robot){
-		    for (unsigned int j=0; j<robot->countSolidComponentRefs();
-			 j++){
-			CkppSolidComponentRefShPtr scref;
-			scref = robot->solidComponentRef(j);
-			CkppSolidComponentShPtr solid;
-			solid = scref->referencedSolidComponent();
-			CkcdObjectShPtr obj2;
-			obj2 = KIT_DYNAMIC_PTR_CAST(CkcdObject, solid);
-			if (obj == obj2){
-			    //std::cout << "obj was a part of robot" << std::endl;
-			    return;
-			}
-		    }
-		}
-	    }
-	    const std::vector<CkcdObjectShPtr> obstacles
-		= planner->obstacleList();
-	    for (unsigned int i=0; i<obstacles.size(); i++){
-		if (obstacles[i] == obj) {
-		    //std::cout << "obj was one of obstacles" << std::endl;
-		    return;
-		}
-	    }
-	    planner->addObstacle(obj);
-	}
-    }
-}
