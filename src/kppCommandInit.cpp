@@ -166,7 +166,7 @@ ktStatus CkppCommandInit::doExecute()
   deviceComponent = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent,paramValue(parameter(DEVICE)).componentValue());
     
 
-  attKpp->hppPlanner()->addHppProblemAtBeginning(deviceComponent);
+  attKpp->hppPlanner()->addHppProblemAtBeginning(deviceComponent, 0.02);
 
   return KD_OK ;
  
