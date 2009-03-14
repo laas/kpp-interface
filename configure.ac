@@ -3,7 +3,7 @@ dnl
 dnl configure.ac file for package kppInterface 
 dnl
 
-AC_INIT([kppInterface], [1.5], [hpp@laas.fr])
+AC_INIT([kppInterface], [1.5.99], [hpp@laas.fr])
 AC_PREREQ(2.59)
 
 if test "$CFLAGS$CXXFLAGS" = ""; then
