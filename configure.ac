@@ -3,7 +3,7 @@ dnl
 dnl configure.ac file for package kppInterface 
 dnl
 
-AC_INIT([kppInterface], [1.4.99], [hpp@laas.fr])
+AC_INIT([kppInterface], [1.5], [hpp@laas.fr])
 AC_PREREQ(2.59)
 
 if test "$CFLAGS$CXXFLAGS" = ""; then
@@ -42,22 +42,24 @@ AC_SUBST(KINEO_ADDON_BUILD,[${KINEOPATHPLANNER_PREFIX}/bin/KineoAddonBuilder])
 AC_SUBST(KINEO_MODULE_DIR,["x${KINEOPATHPLANNER_PREFIX}/modules"])
 AC_SUBST(KINEO_LIBDIR,[${KINEOPATHPLANNER_PREFIX}/lib])
 
-PKG_CHECK_MODULES(HPPCORE, hppCore)
-HPPCORE_PREFIX=`$PKG_CONFIG hppCore --variable=prefix`
+define(hppcore_reqd, [hppCore >= 1.7])
+AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
+PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
 HPPCORE_DOCDIR=`$PKG_CONFIG hppCore --variable=docdir`
-AC_SUBST(HPPCORE_PREFIX)
 AC_SUBST(HPPCORE_DOCDIR)
 
-define(hppcobaserver_reqd, [hppCorbaServer >= 1.5])
+define(hppcobaserver_reqd, [hppCorbaServer >= 1.7])
 AC_SUBST(HPPCOBASERVER_REQD, "hppcobaserver_reqd")
 PKG_CHECK_MODULES(HPPCORBASERVER, hppcobaserver_reqd)
-HPPCORBASERVER_PREFIX=`$PKG_CONFIG hppCorbaServer --variable=prefix`
-AC_SUBST(HPPCORBASERVER_PREFIX)
+HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hppCorbaServer --variable=docdir`
+AC_SUBST(HPPCORBASERVER_DOCDIR)
 
 define(kwsplus_reqd, [kwsPlus >= 1.5])
 AC_SUBST(KWSPLUS_REQD, "kwsplus_reqd")
 PKG_CHECK_MODULES(KWSPLUS, kwsplus_reqd)
-HPPRRTPLANNER_PREFIX=`$PKG_CONFIG kwsPlus --variable=prefix`
+KWSPLUS_DOCDIR=`$PKG_CONFIG kwsPlus --variable=docdir`
+AC_SUBST(KWSPLUS_DOCDIR)
+KWSPLUS_PREFIX=`$PKG_CONFIG kwsPlus --variable=prefix`
 AC_SUBST(KWSPLUS_PREFIX)
 
 AC_OUTPUT(

@@ -1,9 +1,11 @@
 # 
-#  Copyright 
+#  Copyright 2007 JRL AIST CNRS
+#
+#  Author: Florent Lamiraux
 # 
 
 
-kppInterfacedir = $(datadir)/doc/kppInterface
+kppInterfacedir = $(datadir)/doc/kppInterface/html
 
 EXTRA_DIST = \
 	header.html \
@@ -18,8 +20,7 @@ install: html-doc
 	$(INSTALL_DATA) html/* $(kppInterfacedir)
 	mkdir -p $(kppInterfacedir)/pictures
 	$(INSTALL_DATA) $(srcdir)/pictures/* $(kppInterfacedir)/pictures
-	mkdir -p $(datadir)/doc/doxytag
-	$(INSTALL_DATA) kppInterface.doxytag $(datadir)/doc/doxytag
+	$(INSTALL_DATA) kppInterface.doxytag $(kppInterfacedir)
 
 html-doc: package.dox
 	doxygen $<
