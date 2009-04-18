@@ -112,7 +112,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
      \param inKppInterface kppInterface owning this object
    */
   static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,
-					const CkppInterfaceShPtr& inKppInterface,
+					const CkppInterfaceWkPtr& inKppInterface,
 					const std::string &inName = "");
 
   /**
@@ -172,7 +172,7 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
      \param inRoadmapBuilder the roadmap builder owning the roadmap to display.
    */
   ktStatus init(const CkwsGraphicRoadmapWkPtr& inWkPtr,
-		const CkppInterfaceShPtr& inKppInterface,
+		const CkppInterfaceWkPtr& inKppInterface,
 		const CkwsRoadmapBuilderShPtr &inRoadmapBuilder);
 
   /**

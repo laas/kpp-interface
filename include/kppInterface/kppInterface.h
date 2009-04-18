@@ -216,11 +216,11 @@ protected:
 
   /**
      \brief Initialize interface
-     \param shared pointer to itself
+     \param inKppInterface Weak pointer to itself
 
      This function basically stores a shared pointer to itself in CkppInterface object.
   */
-  ktStatus init(CkppInterfaceShPtr inKppInterface);
+  ktStatus init(const CkppInterfaceWkPtr& inKppInterface);
 
  private :
 

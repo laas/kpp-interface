@@ -81,13 +81,14 @@ CkppInterfaceShPtr CkppInterface::create()
   CkppInterface* ptr = new CkppInterface(hppPlanner);
 
   CkppInterfaceShPtr shPtr(ptr);
-  if (ptr->init(shPtr) != KD_OK) {
+  CkppInterfaceWkPtr wkPtr(shPtr);
+  if (ptr->init(wkPtr) != KD_OK) {
     shPtr.reset();
   }
   return shPtr;
 }
 
-ktStatus CkppInterface::init(CkppInterfaceShPtr inKppInterface)
+ktStatus CkppInterface::init(const CkppInterfaceWkPtr& inKppInterface)
 {
   attWeakPtr=inKppInterface;
   return KD_OK;
@@ -596,7 +597,7 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   roadmapName << "graphic roadmap " << rank;
 
   CkwsGraphicRoadmapShPtr graphicRoadmap = 
-    CkwsGraphicRoadmap::create(roadmapBuilder, attWeakPtr.lock(), roadmapName.str());
+    CkwsGraphicRoadmap::create(roadmapBuilder, attWeakPtr, roadmapName.str());
 
   //roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate);
   addGraphicRoadmap(graphicRoadmap, true);

@@ -102,7 +102,7 @@ void CkwsGraphicRoadmap::render(){
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,
-						   const CkppInterfaceShPtr& inKppInterface,
+						   const CkppInterfaceWkPtr& inKppInterface,
 						   const std::string &inName){
 
   CkwsGraphicRoadmap * graphicRoadmapPtr = new CkwsGraphicRoadmap(inName);
@@ -119,7 +119,7 @@ CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr
 
 
 ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,
-				  const CkppInterfaceShPtr& inKppInterface,
+				  const CkppInterfaceWkPtr& inKppInterface,
 				  const CkwsRoadmapBuilderShPtr & inRoadmapBuilder){
 
   ktStatus success = KD_ERROR;
