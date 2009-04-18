@@ -38,11 +38,14 @@
 #include "KineoWX/kwxIdleNotification.h"
 
 #include "hppCore/hppProblem.h"
+#include "hppCorbaServer/hppciServer.h"
 
+#include "kppInterface/kwsGraphicRoadmap.h"
 #include "kppInterface/kppInterface.h"
 #include "kppInterface/kppCommandStartCorbaServer.h"
 #include "kppInterface/kppCommandSetConfig.h"
 #include "kppInterface/kppCommandInit.h"
+#include "kppInterface/kppCommandPlannerPanel.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
 
@@ -78,7 +81,16 @@ CkppInterfaceShPtr CkppInterface::create()
   CkppInterface* ptr = new CkppInterface(hppPlanner);
 
   CkppInterfaceShPtr shPtr(ptr);
+  if (ptr->init(shPtr) != KD_OK) {
+    shPtr.reset();
+  }
   return shPtr;
+}
+
+ktStatus CkppInterface::init(CkppInterfaceShPtr inKppInterface)
+{
+  attWeakPtr=inKppInterface;
+  return KD_OK;
 }
 
 // ==========================================================================
@@ -584,7 +596,7 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   roadmapName << "graphic roadmap " << rank;
 
   CkwsGraphicRoadmapShPtr graphicRoadmap = 
-    CkwsGraphicRoadmap::create(roadmapBuilder, roadmapName.str());
+    CkwsGraphicRoadmap::create(roadmapBuilder, attWeakPtr.lock(), roadmapName.str());
 
   //roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate);
   addGraphicRoadmap(graphicRoadmap, true);

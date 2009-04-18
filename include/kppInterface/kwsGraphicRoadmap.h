@@ -35,6 +35,7 @@
 #include "kppInterface/kwsGraphicRoadmapDelegate.h"
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
+KIT_PREDEF_CLASS(CkppInterface);
 
 /** 
     \addtogroup kppInterface_graphic_Roadmap
@@ -108,8 +109,10 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
      \brief Create method.
      \param inRoadmapBuilder the roadmap builder owning the roadmap to display.
      \param inName Name of the graphic roadmap.
+     \param inKppInterface kppInterface owning this object
    */
   static CkwsGraphicRoadmapShPtr create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,
+					const CkppInterfaceShPtr& inKppInterface,
 					const std::string &inName = "");
 
   /**
@@ -163,8 +166,13 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
 
   /**
      \brief initialization method
+
+     \param inWkPtr Weak pointer to itself
+     \param inKppInterface kppInterface owning this object
+     \param inRoadmapBuilder the roadmap builder owning the roadmap to display.
    */
   ktStatus init(const CkwsGraphicRoadmapWkPtr& inWkPtr,
+		const CkppInterfaceShPtr& inKppInterface,
 		const CkwsRoadmapBuilderShPtr &inRoadmapBuilder);
 
   /**
@@ -203,6 +211,11 @@ class CkwsGraphicRoadmap : public CkppViewGraphic {
      \brief name
   */
   std::string attName;
+
+  /**
+     \brief Weak pointer to kppInterface owning this object
+  */
+  CkppInterfaceWkPtr attKppInterface;
 
   /**
      \if 0

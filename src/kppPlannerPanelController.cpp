@@ -5,15 +5,7 @@
 */
 
 /**************************INCLUDES*************************/
-
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
-
-#include "KineoGUI/kppMainWindowController.h"
-#include "KineoModel/kppConfigComponent.h"
-#include "KineoController/kppDocument.h"
-#include "KineoModel/kppModelTree.h"
-#include "KineoWorks2/kwsSMSlerp.h"
+#include <iostream>
 
 #include "wx/sizer.h"
 #include "wx/bmpcbox.h"
@@ -25,7 +17,25 @@
 #include "wx/spinctrl.h"
 #include "wx/notebook.h"
 
-#include <iostream>
+#include "KineoGUI/kppMainWindowController.h"
+#include "KineoModel/kppConfigComponent.h"
+#include "KineoController/kppDocument.h"
+#include "KineoModel/kppDeviceComponent.h"
+#include "KineoModel/kppModelTree.h"
+#include "KineoWorks2/kwsSMSlerp.h"
+#include "KineoController/kppUICommand.h"
+
+#include "kwsPlus/directPath/flicSteeringMethod.h"
+#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
+#include "kwsPlus/roadmap/hppVisRdmBuilder.h"
+#include "kwsPlus/roadmap/kwsPlusPCARdmBuilder.h"
+#include "kwsPlus/roadmap/kwsPlusLTRdmBuilder.h"
+
+#include "hppCore/hppPlanner.h"
+
+#include "kppInterface/kppPlannerPanelController.h"
+#include "kppInterface/kppPlannerPanel.h"
+#include "kppInterface/kppInterface.h"
 
 //Definition of the event table declared in the header file
 BEGIN_EVENT_TABLE(CkppPlannerPanelController,CkppWindowController)

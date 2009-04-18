@@ -8,6 +8,7 @@
 
 #include "kppInterface/kppCommandSetConfig.h"
 
+#include "KineoWorks2/kwsPath.h"
 #include "KineoController/kppSetPropertyCommand.h"
 #include "KineoModel/kppComponentParameter.h"
 #include "KineoModel/kppValue.h"
@@ -22,6 +23,8 @@
 #include "KineoGUI/kppMainWindowController.h" 
 
 #include "KineoModel/kppModelTree.h"
+
+#include "hppCore/hppPlanner.h"
 
 /*****************************************
  DEFINES
@@ -159,7 +162,7 @@ ktStatus CkppCommandSetConfig::doExecute()
   CkppPathComponentShPtr pathComponent = KIT_DYNAMIC_PTR_CAST(CkppPathComponent, component);
 
   if (!pathComponent){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : could NOT find the path  " << endl ;
+    std::cerr << "ERROR - CkppCommandSetConfig::doExecute() : could NOT find the path  " << std::endl ;
     return KD_ERROR ;
   }
 
@@ -167,7 +170,7 @@ ktStatus CkppCommandSetConfig::doExecute()
   initConfig =  pathComponent->kwsPath()->configAtStart() ;
   
   if(!initConfig){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : INIT config does NOT EXIST because there is NO directPath FOUND" << endl ;
+    std::cerr << "ERROR - CkppCommandSetConfig::doExecute() : INIT config does NOT EXIST because there is NO directPath FOUND" << std::endl ;
     return KD_ERROR;
   }
   
@@ -178,7 +181,7 @@ ktStatus CkppCommandSetConfig::doExecute()
   goalConfig =  pathComponent->kwsPath()->configAtEnd() ;
 
   if(!goalConfig){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : GOAL config doest NOT EXIST because there is NO directPath FOUND" << endl ;
+    std::cerr << "ERROR - CkppCommandSetConfig::doExecute() : GOAL config doest NOT EXIST because there is NO directPath FOUND" << std::endl ;
     return KD_ERROR ;
   }
 

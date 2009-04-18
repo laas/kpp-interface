@@ -20,14 +20,6 @@
 #include "KineoWorks2/kwsAdaptiveShortcutOptimizer.h"
 #include "KineoWorks2/kwsRandomOptimizer.h"
 
-#include "flicSteeringMethod.h"
-#include "reedsSheppSteeringMethod.h"
-#include "hppVisRdmBuilder.h"
-#include "kwsPlusPCARdmBuilder.h"
-#include "kwsPlusLTRdmBuilder.h"
-
-#include "kppInterface/kppInterface.h"
-
 #include "wx/sizer.h"
 #include "wx/bmpcbox.h"
 #include "wx/checkbox.h"

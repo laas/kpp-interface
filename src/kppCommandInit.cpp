@@ -15,18 +15,18 @@
  INCLUDES
 *******************************************/
 
-
-#include "kppInterface/kppCommandInit.h"
-#include "kppInterface/kwsGraphicRoadmap.h"
-#include "kppInterface/kwsGraphicRoadmapDelegate.h"
-
-
 #include "KineoController/kppSetPropertyCommand.h"
 #include "KineoModel/kppComponentParameter.h"
 #include "KineoModel/kppValue.h"
 #include "KineoModel/kppComponentClassFilter.h"
 #include "KineoModel/kppComponent.h"
 #include "KineoModel/kppSolidComponent.h"
+
+#include "hppCore/hppPlanner.h"
+
+#include "kppInterface/kppCommandInit.h"
+#include "kppInterface/kwsGraphicRoadmap.h"
+#include "kppInterface/kwsGraphicRoadmapDelegate.h"
 
 /*****************************************
  DEFINES

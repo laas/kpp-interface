@@ -6,6 +6,7 @@
 */
 
 #include "kppInterface/kwsGraphicRoadmap.h"
+#include "kppInterface/kppInterface.h"
 #include "kppInterface/kwsGraphicRoadmapDelegate.h"
 
 #include "KineoWorks2/kwsNode.h"
@@ -100,13 +101,15 @@ void CkwsGraphicRoadmap::render(){
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
-CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,const std::string &inName){
+CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr & inRoadmapBuilder,
+						   const CkppInterfaceShPtr& inKppInterface,
+						   const std::string &inName){
 
   CkwsGraphicRoadmap * graphicRoadmapPtr = new CkwsGraphicRoadmap(inName);
   CkwsGraphicRoadmapShPtr graphicRoadmapShPtr(graphicRoadmapPtr);
   CkwsGraphicRoadmapWkPtr graphicRoadmapWkPtr(graphicRoadmapShPtr);
 
-  if (graphicRoadmapPtr->init(graphicRoadmapWkPtr, inRoadmapBuilder ) != KD_OK ) {
+  if (graphicRoadmapPtr->init(graphicRoadmapWkPtr, inKppInterface, inRoadmapBuilder) != KD_OK ) {
     graphicRoadmapShPtr.reset();
   }
   return graphicRoadmapShPtr;
@@ -115,13 +118,17 @@ CkwsGraphicRoadmapShPtr CkwsGraphicRoadmap::create(const CkwsRoadmapBuilderShPtr
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,const CkwsRoadmapBuilderShPtr & inRoadmapBuilder){
+ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,
+				  const CkppInterfaceShPtr& inKppInterface,
+				  const CkwsRoadmapBuilderShPtr & inRoadmapBuilder){
 
   ktStatus success = KD_ERROR;
   attWeakPtr = inGrRdmWkPtr;
   isRealTimeUpdated=false;
   attFinished = false;
   attIsDisplayed = false;
+  attKppInterface = inKppInterface;
+
   success = CkppViewGraphic::init(inGrRdmWkPtr);
 //  CkppViewGraphic::isAlwaysDisplayed(false);
   if (inRoadmapBuilder) {
@@ -244,7 +251,7 @@ void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& inNo
   if(inNotification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) {
     attFinished = true;
   }
-  CkppMainWindowController::getInstance()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
+  attKppInterface.lock()->mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------

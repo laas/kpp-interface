@@ -17,22 +17,26 @@
  INCLUDES
 *******************************************/
 
+#include <deque>
+#include <map>
+
 #include "KineoModuleManager/kppModuleInterface.h"
 #include "KineoGUI/kppGUIModuleInterface.h"
-#include "KineoController/kppUICommand.h"
 
-#include "hppCorbaServer/hppciServer.h"
-#include "kppInterface/kwsGraphicRoadmap.h"
-#include "kppInterface/kppCommandPlannerPanel.h"
+class ChppPlanner;
+class ChppciServer;
 
-#include <deque>
-
-KIT_PREDEF_CLASS(CkppInterface);
-
+KIT_PREDEF_CLASS(CkitNotification);
+KIT_PREDEF_CLASS(CkwsRoadmap);
+KIT_PREDEF_CLASS(CkppUICommand);
+KIT_PREDEF_CLASS(CkppMainWindowController);
+KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
 /*****************************************
  CLASS
 *******************************************/
+
+KIT_PREDEF_CLASS(CkppInterface);
 
 class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface
 {
@@ -80,6 +84,11 @@ public:
      \brief Command to start corba server()
   */
   ktStatus startCorbaServer();
+
+  /**
+     \brief Access to the main window controller
+  */
+  CkppMainWindowControllerShPtr mainWindowController();
 
   /**
      \brief Adds a graphical representation of a roadmap in the interface
@@ -147,11 +156,6 @@ protected:
   */
   void getMainWindowController(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory);
 
-  /**
-     \brief Access to the main window controller
-  */
-  CkppMainWindowControllerShPtr mainWindowController();
-
 
 protected:
 
@@ -210,6 +214,14 @@ protected:
      @}
   */
 
+  /**
+     \brief Initialize interface
+     \param shared pointer to itself
+
+     This function basically stores a shared pointer to itself in CkppInterface object.
+  */
+  ktStatus init(CkppInterfaceShPtr inKppInterface);
+
  private :
 
   /**
@@ -223,6 +235,11 @@ protected:
      \brief Store weak pointer to main window controller
   */
   CkppMainWindowControllerWkPtr attMainWindowControllerWkPtr;
+
+  /**
+     \brief Weak pointer to itself
+  */
+  CkppInterfaceWkPtr attWeakPtr;
 
   /**
      \brief Store graphic existing roadmaps

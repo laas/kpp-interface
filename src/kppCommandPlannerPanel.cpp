@@ -5,10 +5,6 @@
  INCLUDES
 *******************************************/
 
-#include "kppInterface/kppCommandPlannerPanel.h"
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
-
 #include "KineoController/kppSetPropertyCommand.h"
 #include "KineoModel/kppComponentParameter.h"
 #include "KineoModel/kppValue.h"
@@ -16,6 +12,13 @@
 #include "KineoModel/kppComponent.h"
 #include "KineoModel/kppSolidComponent.h"
 #include "KineoGUI/kppMainWindowController.h"
+#include "KineoController/kppUICommand.h"
+
+#include "hppCore/hppPlanner.h"
+
+#include "kppInterface/kppCommandPlannerPanel.h"
+#include "kppInterface/kppPlannerPanelController.h"
+#include "kppInterface/kppPlannerPanel.h"
 
 /*****************************************
  DEFINES
@@ -159,77 +162,6 @@ CkppParameterConstShPtr CkppCommandPlannerPanel::parameter(unsigned int inRank) 
 
 ktStatus CkppCommandPlannerPanel::doExecute()
 {
-
-  // write here what your command does
-
-//---------- Initializing Problem ------------------------------------------------------
-/*  CkppModelTreeShPtr modelTree(KIT_DYNAMIC_PTR_CAST(CkppModelTree,paramValue(parameter(MODELTREE)).componentValue()));
-  CkppPathComponentShPtr pathComponent;
-  CkppDeviceComponentShPtr deviceComponent;
-
-  if(modelTree->deviceNode()){
-    deviceComponent = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent,paramValue(parameter(DEVICE)).componentValue());
-  }
-
-  cout<<"retreiving parameters - DONE"<<endl;
-
-  attKpp->hppPlanner()->initializeProblem();//deviceComponent); 
-
-  cout<<"initialize problem - DONE"<<endl;
-
-  CkwsGraphicRoadmapShPtr kwsGraphicRoadmap = CkwsGraphicRoadmap::create(attKpp->hppPlanner()->roadmapBuilderIthProblem(0),"Graphic Roadmap") ;
-
-  attKpp->addGraphicRoadmap(kwsGraphicRoadmap,true);
-
-  cout<<"create a graphic roadmap - DONE"<<endl;
-//----------------------------------------------------------------------------------------
-
-
-//----------- Set Configs ----------------------------------------------------------------  
-  CkppPathNodeShPtr pathNode = modelTree->pathNode() ;
-  unsigned int rank=0 ;  
-
-  if(pathNode->countChildComponents() == 0){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : there is NO PATH yet  " << endl ;
-    return KD_ERROR ;
-  }
- 
- 
-   pathComponent = KIT_DYNAMIC_PTR_CAST( CkppPathComponent, pathNode->childComponent(pathNode->countChildComponents()-1)); 
-
-  if (!pathComponent){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : could NOT find the path  " << endl ;
-    return KD_ERROR ;
-  }
-
-  CkwsConfigShPtr initConfig ;
-  initConfig =  pathComponent->kwsPath()->configAtStart() ;
-  
-  if(!initConfig){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : INIT config not found" << endl ;
-    return KD_ERROR;
-  }
-   
-  //set the Init Config of the problem 
-  if (attKpp->hppPlanner()->initConfIthProblem(0, initConfig) == KD_ERROR) {
-    std::cerr << "ERROR - ChppRRTPlanner::initConfig could not set initial configuration of robot box." << std::endl;
-    return KD_ERROR;
-  }
-      
-  CkwsConfigShPtr goalConfig ;
-  goalConfig =  pathComponent->kwsPath()->configAtEnd() ;
-
-  if(!goalConfig){
-    cerr << "ERROR - CkppCommandSetConfig::doExecute() : GOAL config not found" << endl ;
-    return KD_ERROR ;
-  }
-   
-  //set the Goal Config of the problem  
-  if (attKpp->hppPlanner()->goalConfIthProblem(0, goalConfig) == KD_ERROR) {
-    std::cerr << "ERROR - ChppRRTPlanner::goalConfig : could not set initial configuration of robot box." << std::endl;
-    return KD_ERROR;
-  }*/
-//----------------------------------------------------------------------------------------
 
 
 //----------- Displaying Panel -----------------------------------------------------------  

@@ -9,5 +9,5 @@ Name: @PACKAGE@
 Description: 
 Version: @VERSION@
 Requires: @KWSPLUS_REQD@, @HPPCOBASERVER_REQD@, KineoPathPlanner
-Libs: -L${libdir}/modules/@LICENCE_HOST@ -lkppInterface
+Libs: -Wl,-R${libdir}/modules/@LICENCE_HOST@ -L${libdir}/modules/@LICENCE_HOST@ -lkppInterface
 Cflags: -I${includedir}
