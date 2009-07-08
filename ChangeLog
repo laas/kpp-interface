@@ -1,3 +1,45 @@
+2009-07-08  Thomas Moulard  <thomas.moulard@gmail.com>
+
+	Clean package and generic library with automatic Corba server start.
+	* .gitignore: Update ignore files list.
+	* AUTHORS: New.
+	* Makefile.am: Allos doc rule at root-level,
+	use new pkg-config rules, add Libtool specific rules
+	and search for macros in build-aux.
+	* NEWS: New.
+	* build-aux/bootstrap: Do not overwrite build-aux
+	content.
+	* build-aux/config.guess: New.
+	* build-aux/config.sub: New.
+	* build-aux/depcomp: New.
+	* build-aux/doxygen.m4: New.
+	* build-aux/init.mk: New.
+	* build-aux/install-sh: New.
+	* build-aux/kineo.mk: New.
+	* build-aux/libtool.m4: New.
+	* build-aux/ltmain.sh: New.
+	* build-aux/ltoptions.m4: New.
+	* build-aux/ltsugar.m4: New.
+	* build-aux/ltversion.m4: New.
+	* build-aux/lt~obsolete.m4: New.
+	* build-aux/missing: New.
+	* build-aux/move-if-change: New.
+	* build-aux/pkg-config.mk: New.
+	* build-aux/pkg-config.pc.in: New.
+	* build-aux/warning.m4: New.
+	* configure.ac: Clean and use new generic rules.
+	* doc/Doxyfile.in: Rename from doc/package.dox.in.
+	* doc/Makefile.am: Use new generic rules.
+	* doc/footer.html,
+	* doc/header.html: Make generic.
+	* doc/pictures/footer.jpg: Rename from doc/pictures/HRP2.jpg.
+	* include/Makefile.am: Simplify.
+	* kppInterface.pc.in: Remove.
+	* src/Makefile.am: Clean, simplify, generate an additional
+	library with automatic starting of Corba server.
+	* src/kppInterface.cpp: Start Corba server if the
+	pre-processor symbol KPP_INTERFACE_START_ALL is defined.
+
 kppInterface 1.6 released April 18, 2009
 
 	48. Pass weak pointer instead of shared pointer to CkppInterface::init.

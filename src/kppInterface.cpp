@@ -105,6 +105,16 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
   corbaServerRunning = 0;
   attGraphicRoadmaps.clear();
   attHppCorbaServer = new ChppciServer(inHppPlanner, argc, argv);
+
+  // If the  module is compiled with this pre-compilation symbol, start Corba
+  // server when module is initialized.
+#ifdef KPP_INTERFACE_START_ALL
+  if (startCorbaServer() != KD_OK)
+    {
+      ODEBUG1("CkppInterface: failed to start Corba server.");
+      assert (0 && "Failed to start Corba server.");
+    }
+#endif
 }
 
 // ==========================================================================
@@ -187,7 +197,7 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
   hppUICommandList->appendCommand(attCommandPlannerPanel) ;
 
   if (attStartCorbaServerCommand) {
-    hppUICommandList->appendCommand(attStartCorbaServerCommand) ; 
+    hppUICommandList->appendCommand(attStartCorbaServerCommand) ;
   } else {
     std::cerr << "CkppInterface: cannot create menu item \"Start CORBA Server\"." << std::endl;
   }
@@ -237,7 +247,7 @@ ktStatus CkppInterface::activate()
 
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkwxIdleNotification::TYPE,
 								    this,
-								    &CkppInterface::onIdle);  
+								    &CkppInterface::onIdle);
   // debug
   // cerr<<"kppInterface activated."<<endl;
   return KD_OK;
@@ -274,12 +284,12 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
 {
   // retrieve the object with key
   CkppDeviceComponentShPtr  device(inNotification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
-  
+
   //debug
   //cout<<"hppAddRobot called."<<endl;
- 
+
   CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
-  
+
   //before adding device, we check if it's already in the model tree
   CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
   bool canAddDevice = true;
@@ -292,36 +302,36 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
   // cout<<"adding device..."<<endl;
   if(canAddDevice){
     CkppInsertComponentCommandShPtr insertCommand;
-    
+
     // Get notificator instance
     CkitNotificatorShPtr notificator = CkitNotificator::defaultNotificator();
-    
+
     //debug
     //cout<<" device solid components: "<<device->countSolidComponentRefs()<<endl;
-    
+
     for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
       {
-	notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, 
+	notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD,
 				 device->solidComponentRef(i)->referencedSolidComponent().get());
-	notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, 
+	notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
 				 device->solidComponentRef(i)->referencedSolidComponent().get());
-	
+
 	insertCommand = CkppInsertSolidComponentCommand::create();
-	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 				  CkppComponentShPtr(modelTree->geometryNode()) );
-	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 				  CkppComponentShPtr(device->solidComponentRef(i)->referencedSolidComponent()));
 	insertCommand->doExecute() ;
       }
-    
+
     // temporary: deactivate updating outer list
     notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, device.get());
     notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, device.get());
-    
+
     insertCommand = CkppInsertComponentCommand::create();
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 			      CkppComponentShPtr(modelTree->deviceNode()));
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 			      CkppComponentShPtr(device) );
     insertCommand->doExecute();
   }
@@ -339,7 +349,7 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
 
   //debug
   //cout<<"hppAddPath called."<<endl;
- 
+
   CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
 
   CkppInsertComponentCommandShPtr insertCommand;
@@ -354,12 +364,12 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
   CkppPathComponentShPtr kppPath = CkppPathComponent::create(path, path_name);
 
   insertCommand = CkppInsertComponentCommand::create();
-  insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+  insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
                             CkppComponentShPtr(modelTree->pathNode()));
-  insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+  insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
                             CkppComponentShPtr(kppPath) );
   insertCommand->doExecute();
-     
+
 }
 
 
@@ -370,7 +380,7 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
   ODEBUG2(" adding an obstacle ... ");
 
   std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
-  
+
   CkppDocumentShPtr document = mainWindowController()->document();
   if (!document) return;
   CkppModelTreeShPtr modelTree = document->modelTree();
@@ -396,12 +406,12 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 
   CkppGeometryComponentShPtr geomComponent;
   for (unsigned int i=0; i<geomNode->countChildComponents(); i++){
-      geomComponent = 
+      geomComponent =
 	KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, geomNode->childComponent(i));
       CkcdObjectShPtr obj;
       obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
       if (obj && (obj == obstacle)){
-	  //std::cout << "the obstacle is already registered" << std::endl; 
+	  //std::cout << "the obstacle is already registered" << std::endl;
 	  return;
       }
   }
@@ -422,9 +432,9 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 						       solidComp.get());
 
     insertCommand = CkppInsertSolidComponentCommand::create();
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 			      CkppComponentShPtr(modelTree->geometryNode()) );
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 			      CkppComponentShPtr(poly->referencedSolidComponent()) );
     insertCommand->doExecute();
     ODEBUG2("obstacle added.");
@@ -441,7 +451,7 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotif
   ODEBUG2(" adding obstacles ... ");
 
   std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
-  
+
   CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
 
   CkppInsertComponentCommandShPtr insertCommand;
@@ -467,23 +477,23 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotif
       CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(hppPolyhedron);
       // modelTree->geometryNode()->addChildComponent(poly);
       // cerr<<" adding hppPolyhedron."<<endl;
-      
+
       insertCommand = CkppInsertSolidComponentCommand::create();
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 				CkppComponentShPtr(modelTree->geometryNode()) );
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 				CkppComponentShPtr(poly->referencedSolidComponent()) );
       insertCommand->doExecute();
-      
+
     } else if (kcdAssembly = boost::dynamic_pointer_cast<CkppKCDAssembly>(obstacle)) {
       CkppSolidComponentRefShPtr assembly = CkppSolidComponentRef::create(kcdAssembly);
       insertCommand = CkppInsertSolidComponentCommand::create();
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 				CkppComponentShPtr(modelTree->geometryNode()) );
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 				CkppComponentShPtr(assembly->referencedSolidComponent()) );
       insertCommand->doExecute();
-      
+
     } else {
       cerr << "CkppInterface::setObstacleList: obstacle "
 	   << iObstacle << "is of undefined type." << endl;
@@ -495,9 +505,9 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotif
     if(CkppSolidComponentShPtr solid = KIT_DYNAMIC_PTR_CAST(CkppSolidComponent, obstacle))
     {
       insertCommand = CkppInsertSolidComponentCommand::create();
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
 				CkppComponentShPtr(modelTree->geometryNode()) );
-      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT), 
+      insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
 				CkppComponentShPtr(solid));
       insertCommand->doExecute();
     }
@@ -577,7 +587,7 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
 
   // Retrieve roadmap that is about to be destroyed
   unsigned int rank = inNotification->unsignedIntValue(ChppPlanner::ROADMAP_KEY);
-  
+
   unsigned int nbProblem = planner->getNbHppProblems();
   if (rank >= nbProblem) {
     ODEBUG1(":hppAddGraphicRoadmap wrong rank: " << rank << " should be less than " << nbProblem);
@@ -596,7 +606,7 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   std::stringstream roadmapName;
   roadmapName << "graphic roadmap " << rank;
 
-  CkwsGraphicRoadmapShPtr graphicRoadmap = 
+  CkwsGraphicRoadmapShPtr graphicRoadmap =
     CkwsGraphicRoadmap::create(roadmapBuilder, attWeakPtr, roadmapName.str());
 
   //roadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate);
@@ -626,25 +636,25 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
   if(inIsRealTimeUpdated){
 
     ODEBUG2("The Roadmap will be updated at run time");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::SCENE_3D, 
-								 attGraphicRoadmaps.back() );   
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::SCENE_3D,
+								 attGraphicRoadmaps.back() );
     CkitNotificator::defaultNotificator()->
-      subscribe<CkppInterface>(CkwsGraphicRoadmapDelegate::DID_MODIFY_THE_ROADMAP, 
-			       this , 
+      subscribe<CkppInterface>(CkwsGraphicRoadmapDelegate::DID_MODIFY_THE_ROADMAP,
+			       this ,
 			       &CkppInterface::graphicRoadmapHasBeenModified);
 
   }
   else{
     ODEBUG2("The Roadmap will be updated at the end of building");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, 
-								  attGraphicRoadmaps.back() ); 
+    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D,
+								  attGraphicRoadmaps.back() );
     CkitNotificator::defaultNotificator()->
-      subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING, 
+      subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING,
 				 this, &CkppInterface::graphicRoadmapHasBeenModified);
   }
 
 #if 0
-  /* 
+  /*
      Do not delete all roadmap and problems each time somthing has changed since
      this causes erratic behaviors using hppCorbaServer
   */
@@ -673,7 +683,7 @@ void CkppInterface::removeGraphicRoadmap( int inRank){
   else if(inRank < 0){
 
     for(unsigned int i=0; i<attGraphicRoadmaps.size();i++ ){
-      
+
       if(attGraphicRoadmaps[i]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[i]);
       attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+i);
 
@@ -693,7 +703,7 @@ void CkppInterface::removeGraphicRoadmap( int inRank){
 // ==========================================================================
 
 void CkppInterface::showRoadmap(unsigned int inRank){
-  
+
   if(!attGraphicRoadmaps[inRank]->isDisplayed()){
 
     CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank] );
@@ -709,9 +719,9 @@ void CkppInterface::showRoadmap(unsigned int inRank){
 // ==========================================================================
 
 void CkppInterface::hideRoadmap(unsigned int inRank){
-  
+
   if(attGraphicRoadmaps[inRank]->isDisplayed()){
-    
+
     CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
     attGraphicRoadmaps[inRank]->isDisplayed(false);
     mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
@@ -727,26 +737,26 @@ void CkppInterface::graphicRoadmapHasBeenModified(const CkitNotificationConstShP
 {
   ODEBUG2(":graphicRoadmapHasBeenModified called");
   bool found = false;
-  
-  CkwsRoadmapBuilderConstShPtr rdmBuilder = 
+
+  CkwsRoadmapBuilderConstShPtr rdmBuilder =
     inNotification->constShPtrValue<CkwsRoadmapBuilder>(CkwsGraphicRoadmapDelegate::ROADMAPBUILDER_KEY);
 
   if(rdmBuilder) {
-    /* We look in the vector for the graphic roadmap that has his intern 
+    /* We look in the vector for the graphic roadmap that has his intern
        kwsRoadmap shared pointer identical to the modified roadmap */
-    for(std::deque<CkwsGraphicRoadmapShPtr>::iterator it = attGraphicRoadmaps.begin() ; 
+    for(std::deque<CkwsGraphicRoadmapShPtr>::iterator it = attGraphicRoadmaps.begin() ;
 	it<attGraphicRoadmaps.end() ; it++) {
       if((*it)->kwsRoadmap() == rdmBuilder->roadmap()){
 	found = true;
 	(*it)->drawNotifRoadmap(inNotification);
       }
     }
-    
+
     if(!found) {
       ODEBUG1(":graphicRoadmapHasBeenModified:    No graphical roadmap for the modified kwsRoadmap,");
       ODEBUG1(":graphicRoadmapHasBeenModified:    " << attGraphicRoadmaps.size() <<" roadmaps in vector.");
     }
-  } 
+  }
   else {
     ODEBUG1(":graphicRoadmapHasBeenModified: no roadmap builder in notification");
   }
@@ -771,8 +781,7 @@ void CkppInterface::removeAllRoadmapsAndProblems(const CkitNotificationConstShPt
 
 int initializeModule(CkppModuleInterfaceShPtr& o_moduleInterface)
 {
-  cerr<<" initializing module ... "<<endl;
+  std::cerr << " initializing module ... " << std::endl;
   o_moduleInterface = CkppInterface::create();
   return 0;
 }
-

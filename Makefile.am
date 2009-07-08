@@ -1,11 +1,30 @@
-# 
-#  Copyright 
-# 
+include $(top_srcdir)/build-aux/init.mk
 
-SUBDIRS = \
-	src	\
-	doc	\
-	include
+# Search for autoconf macros in build-aux.
+ACLOCAL_AMFLAGS = -I build-aux
 
-kppInterfacedir = $(libdir)/pkgconfig
-kppInterface_DATA = kppInterface.pc
+SUBDIRS = 		\
+	doc		\
+	include		\
+	src
+
+
+# Provide bootstrap with the generated package.
+EXTRA_DIST +=	bootstrap			\
+		build-aux/bootstrap
+
+
+# Nothing to do in this directory.
+all:
+
+# Libtool rules
+LIBTOOL_DEPS = @LIBTOOL_DEPS@
+libtool: $(LIBTOOL_DEPS)
+	$(SHELL) ./config.status --recheck
+
+include $(top_srcdir)/build-aux/pkg-config.mk
+
+# -- Generate documentation
+.PHONY: doc html
+doc html:
+	cd doc && $(MAKE) $(AM_MAKEFLAGS) $@

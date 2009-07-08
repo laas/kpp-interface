@@ -1,34 +1,66 @@
+# Don't expend macros beginning by JRL_.
+m4_pattern_forbid([^JRL_])
+AC_PREREQ([2.59])
 
-dnl 
-dnl configure.ac file for package kppInterface 
-dnl
+## --------------------- ##
+## Package configuration ##
+## --------------------- ##
+AC_INIT([kppInterface], [1.6.0.99], [hpp@laas.fr], [kppInterface])
 
-AC_INIT([kppInterface], [1.6.0.99], [hpp@laas.fr])
-AC_PREREQ(2.59)
+# Auxiliary files.
+AC_CONFIG_AUX_DIR([build-aux])
 
-if test "$CFLAGS$CXXFLAGS" = ""; then
-  setdefaultflags=yes
-else
-  setdefaultflags=no
-fi
+# Automake.
+AM_INIT_AUTOMAKE([1.9.6 dist-bzip2 -Wall nostdinc])
 
-AM_INIT_AUTOMAKE([foreign no-define])
+## ------------- ##
+## C++ compiler  ##
+## ------------- ##
 
+# Search for a C++ compiler.
+AC_LANG([C++])
 AC_PROG_CXX
-AC_PROG_INSTALL
-AC_PROG_LIBTOOL
 
-if test "$setdefaultflags" = "yes"; then
-  if test "$GCC" = "yes"; then
-    CFLAGS="$CFLAGS -Wall"
-    AC_MSG_NOTICE([adding default "-Wall" c flags])
-  fi
-  if test "$GXX" = "yes"; then
-    CXXFLAGS="$CXXFLAGS -Wall"
-    AC_MSG_NOTICE([adding default "-Wall" c++ flags])
-  fi
+# Speed-up compilation.
+if test "$GXX" = yes; then
+  CXXFLAGS="$CXXFLAGS -pipe"
 fi
 
+# Macros are stored in build-aux.
+AC_CONFIG_MACRO_DIR([build-aux])
+
+## ------------------- ##
+## Additionnal tools.  ##
+## ------------------- ##
+
+# Search for misc. common tools.
+AC_PROG_MKDIR_P
+AC_PROG_SED
+AC_PROG_INSTALL
+
+# Customize warnings.
+JRL_CXX_WARNINGS([[-Wall],
+                   [-Wcast-align],
+                   [-Wcast-qual],
+                   [-Wformat],
+                   [-Wmissing-prototypes],
+                   [-Wstrict-prototypes],
+                   [-Wwrite-strings],
+                   [-Wbad-function-cast],
+                   [-Wmissing-declarations],
+                   [-Wnested-externs]])
+
+# Search for Libtool.
+LT_INIT([dlopen])
+
+# Search for Doxygen.
+JRL_PROG_DOXYGEN
+
+## ------------------------- ##
+## Search for dependencies.  ##
+## ------------------------- ##
+
+# Kineo
 LICENCE_HOST=`uname -n`
 AC_SUBST(LICENCE_HOST)
 
@@ -38,10 +70,12 @@ AC_SUBST(KINEOPATHPLANNER_PREFIX)
 AC_SUBST(KINEOPATHPLANNER_CFLAGS)
 AC_SUBST(KINEOPATHPLANNER_LIBS)
 
-AC_SUBST(KINEO_ADDON_BUILD,[${KINEOPATHPLANNER_PREFIX}/bin/KineoAddonBuilder])
-AC_SUBST(KINEO_MODULE_DIR,["x${KINEOPATHPLANNER_PREFIX}/modules"])
+AC_SUBST(KINEO_ADDON_BUILDER,
+	[${KINEOPATHPLANNER_PREFIX}/bin/KineoAddonBuilder])
+AC_SUBST(KINEO_MODULE_DIR, ["x${KINEOPATHPLANNER_PREFIX}/modules"])
 AC_SUBST(KINEO_LIBDIR,[${KINEOPATHPLANNER_PREFIX}/lib])
 
+# HPP packages
 define(hppcore_reqd, [hppCore >= 1.8])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
@@ -62,11 +96,29 @@ AC_SUBST(KWSPLUS_DOCDIR)
 KWSPLUS_PREFIX=`$PKG_CONFIG kwsPlus --variable=prefix`
 AC_SUBST(KWSPLUS_PREFIX)
 
-AC_OUTPUT(
-	kppInterface.pc
+
+## ------------ ##
+## Pkg-config.  ##
+## ------------ ##
+
+AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
+AC_SUBST([PKGCONFIG_REQUIRES],
+	'[kwsPlus >= 1.7, hppCorbaServer >= 1.7.2, KineoPathPlanner'])
+AC_SUBST([PKGCONFIG_CONFLICTS], [])
+AC_SUBST([PKGCONFIG_LIBS], [-lkppInterface])
+AC_SUBST([PKGCONFIG_CFLAGS], [])
+
+## -------------- ##
+## Write output.  ##
+## -------------- ##
+
+# Create config.h
+AC_CONFIG_HEADERS([config.h])
+
+# Creating Makefiles.
+AC_OUTPUT([
 	Makefile
 	include/Makefile
 	src/Makefile
 	doc/Makefile
-	doc/package.dox
-	)
+])

@@ -1,26 +1,59 @@
-# 
+#
 #  Copyright 2007 JRL AIST CNRS
 #
 #  Author: Florent Lamiraux
-# 
+#
 
+# Distributed files.
+EXTRA_DIST = 				\
+	Doxyfile.in			\
+	additionalDoc/package.h 	\
+	footer.html 			\
+	header.html 			\
+	package.css 			\
+	pictures/footer.jpg
 
-kppInterfacedir = $(datadir)/doc/kppInterface/html
+# Generated files.
+CLEANFILES =				\
+	$(PACKAGE_TARNAME).doxytag	\
+	Doxyfile			\
+	config.log
 
-EXTRA_DIST = \
-	header.html \
-	footer.html \
-	package.css \
-	pictures/HRP2.jpg \
-	additionalDoc/package.h 
+.PHONY: 				\
+	copy-pictures			\
+	doc				\
+	html				\
+	doxygen 			\
+	install-doxygen-html		\
+	uninstall-doxygen-html
 
+# Rules.
+doc: html
 
-install: html-doc
-	mkdir -p $(kppInterfacedir)
-	$(INSTALL_DATA) html/* $(kppInterfacedir)
-	mkdir -p $(kppInterfacedir)/pictures
-	$(INSTALL_DATA) $(srcdir)/pictures/* $(kppInterfacedir)/pictures
-	$(INSTALL_DATA) kppInterface.doxytag $(kppInterfacedir)
+html-local: doxygen
 
-html-doc: package.dox
-	doxygen $<
+doxygen: Doxyfile
+	$(DOXYGEN) "$<" \
+	&& cp -rf $(top_srcdir)/doc/pictures/* html
+
+# Doxygen generation rule.
+Doxyfile: $(srcdir)/Doxyfile.in
+	$(top_builddir)/config.status --file="$@":"$<" \
+	&& sed -i -e 's/^#.*//' -e '/^$$/d' "$@"
+
+# Clean rule.
+clean-local:
+	rm -rf html latex
+
+# Install rules.
+install-data-local: install-doxygen-html
+uninstall-local: uninstall-doxygen-html
+
+install-doxygen-html: html-local
+	$(mkdir_p) "$(DESTDIR)$(htmldir)"
+	cp -rf html "$(DESTDIR)$(htmldir)"
+	$(INSTALL_DATA) $(PACKAGE_TARNAME).doxytag \
+		"$(DESTDIR)$(htmldir)/html"
+
+uninstall-doxygen-html:
+	rm -rf "$(DESTDIR)$(htmldir)"
