@@ -31,6 +31,7 @@
 # This file assumes that:
 #
 # - build-aux/init.mk has been included before.
+# - KINEO_PREFIX points to Kineo setup prefix.
 # - KINEO_LIBDIR points to the library directory of the Kineo installation
 #   prefix.
 # - KINEO_ADDON_BUILDER points to the KineoAddonBuilder tool.
@@ -52,9 +53,10 @@
 SUFFIXES += .kab
 
 .la.kab:
-	SOFILE=`echo ".libs/$<" | sed 's/.la$$/-$(PACKAGE_VERSION).so/'`; \
-	KABSRCFILE=`echo "$$SOFILE" | sed 's/.so$$/.kab/'`; \
-	KABDSTFILE=`echo "$<" | sed 's/.la$$/.kab/'`; \
-	echo "$$SOFILE"; \
-	LD_LIBRARY_PATH=@KINEO_LIBDIR@  @KINEO_ADDON_BUILDER@ -m "$$SOFILE" \
+	SOFILE=`echo ".libs/$<" | sed 's/.la$$/-$(PACKAGE_VERSION).so/'`; 	\
+	KABSRCFILE=`echo "$$SOFILE" | sed 's/.so$$/.kab/'`; 			\
+	KABDSTFILE=`echo "$<" | sed 's/.la$$/.kab/'`; 				\
+	LD_LIBRARY_PATH=$(KINEO_LIBDIR) 					\
+	KPP_INSTALL_DIR=$(KINEO_PREFIX) 					\
+	$(KINEO_ADDON_BUILDER) -m "$$SOFILE" 					\
 	&& mv "$$KABSRCFILE" "$$KABDSTFILE"

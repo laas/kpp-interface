@@ -19,7 +19,7 @@ kmodule_DATA =				\
 	libkppInterfaceStartAll.kab
 
 BUILT_SOURCES = $(kmodule_DATA)
-CLEANFILES = $(kmodule_DATA)
+CLEANFILES += $(kmodule_DATA)
 
 
 COMMON_LIBADD = 			\

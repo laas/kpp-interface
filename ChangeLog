@@ -1,5 +1,13 @@
 2009-07-08  Thomas Moulard  <thomas.moulard@gmail.com>
 
+	Fix Kineo Makefile rules.
+	* build-aux/kineo.mk: Define KPP_INSTALL_PREFIX when
+	generating module's signature.
+	* configure.ac: Define KINEO_PREFIX.
+	* src/Makefile.am: Avoid overwriting CLEANFILES.
+
+2009-07-08  Thomas Moulard  <thomas.moulard@gmail.com>
+
 	Clean package and generic library with automatic Corba server start.
 	* .gitignore: Update ignore files list.
 	* AUTHORS: New.
