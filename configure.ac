@@ -61,8 +61,8 @@ JRL_PROG_DOXYGEN
 ## ------------------------- ##
 
 # Kineo
-LICENCE_HOST=`uname -n`
-AC_SUBST(LICENCE_HOST)
+LICENSE_HOST=`uname -n`
+AC_SUBST(LICENSE_HOST)
 
 PKG_CHECK_MODULES(KINEOPATHPLANNER, KineoPathPlanner)
 KINEOPATHPLANNER_PREFIX=`$PKG_CONFIG KineoPathPlanner --variable=prefix`
@@ -105,9 +105,12 @@ AC_SUBST(KWSPLUS_PREFIX)
 
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
 AC_SUBST([PKGCONFIG_REQUIRES],
-	'[kwsPlus >= 1.7, hppCorbaServer >= 1.7.2, KineoPathPlanner'])
+	['kwsPlus >= 1.7, hppCorbaServer >= 1.7.2, KineoPathPlanner'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
-AC_SUBST([PKGCONFIG_LIBS], [-lkppInterface])
+
+AC_SUBST([PKGCONFIG_LIBS],
+	["-L${libdir}/modules/${LICENSE_HOST} -lkppInterface"])
+
 AC_SUBST([PKGCONFIG_CFLAGS], [])
 
 ## -------------- ##
