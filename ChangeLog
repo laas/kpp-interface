@@ -1,5 +1,11 @@
 2009-07-08  Thomas Moulard  <thomas.moulard@gmail.com>
 
+	Remove warnings.
+	* src/kwsGraphicRoadmap.cpp: Initialize variables
+	properly.
+
+2009-07-08  Thomas Moulard  <thomas.moulard@gmail.com>
+
 	Fix Kineo Makefile rules.
 	* build-aux/kineo.mk: Define KPP_INSTALL_PREFIX when
 	generating module's signature.

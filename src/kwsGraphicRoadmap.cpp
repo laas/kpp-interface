@@ -39,7 +39,7 @@ using namespace std;
 #endif
 
 
-CkwsGraphicRoadmap::CkwsGraphicRoadmap(const std::string& inName) : 
+CkwsGraphicRoadmap::CkwsGraphicRoadmap(const std::string& inName) :
   attName(inName)
 {
   nbObjects++;
@@ -69,34 +69,34 @@ void CkwsGraphicRoadmap::render(){
       glPushAttrib(GL_ENABLE_BIT);
       glEnable(GL_LINE_SMOOTH);
       glEnable(GL_BLEND);
-      
+
       glPushName(m_savedGraphicID);
-      
+
       drawRoadmap();
-      
+
       glPopName();
       glPopAttrib();
-      
+
     }else{
       if(attFinished){
-	
+
 	// anti-aliasing
 	glPushAttrib(GL_ENABLE_BIT);
-	glEnable(GL_LINE_SMOOTH); 
+	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
-	
+
 	glPushName(m_savedGraphicID);
-	
+
 	drawRoadmap();
-	
+
 	glPopName();
 	glPopAttrib();
       }
-      
+
     }
 
   }
-  
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,
   }
 
   attKwsRoadmap = inRoadmapBuilder->roadmap();
-    
+
   ODEBUG2(":init - Done");
 
   return success;
@@ -173,17 +173,23 @@ void CkwsGraphicRoadmap::drawRoadmap(){
   //Drawing edges
   for (unsigned int iJoint=0; iJoint < displayJointVector.size(); iJoint++) {
     for(unsigned int i=0; i<kwsRoadmap()->countNodes(); i++){//throught the roadmap
-      
+
       CkwsNodeShPtr currentNode = kwsRoadmap()->node(i);
-      
+
       for(unsigned int j=0; j<currentNode->countOutEdges(); j++){//throught each node of the roadmap
-	
+
 	CkwsJointShPtr kwsJoint = displayJointVector[iJoint];
 	CkwsConfig current(kwsRoadmap()->node(i)->config());//current configuration : edge start
 	CkwsConfig next(kwsRoadmap()->node(i)->outEdge(j)->endNode()->config());//next configuration : edge end
-	
+
 	std::vector<CkitMat4> jointPositions;
-	double x1,y1,z1,x2,y2,z2 = 0;
+	double x1 = 0.;
+	double y1 = 0.;
+	double z1 = 0.;
+	double x2 = 0.;
+	double y2 = 0.;
+	double z2 = 0.;
+
 	if(KD_OK == current.getJointMatVector(jointPositions)){
 	  CkitMat4 jointPosition = jointPositions.at(iJoint);
 	  x1 = jointPosition(0,3);
@@ -201,15 +207,15 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 	glPushAttrib(GL_ENABLE_BIT);
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
-	
+
 	glColor4fv(&(CkppColor::DARK_GREEN)[0]);
-	
-	//drawing an edge 
+
+	//drawing an edge
 	glBegin(GL_LINES);
 	glVertex3f(x1,y1,z1);
 	glVertex3f(x2,y2,z2);
 	glEnd();
-	
+
 
 	//drawing a point for the current node
 	glBegin(GL_POINTS);
@@ -220,7 +226,7 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 
 	glLineWidth(1.f);
       }
-      
+
     }
   }
 }
@@ -251,7 +257,7 @@ void CkwsGraphicRoadmap::drawNotifRoadmap(const CkitNotificationConstShPtr& inNo
   if(inNotification->type() == CkppPlanPathCommand::DID_FINISH_BUILDING) {
     attFinished = true;
   }
-  attKppInterface.lock()->mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);    
+  attKppInterface.lock()->mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------
