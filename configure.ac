@@ -104,6 +104,7 @@ AC_SUBST(KWSPLUS_PREFIX)
 ## ------------ ##
 
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
+AC_SUBST([PKGCONFIG_URL], [])
 AC_SUBST([PKGCONFIG_REQUIRES],
 	['kwsPlus >= 1.7, hppCorbaServer >= 1.7.2, KineoPathPlanner'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
