@@ -9,7 +9,7 @@ AM_CPPFLAGS += 				\
 	@KINEOPATHPLANNER_CFLAGS@ 	\
 	@KWSPLUS_CFLAGS@
 
-kmoduledir = $(libdir)/modules/$(LICENCE_HOST)
+kmoduledir = $(libdir)/modules/$(LICENSE_HOST)
 kmodule_LTLIBRARIES =			\
 	libkppInterface.la		\
 	libkppInterfaceStartAll.la
