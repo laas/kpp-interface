@@ -147,7 +147,7 @@ CkppParameterConstShPtr CkppCommandSolvePlanner::parameter(unsigned int inRank) 
 ktStatus CkppCommandSolvePlanner::doExecute()
 {
   if (attKpp->hppPlanner() == NULL) {
-    cerr << "You need to create a Planner object first." << endl;
+    std::cerr << "You need to create a Planner object first." << std::endl;
     return KD_ERROR;
   }
 
