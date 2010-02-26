@@ -5,7 +5,7 @@ AC_PREREQ([2.59])
 ## --------------------- ##
 ## Package configuration ##
 ## --------------------- ##
-AC_INIT([kppInterface], [1.6.0.99], [hpp@laas.fr], [kppInterface])
+AC_INIT([kppInterface], [1.6.1], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
 AC_CONFIG_AUX_DIR([build-aux])
@@ -78,19 +78,19 @@ AC_SUBST(KINEO_PREFIX, [${KINEOPATHPLANNER_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KINEOPATHPLANNER_PREFIX}/lib])
 
 # HPP packages
-define(hppcore_reqd, [hppCore >= 1.8])
+define(hppcore_reqd, [hppCore >= 1.11])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
 HPPCORE_DOCDIR=`$PKG_CONFIG hppCore --variable=docdir`
 AC_SUBST(HPPCORE_DOCDIR)
 
-define(hppcobaserver_reqd, [hppCorbaServer >= 1.7.2])
+define(hppcobaserver_reqd, [hppCorbaServer >= 1.8.3])
 AC_SUBST(HPPCOBASERVER_REQD, "hppcobaserver_reqd")
 PKG_CHECK_MODULES(HPPCORBASERVER, hppcobaserver_reqd)
 HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hppCorbaServer --variable=docdir`
 AC_SUBST(HPPCORBASERVER_DOCDIR)
 
-define(kwsplus_reqd, [kwsPlus >= 1.7])
+define(kwsplus_reqd, [kwsPlus >= 1.8])
 AC_SUBST(KWSPLUS_REQD, "kwsplus_reqd")
 PKG_CHECK_MODULES(KWSPLUS, kwsplus_reqd)
 KWSPLUS_DOCDIR=`$PKG_CONFIG kwsPlus --variable=docdir`
@@ -106,7 +106,7 @@ AC_SUBST(KWSPLUS_PREFIX)
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
 AC_SUBST([PKGCONFIG_URL], [])
 AC_SUBST([PKGCONFIG_REQUIRES],
-	['kwsPlus >= 1.7, hppCorbaServer >= 1.7.2, KineoPathPlanner'])
+	['kwsPlus >= 1.8, hppCorbaServer >= 1.8.3, KineoPathPlanner'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
 
 AC_SUBST([PKGCONFIG_LIBS],
