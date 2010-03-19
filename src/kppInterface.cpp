@@ -38,7 +38,7 @@
 #include "KineoWX/kwxIdleNotification.h"
 
 #include "hppCore/hppProblem.h"
-#include "hppCorbaServer/hppciServer.h"
+#include <hpp/corbaserver/server.hh>
 
 #include "kppInterface/kwsGraphicRoadmap.h"
 #include "kppInterface/kppInterface.h"
@@ -99,12 +99,12 @@ ktStatus CkppInterface::init(const CkppInterfaceWkPtr& inKppInterface)
 CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPlanner)
 {
   int argc=1;
-  char *argv[1] = {"KineoPathPlanner"};
+  const char* argv[] = {"KineoPathPlanner"};
 
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
   attGraphicRoadmaps.clear();
-  attHppCorbaServer = new ChppciServer(inHppPlanner, argc, argv);
+  attHppCorbaServer = new hpp::corbaServer::Server (inHppPlanner, argc, argv);
 
   // If the  module is compiled with this pre-compilation symbol, start Corba
   // server when module is initialized.

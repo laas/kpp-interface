@@ -1,6 +1,6 @@
 /*
   Research carried out within the scope of the Associated International Laboratory: Joint Japanese-French Robotics Laboratory (JRL)
- 
+
   Developed by Florent Lamiraux (LAAS-CNRS)
 
 */
@@ -23,8 +23,9 @@
 #include "KineoModuleManager/kppModuleInterface.h"
 #include "KineoGUI/kppGUIModuleInterface.h"
 
+#include <hpp/corbaserver/fwd.hh>
+
 class ChppPlanner;
-class ChppciServer;
 
 KIT_PREDEF_CLASS(CkitNotification);
 KIT_PREDEF_CLASS(CkwsRoadmap);
@@ -40,28 +41,28 @@ KIT_PREDEF_CLASS(CkppInterface);
 
 class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface
 {
-  
+
 public:
-  
+
   static CkppInterfaceShPtr create();
 
   virtual ~CkppInterface();
-  
+
   /**
      \brief Initialize the module.
 
      This methods implements CkppModuleInterface::activate.
      This method subscribes to notifications triggered in hppCore.
-  */  
+  */
   virtual ktStatus activate();
-  
+
   /**
      \brief Name of the module
 
      This methods implements CkppModuleInterface::name.
   */
   virtual std::string name() const {return std::string("kppInterface");};
-  
+
   /**
      \brief Add a new menu in KPP
 
@@ -69,7 +70,7 @@ public:
   */
   virtual void getMenuUICommandLists(const CkppMainWindowUICommandFactoryConstShPtr& inCommandFactory,
 				     std::vector<CkppUICommandListShPtr> & outMenuCommandListVector);
-  
+
   /**
      \brief Set pointer to ChppPlanner object.
   */
@@ -129,7 +130,7 @@ public:
   CkppUICommandShPtr attCommandSetConfigBase;
 
 protected:
-  
+
   CkppInterface(ChppPlanner *inHppPlanner);
 
   /// command to start corba server
@@ -139,8 +140,8 @@ protected:
   CkppUICommandShPtr attCommandOpenFile;
 
   /// Object that implements Corba interface of module "Stochastic Environment Path Planning"
-  ChppciServer *attHppCorbaServer;
-  
+  hpp::corbaServer::Server* attHppCorbaServer;
+
   bool corbaServerRunning;
 
   /**
@@ -167,28 +168,28 @@ protected:
   /**
      \brief Add a Robot (device) to the interface
      \param inNotification :
-     
+
      KPP Default actions when inserting a device in the device node are disabled to get the same behavior with or without interface.
-  */								
+  */
   virtual void hppAddRobot(const CkitNotificationConstShPtr& inNotification);
  /**
      \brief Add a Path to the interface
      \param inNotification :
-  */	
+  */
   virtual void hppAddPath(const CkitNotificationConstShPtr& inNotification);
  /**
      \brief Add a Obstacle to the interface
      \param inNotification :
-  */	
+  */
   virtual void hppAddObstacle(const CkitNotificationConstShPtr& inNotification);
- 
+
  /**
      \brief Insert a list of obstacle to the interface
      \param inNotification :
-  */	
+  */
   virtual void hppSetObstacleList(const CkitNotificationConstShPtr& inNotification);
 
-  /**						
+  /**
      \brief Delete a roadmap builder
      \param inNotification notification sent by ChppPlanner object.
 
@@ -200,7 +201,7 @@ protected:
      \brief Insert a graphic roadmap in the interface
      \param inNotification notification sent by ChppPlanner object.
 
-     This method is called each time a new roadmap builder is created 
+     This method is called each time a new roadmap builder is created
      the roadmap of which is required to be displayed.
   */
   virtual void hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNotification);
@@ -249,7 +250,7 @@ protected:
   /**
      \brief Mapping between CkwsRoadmap and CkwsGraphicRoadmap.
 
-     This mapping is used when a roadmap is deleted. It enables the object to retrieve the 
+     This mapping is used when a roadmap is deleted. It enables the object to retrieve the
      corresponding graphic roadmap if any.
   */
   std::map <CkwsRoadmapShPtr, CkwsGraphicRoadmapShPtr> attRoadmapMapping;
@@ -260,17 +261,17 @@ protected:
      \param inRoadmap A shared pointer to a standard roadmap
      \retval outRank the rank of graphic roadmap corresponding to CkppInterface::attGraphicRoadmaps if any.
      \return true if the input roadmap corresponds to a graphic roadmap, false otherwise.
-     
+
      This function tries to solve the following equation:
 
      attGraphicRoadmaps[outRank] = attRoadmapMapping[inRoadmap]
-     
+
   */
   bool isRoadmapStoredAsGraphic(const CkwsRoadmapShPtr& inRoadmap, unsigned int& outRank);
-  
+
   /**
      \brief Draws the entire roadmap upon notification.
-     \param inNotification Received notification. 
+     \param inNotification Received notification.
 
      \note notification CkppPlanPathCommand::DID_FINISH_BUILDING must be sent with a Shared pointer on a CkwsRoadmapBuilder object in order
      to know which roadmap have to be updated.
