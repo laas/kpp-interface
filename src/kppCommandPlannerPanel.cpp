@@ -14,7 +14,7 @@
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoController/kppUICommand.h"
 
-#include "hppCore/hppPlanner.h"
+#include "hpp/core/planner.hh"
 
 #include "kppInterface/kppCommandPlannerPanel.h"
 #include "kppInterface/kppPlannerPanelController.h"

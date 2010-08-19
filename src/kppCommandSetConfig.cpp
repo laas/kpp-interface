@@ -24,7 +24,7 @@
 
 #include "KineoModel/kppModelTree.h"
 
-#include "hppCore/hppPlanner.h"
+#include "hpp/core/planner.hh"
 
 /*****************************************
  DEFINES

@@ -37,7 +37,7 @@
 
 #include "KineoWX/kwxIdleNotification.h"
 
-#include "hppCore/hppProblem.h"
+#include "hpp/core/problem.hh"
 #include <hpp/corbaserver/server.hh>
 
 #include "kppInterface/kwsGraphicRoadmap.h"

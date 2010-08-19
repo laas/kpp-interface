@@ -31,7 +31,7 @@
 #include "kwsPlus/roadmap/kwsPlusPCARdmBuilder.h"
 #include "kwsPlus/roadmap/kwsPlusLTRdmBuilder.h"
 
-#include "hppCore/hppPlanner.h"
+#include "hpp/core/planner.hh"
 
 #include "kppInterface/kppPlannerPanelController.h"
 #include "kppInterface/kppPlannerPanel.h"

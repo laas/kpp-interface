@@ -22,7 +22,7 @@
 #include "KineoModel/kppComponent.h"
 #include "KineoModel/kppSolidComponent.h"
 
-#include "hppCore/hppPlanner.h"
+#include "hpp/core/planner.hh"
 
 #include "kppInterface/kppCommandInit.h"
 #include "kppInterface/kwsGraphicRoadmap.h"
