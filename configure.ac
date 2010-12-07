@@ -39,16 +39,16 @@ AC_PROG_SED
 AC_PROG_INSTALL
 
 # Customize warnings.
-JRL_CXX_WARNINGS([[-Wall],
-                   [-Wcast-align],
-                   [-Wcast-qual],
-                   [-Wformat],
-                   [-Wmissing-prototypes],
-                   [-Wstrict-prototypes],
-                   [-Wwrite-strings],
-                   [-Wbad-function-cast],
-                   [-Wmissing-declarations],
-                   [-Wnested-externs]])
+dnl JRL_CXX_WARNINGS([[-Wall],
+dnl                    [-Wcast-align],
+dnl                    [-Wcast-qual],
+dnl                    [-Wformat],
+dnl                    [-Wmissing-prototypes],
+dnl                    [-Wstrict-prototypes],
+dnl                    [-Wwrite-strings],
+dnl                    [-Wbad-function-cast],
+dnl                    [-Wmissing-declarations],
+dnl                    [-Wnested-externs]])
 
 # Search for Libtool.
 LT_INIT([dlopen])
