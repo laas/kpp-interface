@@ -1,11 +1,11 @@
-# Don't expend macros beginning by JRL_.
+vf# Don't expend macros beginning by JRL_.
 m4_pattern_forbid([^JRL_])
 AC_PREREQ([2.59])
 
 ## --------------------- ##
 ## Package configuration ##
 ## --------------------- ##
-AC_INIT([kppInterface], [1.7], [hpp@laas.fr], [kppInterface])
+AC_INIT([kppInterface], [1.7.0.99], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
 AC_CONFIG_AUX_DIR([build-aux])
