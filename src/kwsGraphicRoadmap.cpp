@@ -54,7 +54,7 @@ CkwsGraphicRoadmap::~CkwsGraphicRoadmap(){
   ODEBUG2(" destructor: nb existing objects: " << nbObjects);
   if(attIsDisplayed){
     ODEBUG2("erasing roadmap");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::SCENE_3D, attWeakPtr.lock());
+    attKppInterface.lock()->viewGeneral()->viewportGraphicMap()->remove( CkppViewGraphicMap::SCENE_3D, attWeakPtr.lock());
   }
   attWeakPtr.reset();
 }
@@ -129,7 +129,7 @@ ktStatus CkwsGraphicRoadmap::init(const CkwsGraphicRoadmapWkPtr& inGrRdmWkPtr,
   attIsDisplayed = false;
   attKppInterface = inKppInterface;
 
-  success = CkppViewGraphic::init(inGrRdmWkPtr);
+  success = CkppViewGraphic::init(inGrRdmWkPtr,attKppInterface.lock()->viewGeneral());
 //  CkppViewGraphic::isAlwaysDisplayed(false);
   if (inRoadmapBuilder) {
     inRoadmapBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());

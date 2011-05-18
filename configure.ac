@@ -1,10 +1,11 @@
 # Don't expend macros beginning by JRL_.
 m4_pattern_forbid([^JRL_])
-AC_PREREQ([2.59])
+AC_PREREQ(2.65)
 
 ## --------------------- ##
 ## Package configuration ##
 ## --------------------- ##
+
 AC_INIT([kppInterface], [1.7], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
@@ -64,18 +65,17 @@ JRL_PROG_DOXYGEN
 LICENSE_HOST=`uname -n`
 AC_SUBST(LICENSE_HOST)
 
-PKG_CHECK_MODULES(KINEOPATHPLANNER, KineoPathPlanner)
-KINEOPATHPLANNER_PREFIX=`$PKG_CONFIG KineoPathPlanner --variable=prefix`
-AC_SUBST(KINEOPATHPLANNER_PREFIX)
-AC_SUBST(KINEOPATHPLANNER_CFLAGS)
-AC_SUBST(KINEOPATHPLANNER_LIBS)
+PKG_CHECK_MODULES(KITE, Kite)
+KITE_PREFIX=`$PKG_CONFIG Kite --variable=prefix`
+AC_SUBST(KITE_PREFIX)
+AC_SUBST(KITE_CFLAGS)
+AC_SUBST(KITE_LIBS)
 
-AC_SUBST(KINEO_ADDON_BUILDER,
-	[${KINEOPATHPLANNER_PREFIX}/bin/KineoAddonBuilder])
-AC_SUBST(KINEO_MODULE_DIR, ["x${KINEOPATHPLANNER_PREFIX}/modules"])
+AC_SUBST(KINEO_ADDON_BUILDER,[${KITE_PREFIX}/bin/KineoAddonBuilder])
+AC_SUBST(KINEO_MODULE_DIR, ["x${KITE_PREFIX}/modules"])
 
-AC_SUBST(KINEO_PREFIX, [${KINEOPATHPLANNER_PREFIX}])
-AC_SUBST(KINEO_LIBDIR, [${KINEOPATHPLANNER_PREFIX}/lib])
+AC_SUBST(KINEO_PREFIX, [${KITE_PREFIX}])
+AC_SUBST(KINEO_LIBDIR, [${KITE_PREFIX}/lib])
 
 # HPP packages
 define(hppcore_reqd, [hppCore >= 1.11])
@@ -91,12 +91,12 @@ HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hpp-corbaserver --variable=docdir`
 AC_SUBST(HPPCORBASERVER_DOCDIR)
 
 define(kwsplus_reqd, [kwsPlus >= 1.8])
-AC_SUBST(KWSPLUS_REQD, "kwsplus_reqd")
-PKG_CHECK_MODULES(KWSPLUS, kwsplus_reqd)
+AC_SUBST([KWSPLUS_REQD], ["kwsplus_reqd"])
+PKG_CHECK_MODULES([KWSPLUS], [kwsplus_reqd])
 KWSPLUS_DOCDIR=`$PKG_CONFIG kwsPlus --variable=docdir`
-AC_SUBST(KWSPLUS_DOCDIR)
+AC_SUBST([KWSPLUS_DOCDIR])
 KWSPLUS_PREFIX=`$PKG_CONFIG kwsPlus --variable=prefix`
-AC_SUBST(KWSPLUS_PREFIX)
+AC_SUBST([KWSPLUS_PREFIX])
 
 
 ## ------------ ##
@@ -106,13 +106,14 @@ AC_SUBST(KWSPLUS_PREFIX)
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
 AC_SUBST([PKGCONFIG_URL], [])
 AC_SUBST([PKGCONFIG_REQUIRES],
-	['kwsPlus >= 1.8, hpp-corbaserver, KineoPathPlanner'])
+	['kwsPlus >= 1.8, hpp-corbaserver >= 1.8.3, Kite'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
 
 AC_SUBST([PKGCONFIG_LIBS],
 	["-L${libdir}/modules/${LICENSE_HOST} -lkppInterface"])
 
 AC_SUBST([PKGCONFIG_CFLAGS], [])
+AC_SUBST([PKGCONFIG_EXTRA], [])
 
 ## -------------- ##
 ## Write output.  ##
@@ -122,9 +123,10 @@ AC_SUBST([PKGCONFIG_CFLAGS], [])
 AC_CONFIG_HEADERS([config.h])
 
 # Creating Makefiles.
-AC_OUTPUT([
+AC_CONFIG_FILES([
 	Makefile
 	include/Makefile
 	src/Makefile
 	doc/Makefile
 ])
+AC_OUTPUT

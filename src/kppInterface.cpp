@@ -99,7 +99,8 @@ ktStatus CkppInterface::init(const CkppInterfaceWkPtr& inKppInterface)
 CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPlanner)
 {
   int argc=1;
-  const char* argv[] = {"KineoPathPlanner"};
+
+  char *argv[1] = {"Kite"};
 
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
@@ -636,8 +637,7 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
   if(inIsRealTimeUpdated){
 
     ODEBUG2("The Roadmap will be updated at run time");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert(CkppViewGraphicMap::SCENE_3D,
-								 attGraphicRoadmaps.back() );
+    attViewGeneral->viewportGraphicMap()->insert(CkppViewGraphicMap::SCENE_3D, attGraphicRoadmaps.back());
     CkitNotificator::defaultNotificator()->
       subscribe<CkppInterface>(CkwsGraphicRoadmapDelegate::DID_MODIFY_THE_ROADMAP,
 			       this ,
@@ -646,8 +646,7 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
   }
   else{
     ODEBUG2("The Roadmap will be updated at the end of building");
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D,
-								  attGraphicRoadmaps.back() );
+    attViewGeneral->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps.back());
     CkitNotificator::defaultNotificator()->
       subscribe< CkppInterface >(CkppPlanPathCommand::DID_FINISH_BUILDING,
 				 this, &CkppInterface::graphicRoadmapHasBeenModified);
@@ -674,6 +673,13 @@ unsigned int CkppInterface::addGraphicRoadmap(CkwsGraphicRoadmapShPtr inGraphicR
 
 // ==========================================================================
 
+void CkppInterface::initializeViewGeneral (const CkppViewGeneralShPtr &i_viewGeneral)
+{
+	attViewGeneral = i_viewGeneral;
+}
+
+// ==========================================================================
+
 void CkppInterface::removeGraphicRoadmap( int inRank){
 
   if(inRank >= (int)attGraphicRoadmaps.size()) {
@@ -684,7 +690,7 @@ void CkppInterface::removeGraphicRoadmap( int inRank){
 
     for(unsigned int i=0; i<attGraphicRoadmaps.size();i++ ){
 
-      if(attGraphicRoadmaps[i]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[i]);
+      if(attGraphicRoadmaps[i]->isDisplayed()) attViewGeneral->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[i]);
       attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+i);
 
     }
@@ -692,7 +698,7 @@ void CkppInterface::removeGraphicRoadmap( int inRank){
   }
   else{
 
-    if(attGraphicRoadmaps[inRank]->isDisplayed()) CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
+    if(attGraphicRoadmaps[inRank]->isDisplayed()) attViewGeneral->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
     attGraphicRoadmaps.erase(attGraphicRoadmaps.begin()+inRank);
 
   }
@@ -706,7 +712,7 @@ void CkppInterface::showRoadmap(unsigned int inRank){
 
   if(!attGraphicRoadmaps[inRank]->isDisplayed()){
 
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank] );
+    attViewGeneral->viewportGraphicMap()->insert( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank] );
     attGraphicRoadmaps[inRank]->isDisplayed(true);
     mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 
@@ -722,7 +728,7 @@ void CkppInterface::hideRoadmap(unsigned int inRank){
 
   if(attGraphicRoadmaps[inRank]->isDisplayed()){
 
-    CkppViewGeneral::getInstance()->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
+    attViewGeneral->viewportGraphicMap()->remove( CkppViewGraphicMap::OVERLAY_3D, attGraphicRoadmaps[inRank]);
     attGraphicRoadmaps[inRank]->isDisplayed(false);
     mainWindowController()->graphicWindowController()->viewWindow()->redraw(CkppViewCanvas::NOW);
 

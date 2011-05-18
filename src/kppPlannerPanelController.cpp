@@ -587,7 +587,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       Device->steeringMethod(CreedsSheppSteeringMethod::create(RSRadiusSpinCtrl->GetValue(),IsOrientedCheckBox->IsChecked()));
       break;
     case CkppPlannerPanel::SLERP : 
-      Device->steeringMethod(CkwsSMSlerp::create());
+      Device->steeringMethod(CkwsSMSlerp::create(Device->rootJoint()));
     default: 
       break;
     }

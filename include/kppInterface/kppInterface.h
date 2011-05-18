@@ -22,6 +22,7 @@
 
 #include "KineoModuleManager/kppModuleInterface.h"
 #include "KineoGUI/kppGUIModuleInterface.h"
+#include "KineoView/kppViewModuleInterface.h"
 
 #include <hpp/corbaserver/fwd.hh>
 
@@ -32,6 +33,7 @@ KIT_PREDEF_CLASS(CkwsRoadmap);
 KIT_PREDEF_CLASS(CkppUICommand);
 KIT_PREDEF_CLASS(CkppMainWindowController);
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
+KIT_PREDEF_CLASS(CkppViewGeneral);
 
 /*****************************************
  CLASS
@@ -39,7 +41,7 @@ KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 
 KIT_PREDEF_CLASS(CkppInterface);
 
-class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface
+class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface, public CkppViewModuleInterface
 {
 
 public:
@@ -124,6 +126,16 @@ public:
      \param inRank Rank of the graphic roadmap to show
   */
   void hideRoadmap(unsigned int inRank);
+	
+	/**
+     \brief updates the viewGeneral
+  */
+	virtual void initializeViewGeneral (const CkppViewGeneralShPtr &i_viewGeneral);
+	
+	CkppViewGeneralShPtr viewGeneral()
+	{
+		return attViewGeneral;
+	}
 
   CkppUICommandShPtr attCommandInitBase;
 
@@ -224,6 +236,8 @@ protected:
   ktStatus init(const CkppInterfaceWkPtr& inKppInterface);
 
  private :
+	 
+	 CkppViewGeneralShPtr attViewGeneral;
 
   /**
      \brief ChppPlanner object associated to the interface
