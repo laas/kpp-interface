@@ -2,14 +2,13 @@
 #ifndef KPP_CORBASERVERCOMMAND_H
 #define KPP_CORBASERVERCOMMAND_H
 
-#include "KineoController/kppCommand.h"
+#include <KineoController/kppCommand.h>
+
 
 KIT_PREDEF_CLASS( CkppCommandStartCorbaServer );
 KIT_PREDEF_CLASS( ChppDevice );
 KIT_PREDEF_CLASS( ChppBox );
 KIT_PREDEF_CLASS( CkppInterface );
-
-class ChppPlanner;
 
 KIT_PREDEF_CLASS( CkitNotification);
 

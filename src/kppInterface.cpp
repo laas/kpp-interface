@@ -11,33 +11,33 @@
 #include <iostream>
 #include <sstream>
 
-#include "KineoGUI/kppMainWindowUICommandFactory.h"
-#include "KineoController/kppUICommandList.h"
-#include "KineoController/kppUICommand.h"
-#include "KineoController/kppCommandEnvironment.h"
-#include "KineoController/kppCommand.h"
+#include <KineoGUI/kppMainWindowUICommandFactory.h>
+#include <KineoController/kppUICommandList.h>
+#include <KineoController/kppUICommand.h>
+#include <KineoController/kppCommandEnvironment.h>
+#include <KineoController/kppCommand.h>
 
-#include "KineoModel/kppModelTree.h"
-#include "KineoModel/kppGeometryNode.h"
-#include "KineoModel/kppDeviceNode.h"
-#include "KineoModel/kppPathNode.h"
-#include "KineoModel/kppPathComponent.h"
-#include "KineoModel/kppJointComponent.h"
+#include <KineoModel/kppModelTree.h>
+#include <KineoModel/kppGeometryNode.h>
+#include <KineoModel/kppDeviceNode.h>
+#include <KineoModel/kppPathNode.h>
+#include <KineoModel/kppPathComponent.h>
+#include <KineoModel/kppJointComponent.h>
 
 
-#include "KineoController/kppInsertComponentCommand.h"
-#include "KineoController/kppInsertSolidComponentCommand.h"
-#include "KineoController/kppDocument.h"
-#include "KineoGUI/kppMainWindowController.h"
-#include "KineoWorks2/kwsRoadmapBuilder.h"
-#include "KineoWorks2/kwsRdmBuilderDelegate.h"
+#include <KineoController/kppInsertComponentCommand.h>
+#include <KineoController/kppInsertSolidComponentCommand.h>
+#include <KineoController/kppDocument.h>
+#include <KineoGUI/kppMainWindowController.h>
+#include <KineoWorks2/kwsRoadmapBuilder.h>
+#include <KineoWorks2/kwsRdmBuilderDelegate.h>
 
-#include "KineoUtility/kitNotification.h"
-#include "KineoUtility/kitNotificator.h"
+#include <KineoUtility/kitNotification.h>
+#include <KineoUtility/kitNotificator.h>
 
-#include "KineoWX/kwxIdleNotification.h"
+#include <KineoWX/kwxIdleNotification.h>
 
-#include "hpp/core/problem.hh"
+#include <hpp/core/problem.hh>
 #include <hpp/corbaserver/server.hh>
 
 #include "kppInterface/kwsGraphicRoadmap.h"
@@ -47,9 +47,9 @@
 #include "kppInterface/kppCommandInit.h"
 #include "kppInterface/kppCommandPlannerPanel.h"
 
-#include "KineoKCDModel/kppKCDBox.h"
+#include <KineoKCDModel/kppKCDBox.h>
 
-#include "KineoKCDModel/kppKCDAssembly.h"
+#include <KineoKCDModel/kppKCDAssembly.h>
 
 using namespace std;
 
@@ -77,7 +77,7 @@ using namespace std;
 
 CkppInterfaceShPtr CkppInterface::create()
 {
-  ChppPlanner *hppPlanner = new ChppPlanner();
+  hpp::core::Planner *hppPlanner = new hpp::core::Planner();
   CkppInterface* ptr = new CkppInterface(hppPlanner);
 
   CkppInterfaceShPtr shPtr(ptr);
@@ -96,7 +96,7 @@ ktStatus CkppInterface::init(const CkppInterfaceWkPtr& inKppInterface)
 
 // ==========================================================================
 
-CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPlanner)
+CkppInterface::CkppInterface(hpp::core::Planner *inHppPlanner) : attHppPlanner(inHppPlanner)
 {
   int argc=1;
   const char* argv[] = {"KineoPathPlanner"};
@@ -214,33 +214,33 @@ ktStatus CkppInterface::activate()
   //hppPlanner->subscribe(ID_IDLE, cbHppPeriodicEvent, (void*)this);
 
   // Subscribe to HPP event ID_HPP_ADD_ROBOT.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_ADD_ROBOT,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_ROBOT,
 								       this,
 								       &CkppInterface::hppAddRobot);
 
   // Subscribe to HPP event ID_HPP_ADD_OBSTACLE triggered when an obstacle is added to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_ADD_OBSTACLE,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_OBSTACLE,
 								       this,
 								       &CkppInterface::hppAddObstacle);
 
   // Subscribe to HPP event ID_HPP_ADD_PATH triggered when a path is added to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppProblem::ID_HPP_ADD_PATH,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Problem::ID_HPP_ADD_PATH,
 									this,
 									&CkppInterface::hppAddPath);
 
   // Subscribe to HPP event ID_HPP_SET_OBSTACLE_LIST triggered when a list of obstacles is attached
   // to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_SET_OBSTACLE_LIST,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_SET_OBSTACLE_LIST,
 								    this,
 								    &CkppInterface::hppSetObstacleList);
 
   // Subscribe to HPP event ID_HPP_REMOVE_ROADMAPBUILDER triggered when a roadmap builder is destroyed
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_REMOVE_ROADMAPBUILDER,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_REMOVE_ROADMAPBUILDER,
 								    this,
 								    &CkppInterface::hppRemoveRoadmapBuilder);
 
   // Subscribe to HPP event ID_HPP_ADD_ROADMAPBUILDER triggered when a new roadmap should be displayed
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppPlanner::ID_HPP_ADD_ROADMAPBUILDER,
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_ROADMAPBUILDER,
 								    this,
 								    &CkppInterface::hppAddGraphicRoadmap);
 
@@ -283,7 +283,7 @@ ktStatus CkppInterface::startCorbaServer()
 void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification)
 {
   // retrieve the object with key
-  CkppDeviceComponentShPtr  device(inNotification->shPtrValue<CkppDeviceComponent>(ChppPlanner::ROBOT_KEY));
+  CkppDeviceComponentShPtr  device(inNotification->shPtrValue<CkppDeviceComponent>(hpp::core::Planner::ROBOT_KEY));
 
   //debug
   //cout<<"hppAddRobot called."<<endl;
@@ -379,7 +379,9 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 {
   ODEBUG2(" adding an obstacle ... ");
 
-  std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
+  std::vector<CkcdObjectShPtr>*
+    obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >
+		 (hpp::core::Planner::OBSTACLE_KEY));
 
   CkppDocumentShPtr document = mainWindowController()->document();
   if (!document) return;
@@ -450,7 +452,9 @@ void CkppInterface::hppSetObstacleList(const CkitNotificationConstShPtr& inNotif
 {
   ODEBUG2(" adding obstacles ... ");
 
-  std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(ChppPlanner::OBSTACLE_KEY));
+  std::vector<CkcdObjectShPtr>*
+    obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >
+		 (hpp::core::Planner::OBSTACLE_KEY));
 
   CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
 
@@ -543,11 +547,11 @@ bool CkppInterface::isRoadmapStoredAsGraphic(const CkwsRoadmapShPtr& inRoadmap, 
 
 void CkppInterface::hppRemoveRoadmapBuilder(const CkitNotificationConstShPtr& inNotification)
 {
-  // Retrieve ChppPlanner object
-  ChppPlanner *planner = (ChppPlanner*)(inNotification->objectPtr< ChppPlanner >());
+  // Retrieve hpp::core::Planner object
+  hpp::core::Planner *planner = (hpp::core::Planner*)(inNotification->objectPtr< hpp::core::Planner >());
 
   // Retrieve roadmap that is about to be destroyed
-  unsigned int rank = inNotification->unsignedIntValue(ChppPlanner::ROADMAP_KEY);
+  unsigned int rank = inNotification->unsignedIntValue(hpp::core::Planner::ROADMAP_KEY);
 
   unsigned int nbProblem = planner->getNbHppProblems();
   if (rank >= nbProblem) {
@@ -582,11 +586,12 @@ void CkppInterface::hppRemoveRoadmapBuilder(const CkitNotificationConstShPtr& in
 
 void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNotification)
 {
-  // Retrieve ChppPlanner object
-  ChppPlanner *planner = (ChppPlanner*)(inNotification->objectPtr< ChppPlanner >());
+  // Retrieve hpp::core::Planner object
+  hpp::core::Planner *planner = (hpp::core::Planner*)
+    (inNotification->objectPtr< hpp::core::Planner >());
 
   // Retrieve roadmap that is about to be destroyed
-  unsigned int rank = inNotification->unsignedIntValue(ChppPlanner::ROADMAP_KEY);
+  unsigned int rank = inNotification->unsignedIntValue(hpp::core::Planner::ROADMAP_KEY);
 
   unsigned int nbProblem = planner->getNbHppProblems();
   if (rank >= nbProblem) {
@@ -771,7 +776,7 @@ void CkppInterface::removeAllRoadmapsAndProblems(const CkitNotificationConstShPt
   removeGraphicRoadmap();
   attGraphicRoadmaps.clear();
 
-  /* Remove all problems in ChppPlanner object. */
+  /* Remove all problems in hpp::core::Planner object. */
   while(KD_OK==hppPlanner()->removeHppProblem()){}
 
 }

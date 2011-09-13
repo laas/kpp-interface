@@ -78,13 +78,13 @@ AC_SUBST(KINEO_PREFIX, [${KINEOPATHPLANNER_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KINEOPATHPLANNER_PREFIX}/lib])
 
 # HPP packages
-define(hppcore_reqd, [hppCore >= 1.11])
+define(hppcore_reqd, [hpp-core >= 1.14])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
 HPPCORE_DOCDIR=`$PKG_CONFIG hppCore --variable=docdir`
 AC_SUBST(HPPCORE_DOCDIR)
 
-define(hppcobaserver_reqd, [hpp-corbaserver]) dnl >= 1.8.3
+define(hppcobaserver_reqd, [hpp-corbaserver >= 1.11]) dnl >= 1.8.3
 AC_SUBST(HPPCOBASERVER_REQD, "hppcobaserver_reqd")
 PKG_CHECK_MODULES(HPPCORBASERVER, hppcobaserver_reqd)
 HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hpp-corbaserver --variable=docdir`
