@@ -5,7 +5,7 @@ AC_PREREQ([2.59])
 ## --------------------- ##
 ## Package configuration ##
 ## --------------------- ##
-AC_INIT([kppInterface], [1.7.0.99], [hpp@laas.fr], [kppInterface])
+AC_INIT([kppInterface], [1.8], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
 AC_CONFIG_AUX_DIR([build-aux])
@@ -78,13 +78,13 @@ AC_SUBST(KINEO_PREFIX, [${KINEOPATHPLANNER_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KINEOPATHPLANNER_PREFIX}/lib])
 
 # HPP packages
-define(hppcore_reqd, [hpp-core >= 1.14])
+define(hppcore_reqd, [hpp-core >= 1.15])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
 HPPCORE_DOCDIR=`$PKG_CONFIG hppCore --variable=docdir`
 AC_SUBST(HPPCORE_DOCDIR)
 
-define(hppcobaserver_reqd, [hpp-corbaserver >= 1.11]) dnl >= 1.8.3
+define(hppcobaserver_reqd, [hpp-corbaserver >= 1.12])
 AC_SUBST(HPPCOBASERVER_REQD, "hppcobaserver_reqd")
 PKG_CHECK_MODULES(HPPCORBASERVER, hppcobaserver_reqd)
 HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hpp-corbaserver --variable=docdir`
