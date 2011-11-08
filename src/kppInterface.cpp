@@ -100,7 +100,7 @@ CkppInterface::CkppInterface(ChppPlanner *inHppPlanner) : attHppPlanner(inHppPla
 {
   int argc=1;
 
-  char *argv[1] = {"Kite"};
+  const char *argv[1] = {"Kite"};
 
   attHppCorbaServer = NULL;
   corbaServerRunning = 0;
