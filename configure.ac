@@ -78,10 +78,10 @@ AC_SUBST(KINEO_PREFIX, [${KITE_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KITE_PREFIX}/lib])
 
 # HPP packages
-define(hppcore_reqd, [hppCore >= 1.11])
+define(hppcore_reqd, [hpp-core >= 1.15])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
-HPPCORE_DOCDIR=`$PKG_CONFIG hppCore --variable=docdir`
+HPPCORE_DOCDIR=`$PKG_CONFIG hpp-core --variable=docdir`
 AC_SUBST(HPPCORE_DOCDIR)
 
 define(hppcobaserver_reqd, [hpp-corbaserver]) dnl >= 1.8.3
