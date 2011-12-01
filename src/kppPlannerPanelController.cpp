@@ -487,23 +487,24 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       if(LTBuilderCheckBox->IsChecked()){
 	if(DiffusingBuilderCheckBox->IsChecked()) {
 	  DiffusingRdmBuilder = 
-	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsDiffusingRdmBuilder> >::create(CkwsRoadmap::create(Device), penetration);
+	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder
+	    <CkwsDiffusingRdmBuilder> >::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
 	  
 	}
 	else {
 	  DiffusingRdmBuilder = 
-	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> >::create(CkwsRoadmap::create(Device), penetration);
+	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> >::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
 	}
       } 
       else { 
 	if(DiffusingBuilderCheckBox->IsChecked()) {
-	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
+	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
 	}
 	else {
-	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device), penetration);
+	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsIPPRdmBuilder>::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
 	}
       }
