@@ -25,8 +25,7 @@
 #include "KineoView/kppViewModuleInterface.h"
 
 #include <hpp/corbaserver/fwd.hh>
-
-class ChppPlanner;
+#include <hpp/core/fwd.hh>
 
 KIT_PREDEF_CLASS(CkitNotification);
 KIT_PREDEF_CLASS(CkwsRoadmap);
@@ -74,14 +73,14 @@ public:
 				     std::vector<CkppUICommandListShPtr> & outMenuCommandListVector);
 
   /**
-     \brief Set pointer to ChppPlanner object.
+     \brief Set pointer to hpp::core::Planner object.
   */
-  void hppPlanner(ChppPlanner* inHppPlanner) {attHppPlanner = inHppPlanner;};
+  void hppPlanner(hpp::core::Planner* inHppPlanner) {attHppPlanner = inHppPlanner;};
 
   /**
-     \brief Get pointer to ChppPlanner object.
+     \brief Get pointer to hpp::core::Planner object.
   */
-  ChppPlanner* hppPlanner() { return attHppPlanner;};
+  hpp::core::Planner* hppPlanner() { return attHppPlanner;};
 
   /**
      \brief Command to start corba server()
@@ -143,7 +142,7 @@ public:
 
 protected:
 
-  CkppInterface(ChppPlanner *inHppPlanner);
+  CkppInterface(hpp::core::Planner *inHppPlanner);
 
   /// command to start corba server
   CkppUICommandShPtr attStartCorbaServerCommand;
@@ -203,7 +202,7 @@ protected:
 
   /**
      \brief Delete a roadmap builder
-     \param inNotification notification sent by ChppPlanner object.
+     \param inNotification notification sent by hpp::core::Planner object.
 
      This notification is sent each time a roadmap builder is destroyed.
   */
@@ -211,7 +210,7 @@ protected:
 
   /**
      \brief Insert a graphic roadmap in the interface
-     \param inNotification notification sent by ChppPlanner object.
+     \param inNotification notification sent by hpp::core::Planner object.
 
      This method is called each time a new roadmap builder is created
      the roadmap of which is required to be displayed.
@@ -240,11 +239,11 @@ protected:
 	 CkppViewGeneralShPtr attViewGeneral;
 
   /**
-     \brief ChppPlanner object associated to the interface
+     \brief hpp::core::Planner object associated to the interface
 
      Given at construction.
   */
-  ChppPlanner *attHppPlanner;
+  hpp::core::Planner *attHppPlanner;
 
   /**
      \brief Store weak pointer to main window controller
