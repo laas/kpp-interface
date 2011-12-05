@@ -37,6 +37,8 @@
 
 #include "KineoWX/kwxIdleNotification.h"
 
+#include <hpp/util/debug.hh>
+
 #include "hpp/core/problem.hh"
 #include <hpp/corbaserver/server.hh>
 
@@ -77,7 +79,7 @@ using namespace std;
 
 CkppInterfaceShPtr CkppInterface::create()
 {
-  hpp::core::Planner *hppPlanner = new hpp::core::Planner();
+  hpp::core::Planner *hppPlanner = new hpp::core::Planner(false);
   CkppInterface* ptr = new CkppInterface(hppPlanner);
 
   CkppInterfaceShPtr shPtr(ptr);
