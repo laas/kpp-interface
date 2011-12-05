@@ -314,16 +314,26 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
 
     for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
       {
-	notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD,
-				 device->solidComponentRef(i)->referencedSolidComponent().get());
-	notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
-				 device->solidComponentRef(i)->referencedSolidComponent().get());
+	notificator->unsubscribe
+	  (CkppComponent::DID_INSERT_CHILD,
+	   device->solidComponentRef(i)->referencedSolidComponent().get());
+	notificator->unsubscribe
+	  (CkppComponent::DID_REMOVE_CHILD,
+	   device->solidComponentRef(i)->referencedSolidComponent().get());
 
 	insertCommand = CkppInsertSolidComponentCommand::create();
-	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
-				  CkppComponentShPtr(modelTree->geometryNode()) );
-	insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
-				  CkppComponentShPtr(device->solidComponentRef(i)->referencedSolidComponent()));
+	insertCommand->paramValue
+	  (insertCommand->parameter(CkppInsertComponentCommand::
+				    PARENT_COMPONENT),
+	   CkppComponentShPtr(modelTree->geometryNode()) );
+	insertCommand->paramValue
+	  (insertCommand->parameter(CkppInsertComponentCommand::
+				    INSERTED_COMPONENT),
+	   CkppComponentShPtr
+	   (device->solidComponentRef(i)->referencedSolidComponent()));
+	hppDout (info, "Attempting to insert "<< device->solidComponentRef(i)->
+		 referencedSolidComponent()->name () << " into "
+		 << modelTree->geometryNode ()->name () <<".");
 	insertCommand->doExecute() ;
       }
 
@@ -332,10 +342,14 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
     notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, device.get());
 
     insertCommand = CkppInsertComponentCommand::create();
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
-			      CkppComponentShPtr(modelTree->deviceNode()));
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
-			      CkppComponentShPtr(device) );
+    insertCommand->paramValue
+      (insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
+       CkppComponentShPtr(modelTree->deviceNode()));
+    insertCommand->paramValue
+      (insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
+       CkppComponentShPtr(device));
+    hppDout (info, "Attempting to insert " << device->name () << " into "
+	     << modelTree->deviceNode()->name () <<".");
     insertCommand->doExecute();
   }
 }
