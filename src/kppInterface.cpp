@@ -23,6 +23,7 @@
 #include "KineoModel/kppPathNode.h"
 #include "KineoModel/kppPathComponent.h"
 #include "KineoModel/kppJointComponent.h"
+#include "KineoModel/kppSteeringMethodComponent.h"
 
 
 #include "KineoController/kppInsertComponentCommand.h"
@@ -351,6 +352,8 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
     hppDout (info, "Attempting to insert " << device->name () << " into "
 	     << modelTree->deviceNode()->name () <<".");
     insertCommand->doExecute();
+    hppDout (info, "Steering method component: "
+	     <<device->steeringMethodComponent ()->name ());
   }
 }
 
