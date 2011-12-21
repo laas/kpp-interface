@@ -6,7 +6,7 @@ AC_PREREQ(2.65)
 ## Package configuration ##
 ## --------------------- ##
 
-AC_INIT([kppInterface], [1.7], [hpp@laas.fr], [kppInterface])
+AC_INIT([kppInterface], [1.9], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
 AC_CONFIG_AUX_DIR([build-aux])
@@ -65,7 +65,7 @@ JRL_PROG_DOXYGEN
 LICENSE_HOST=`uname -n`
 AC_SUBST(LICENSE_HOST)
 
-PKG_CHECK_MODULES(KITE, Kite)
+PKG_CHECK_MODULES(KITE, Kite >= 2.06)
 KITE_PREFIX=`$PKG_CONFIG Kite --variable=prefix`
 AC_SUBST(KITE_PREFIX)
 AC_SUBST(KITE_CFLAGS)
@@ -78,19 +78,19 @@ AC_SUBST(KINEO_PREFIX, [${KITE_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KITE_PREFIX}/lib])
 
 # HPP packages
-define(hppcore_reqd, [hpp-core >= 1.15])
+define(hppcore_reqd, [hpp-core >= 2.0])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
 HPPCORE_DOCDIR=`$PKG_CONFIG hpp-core --variable=docdir`
 AC_SUBST(HPPCORE_DOCDIR)
 
-define(hppcobaserver_reqd, [hpp-corbaserver]) dnl >= 1.8.3
+define(hppcobaserver_reqd, [hpp-corbaserver >= 1.13])
 AC_SUBST(HPPCOBASERVER_REQD, "hppcobaserver_reqd")
 PKG_CHECK_MODULES(HPPCORBASERVER, hppcobaserver_reqd)
 HPPCORBASERVER_DOCDIR=`$PKG_CONFIG hpp-corbaserver --variable=docdir`
 AC_SUBST(HPPCORBASERVER_DOCDIR)
 
-define(kwsplus_reqd, [kwsPlus >= 1.8])
+define(kwsplus_reqd, [kwsPlus >= 2.1])
 AC_SUBST([KWSPLUS_REQD], ["kwsplus_reqd"])
 PKG_CHECK_MODULES([KWSPLUS], [kwsplus_reqd])
 KWSPLUS_DOCDIR=`$PKG_CONFIG kwsPlus --variable=docdir`
@@ -106,7 +106,7 @@ AC_SUBST([KWSPLUS_PREFIX])
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
 AC_SUBST([PKGCONFIG_URL], [])
 AC_SUBST([PKGCONFIG_REQUIRES],
-	['kwsPlus >= 1.8, hpp-corbaserver >= 1.8.3, Kite'])
+	['kwsPlus >= 2.1, hpp-corbaserver >= 1.13, Kite >= 2.06'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
 
 AC_SUBST([PKGCONFIG_LIBS],
