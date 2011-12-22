@@ -287,18 +287,22 @@ ktStatus CkppInterface::startCorbaServer()
 void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification)
 {
   // retrieve the object with key
-  CkppDeviceComponentShPtr  device(inNotification->shPtrValue<CkppDeviceComponent>(hpp::core::Planner::ROBOT_KEY));
+  CkppDeviceComponentShPtr
+    device(inNotification->shPtrValue<CkppDeviceComponent>
+	   (hpp::core::Planner::ROBOT_KEY));
 
   //debug
   //cout<<"hppAddRobot called."<<endl;
 
-  CkppModelTreeShPtr modelTree = mainWindowController()->document()->modelTree();
+  CkppModelTreeShPtr
+    modelTree = mainWindowController()->document()->modelTree();
 
   //before adding device, we check if it's already in the model tree
   CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
   bool canAddDevice = true;
   for(unsigned int i=0; i<deviceNode->countChildComponents(); i++){
-    if(device == KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent, deviceNode->childComponent(i)))
+    if(device == KIT_DYNAMIC_PTR_CAST
+       (CkppDeviceComponent, deviceNode->childComponent(i)))
       canAddDevice = false;
   }
 
@@ -309,9 +313,6 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
 
     // Get notificator instance
     CkitNotificatorShPtr notificator = CkitNotificator::defaultNotificator();
-
-    //debug
-    //cout<<" device solid components: "<<device->countSolidComponentRefs()<<endl;
 
     for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
       {
