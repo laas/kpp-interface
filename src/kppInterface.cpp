@@ -298,7 +298,7 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
     modelTree = mainWindowController()->document()->modelTree();
 
   //before adding device, we check if it's already in the model tree
-  CkppDeviceNodeShPtr deviceNode = modelTree->deviceNode();
+  CkppComponentShPtr deviceNode = modelTree->deviceNode();
   bool canAddDevice = true;
   for(unsigned int i=0; i<deviceNode->countChildComponents(); i++){
     if(device == KIT_DYNAMIC_PTR_CAST
@@ -316,12 +316,18 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
 
     for( unsigned int i=0; i<device->countSolidComponentRefs(); i++)
       {
-	notificator->unsubscribe
-	  (CkppComponent::DID_INSERT_CHILD,
-	   device->solidComponentRef(i)->referencedSolidComponent().get());
-	notificator->unsubscribe
-	  (CkppComponent::DID_REMOVE_CHILD,
-	   device->solidComponentRef(i)->referencedSolidComponent().get());
+	CkppComponentShPtr componentToInsert
+	  (device->solidComponentRef(i)->referencedSolidComponent());
+
+	// If component is in a tree, extract it first.
+	if (CkppComponentShPtr parentComp = componentToInsert->parent ()) {
+	  parentComp->removeChildComponent (componentToInsert);
+	}
+
+	notificator->unsubscribe (CkppComponent::DID_INSERT_CHILD,
+				  componentToInsert.get());
+	notificator->unsubscribe (CkppComponent::DID_REMOVE_CHILD,
+				  componentToInsert.get());
 
 	insertCommand = CkppInsertSolidComponentCommand::create();
 	insertCommand->paramValue
@@ -330,11 +336,9 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
 	   CkppComponentShPtr(modelTree->geometryNode()) );
 	insertCommand->paramValue
 	  (insertCommand->parameter(CkppInsertComponentCommand::
-				    INSERTED_COMPONENT),
-	   CkppComponentShPtr
-	   (device->solidComponentRef(i)->referencedSolidComponent()));
-	hppDout (info, "Attempting to insert "<< device->solidComponentRef(i)->
-		 referencedSolidComponent()->name () << " into "
+				    INSERTED_COMPONENT), componentToInsert);
+	hppDout (info, "Attempting to insert "<< componentToInsert->name ()
+		 << " into "
 		 << modelTree->geometryNode ()->name () <<".");
 	insertCommand->doExecute() ;
       }
@@ -343,15 +347,20 @@ void CkppInterface::hppAddRobot(const CkitNotificationConstShPtr& inNotification
     notificator->unsubscribe(CkppComponent::DID_INSERT_CHILD, device.get());
     notificator->unsubscribe(CkppComponent::DID_REMOVE_CHILD, device.get());
 
+    // If device is in a tree, extract it first.
+    if (CkppComponentShPtr parent = device->parent ()) {
+      parent->removeChildComponent (device);
+    }
+
     insertCommand = CkppInsertComponentCommand::create();
     insertCommand->paramValue
       (insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
-       CkppComponentShPtr(modelTree->deviceNode()));
+       deviceNode);
     insertCommand->paramValue
       (insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
-       CkppComponentShPtr(device));
+       CkppComponentShPtr (device));
     hppDout (info, "Attempting to insert " << device->name () << " into "
-	     << modelTree->deviceNode()->name () <<".");
+	     << deviceNode->name () <<".");
     insertCommand->doExecute();
     hppDout (info, "Steering method component: "
 	     <<device->steeringMethodComponent ()->name ());
