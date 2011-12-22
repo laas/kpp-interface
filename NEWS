@@ -1,3 +1,8 @@
+12/22/2011 Release 1.9.1
+
+	   1. Before inserting a device into the device node, make sure
+	      the device has no parent.
+
 12/20/2011 Release 1.9
 
 	   1. Compatibility with kitelab-2.06.
