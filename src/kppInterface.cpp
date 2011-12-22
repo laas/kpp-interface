@@ -447,8 +447,12 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
   CkppKCDPolyhedronShPtr hppPolyhedron;
 
   CkppSolidComponentShPtr solidComp;
-  // Test if obstacle is a polyhedron
+  // Test if obstacle is a solid component
   if (solidComp = boost::dynamic_pointer_cast<CkppSolidComponent>(obstacle)) {
+    // if solid component has a parent, detach it from parent
+    if (CkppComponentShPtr parent = solidComp->parent ()) {
+      parent->removeChildComponent (solidComp);
+    }
     CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(solidComp);
     // modelTree->geometryNode()->addChildComponent(poly);
     // cerr<<" adding solidComp."<<endl;
