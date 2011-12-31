@@ -407,10 +407,9 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
 
 void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotification)
 {
-  ODEBUG2(" adding an obstacle ... ");
-
-  std::vector<CkcdObjectShPtr>*  obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >(hpp::core::Planner::OBSTACLE_KEY));
-
+  std::vector<CkcdObjectShPtr>*
+    obstacleList(inNotification->ptrValue< std::vector<CkcdObjectShPtr> >
+		 (hpp::core::Planner::OBSTACLE_KEY));
   CkppDocumentShPtr document = mainWindowController()->document();
   if (!document) return;
   CkppModelTreeShPtr modelTree = document->modelTree();
@@ -420,7 +419,7 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
   unsigned int nbObstacles = obstacleList->size();
 
   if (nbObstacles == 0) {
-    std::cerr << "CkppInterface::hppAddObstacle: obstacle list is empty." << std::endl;
+    hppDout (error, "CkppInterface::hppAddObstacle: obstacle list is empty.");
     return;
   }
 
@@ -432,23 +431,20 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
 
   CkppGeometryNodeShPtr geomNode = modelTree->geometryNode();
 
-  ODEBUG2("the number of child = " << geomNode->countChildComponents());
+  hppDout(info, "the number of child = " << geomNode->countChildComponents());
 
   CkppGeometryComponentShPtr geomComponent;
   for (unsigned int i=0; i<geomNode->countChildComponents(); i++){
-      geomComponent =
-	KIT_DYNAMIC_PTR_CAST(CkppGeometryComponent, geomNode->childComponent(i));
+      geomComponent = KIT_DYNAMIC_PTR_CAST
+	(CkppGeometryComponent, geomNode->childComponent(i));
       CkcdObjectShPtr obj;
       obj = KIT_DYNAMIC_PTR_CAST(CkcdObject, geomComponent);
       if (obj && (obj == obstacle)){
-	  //std::cout << "the obstacle is already registered" << std::endl;
-	  return;
+	return;
       }
   }
 
   CkppKCDPolyhedronShPtr hppPolyhedron;
-
-//   cout<<"nbObstacles "<<nbObstacles<<endl;
 
   CkppSolidComponentShPtr solidComp;
   // Test if obstacle is a polyhedron
@@ -456,20 +452,24 @@ void CkppInterface::hppAddObstacle(const CkitNotificationConstShPtr& inNotificat
     CkppSolidComponentRefShPtr poly = CkppSolidComponentRef::create(solidComp);
     // modelTree->geometryNode()->addChildComponent(poly);
     // cerr<<" adding solidComp."<<endl;
-    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_INSERT_CHILD,
-						       solidComp.get());
-    CkitNotificator::defaultNotificator()->unsubscribe(CkppComponent::DID_REMOVE_CHILD,
-						       solidComp.get());
+    CkitNotificator::defaultNotificator()->unsubscribe
+      (CkppComponent::DID_INSERT_CHILD, solidComp.get());
+    CkitNotificator::defaultNotificator()->unsubscribe
+      (CkppComponent::DID_REMOVE_CHILD, solidComp.get());
 
     insertCommand = CkppInsertSolidComponentCommand::create();
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
-			      CkppComponentShPtr(modelTree->geometryNode()) );
-    insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::INSERTED_COMPONENT),
-			      CkppComponentShPtr(poly->referencedSolidComponent()) );
+    insertCommand->paramValue(insertCommand->parameter
+			      (CkppInsertComponentCommand::PARENT_COMPONENT),
+			      CkppComponentShPtr(modelTree->geometryNode ()));
+    insertCommand->paramValue(insertCommand->parameter
+			      (CkppInsertComponentCommand::INSERTED_COMPONENT),
+			      CkppComponentShPtr
+			      (poly->referencedSolidComponent ()));
     insertCommand->doExecute();
-    ODEBUG2("obstacle added.");
+    hppDout(info, "obstacle added.");
   } else {
-    ODEBUG1(":hppAddObstacle: obstacle " << iObstacle << "is of undefined type.");
+    hppDout(notice, ":hppAddObstacle: obstacle " << iObstacle
+	    << "is of undefined type.");
   }
 }
 
