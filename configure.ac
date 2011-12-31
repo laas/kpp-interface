@@ -78,6 +78,12 @@ AC_SUBST(KINEO_PREFIX, [${KITE_PREFIX}])
 AC_SUBST(KINEO_LIBDIR, [${KITE_PREFIX}/lib])
 
 # HPP packages
+define(hpputil_reqd, [hpp-util >= 0.4])
+AC_SUBST(HPPUTIL_REQD, "hpputil_reqd")
+PKG_CHECK_MODULES(HPPUTIL, hpputil_reqd)
+HPPUTIL_DOCDIR=`$PKG_CONFIG hpp-util --variable=docdir`
+AC_SUBST(HPPUTIL_DOCDIR)
+
 define(hppcore_reqd, [hpp-core >= 2.0])
 AC_SUBST(HPPCORE_REQD, "hppcore_reqd")
 PKG_CHECK_MODULES(HPPCORE, hppcore_reqd)
@@ -106,7 +112,7 @@ AC_SUBST([KWSPLUS_PREFIX])
 AC_SUBST([PKGCONFIG_DESCRIPTION], ['Kpp interface'])
 AC_SUBST([PKGCONFIG_URL], [])
 AC_SUBST([PKGCONFIG_REQUIRES],
-	['kwsPlus >= 2.1, hpp-corbaserver >= 1.13, Kite >= 2.06'])
+	['kwsPlus >= 2.1, hpp-core >= 2.0, hpp-util >= 0.4, hpp-corbaserver >= 1.13, Kite >= 2.06'])
 AC_SUBST([PKGCONFIG_CONFLICTS], [])
 
 AC_SUBST([PKGCONFIG_LIBS],
