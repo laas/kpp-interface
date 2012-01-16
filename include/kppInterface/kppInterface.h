@@ -217,6 +217,9 @@ protected:
   */
   virtual void hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNotification);
 
+  /// Refresh the view after a robot configuration has changed.
+  virtual void hppSetCurrentConfig(const CkitNotificationConstShPtr&
+				   inNotification);
   /**
      \brief Called when the interface has nothing to do.
   */

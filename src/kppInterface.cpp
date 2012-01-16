@@ -276,6 +276,12 @@ ktStatus CkppInterface::activate()
     (hpp::core::Planner::ID_HPP_ADD_ROADMAPBUILDER, this,
      &CkppInterface::hppAddGraphicRoadmap);
 
+  // Subscribe to event Planner::ID_HPP_SET_CURRENT_CONFIG triggered when
+  // current configuration of a robot has changed.
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_SET_CURRENT_CONFIG, this,
+     &CkppInterface::hppSetCurrentConfig);
+
   CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
     (CkwxIdleNotification::TYPE, this, &CkppInterface::onIdle);
   // debug
@@ -677,6 +683,12 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   ODEBUG2(":hppAddGraphicRoadmap: " << roadmapName.str() << " created");
 }
 
+void CkppInterface::hppSetCurrentConfig(const CkitNotificationConstShPtr&
+					inNotification)
+{
+  mainWindowController()->graphicWindowController()->viewWindow()->
+    redraw(CkppViewCanvas::NOW);
+}
 
 void CkppInterface::onIdle(const CkitNotificationConstShPtr& inNotification)
 {
