@@ -81,6 +81,7 @@ using namespace std;
 static
 CkwsPathShPtr wrapPathInDirectPathVector (CkwsPathShPtr path)
 {
+  CkwsDeviceShPtr device (path->device ());
   CkwsPathShPtr outPath = CkwsPath::create (path->device ());
   std::vector< CkwsDirectPathConstShPtr > dpVector;
   for (unsigned int i=0; i < path->countDirectPaths (); i++) {
@@ -89,6 +90,8 @@ CkwsPathShPtr wrapPathInDirectPathVector (CkwsPathShPtr path)
     assert (dp);
     dpVector.push_back (dp);
   }
+  assert (KIT_DYNAMIC_PTR_CAST(CkppSteeringMethodComponent,
+			       device->steeringMethod ()));
   CdirectPathVectorShPtr directPath =
     CdirectPathVector::create (*(dpVector.front ()->configAtStart ()),
 			       *(dpVector.back ()->configAtEnd()),
