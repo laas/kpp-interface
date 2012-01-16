@@ -240,40 +240,41 @@ ktStatus CkppInterface::activate()
   //hppPlanner->subscribe(ID_IDLE, cbHppPeriodicEvent, (void*)this);
 
   // Subscribe to HPP event ID_HPP_ADD_ROBOT.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_ROBOT,
-								       this,
-								       &CkppInterface::hppAddRobot);
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_ADD_ROBOT,
+     this, &CkppInterface::hppAddRobot);
 
-  // Subscribe to HPP event ID_HPP_ADD_OBSTACLE triggered when an obstacle is added to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_OBSTACLE,
-								       this,
-								       &CkppInterface::hppAddObstacle);
+  // Subscribe to HPP event ID_HPP_ADD_OBSTACLE triggered when an
+  // obstacle is added to hppPlanner object.
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_ADD_OBSTACLE, this,
+     &CkppInterface::hppAddObstacle);
 
-  // Subscribe to HPP event ID_HPP_ADD_PATH triggered when a path is added to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(ChppProblem::ID_HPP_ADD_PATH,
-									this,
-									&CkppInterface::hppAddPath);
+  // Subscribe to HPP event ID_HPP_ADD_PATH triggered when a path is
+  // added to hppPlanner object.
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (ChppProblem::ID_HPP_ADD_PATH, this, &CkppInterface::hppAddPath);
 
-  // Subscribe to HPP event ID_HPP_SET_OBSTACLE_LIST triggered when a list of obstacles is attached
-  // to hppPlanner object.
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_SET_OBSTACLE_LIST,
-								    this,
-								    &CkppInterface::hppSetObstacleList);
+  // Subscribe to HPP event ID_HPP_SET_OBSTACLE_LIST triggered when a
+  // list of obstacles is attached to hppPlanner object.
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_SET_OBSTACLE_LIST, this,
+     &CkppInterface::hppSetObstacleList);
 
-  // Subscribe to HPP event ID_HPP_REMOVE_ROADMAPBUILDER triggered when a roadmap builder is destroyed
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_REMOVE_ROADMAPBUILDER,
-								    this,
-								    &CkppInterface::hppRemoveRoadmapBuilder);
+  // Subscribe to HPP event ID_HPP_REMOVE_ROADMAPBUILDER triggered
+  // when a roadmap builder is destroyed
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_REMOVE_ROADMAPBUILDER, this,
+     &CkppInterface::hppRemoveRoadmapBuilder);
 
-  // Subscribe to HPP event ID_HPP_ADD_ROADMAPBUILDER triggered when a new roadmap should be displayed
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(hpp::core::Planner::ID_HPP_ADD_ROADMAPBUILDER,
-								    this,
-								    &CkppInterface::hppAddGraphicRoadmap);
+  // Subscribe to HPP event ID_HPP_ADD_ROADMAPBUILDER triggered when a
+  // new roadmap should be displayed
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (hpp::core::Planner::ID_HPP_ADD_ROADMAPBUILDER, this,
+     &CkppInterface::hppAddGraphicRoadmap);
 
-
-  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >(CkwxIdleNotification::TYPE,
-								    this,
-								    &CkppInterface::onIdle);
+  CkitNotificator::defaultNotificator()->subscribe< CkppInterface >
+    (CkwxIdleNotification::TYPE, this, &CkppInterface::onIdle);
   // debug
   // cerr<<"kppInterface activated."<<endl;
   return KD_OK;
