@@ -6,7 +6,7 @@ AC_PREREQ(2.65)
 ## Package configuration ##
 ## --------------------- ##
 
-AC_INIT([kppInterface], [1.9.2.99], [hpp@laas.fr], [kppInterface])
+AC_INIT([kppInterface], [1.9.3], [hpp@laas.fr], [kppInterface])
 
 # Auxiliary files.
 AC_CONFIG_AUX_DIR([build-aux])

@@ -1,3 +1,7 @@
+01/16/2012 Release 1.9.3
+	   1. Before inserting a path in the path node, wrap it into a
+	      direct path vector.
+
 01/01/2012 Release 1.9.2
 
 	   1. Before inserting an obstacle into the geometry node, make sure
