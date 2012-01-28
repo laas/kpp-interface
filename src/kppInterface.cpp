@@ -23,7 +23,7 @@
 #include "KineoModel/kppPathNode.h"
 #include "KineoModel/kppPathComponent.h"
 #include "KineoModel/kppJointComponent.h"
-#include "KineoModel/kppSMLinearComponent.h"
+#include "KineoModel/kppSteeringMethodComponent.h"
 
 
 #include "KineoController/kppInsertComponentCommand.h"
@@ -32,7 +32,6 @@
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoWorks2/kwsRoadmapBuilder.h"
 #include "KineoWorks2/kwsRdmBuilderDelegate.h"
-#include "KineoWorks2/kwsPath.h"
 
 #include "KineoUtility/kitNotification.h"
 #include "KineoUtility/kitNotificator.h"
@@ -52,9 +51,8 @@
 #include "kppInterface/kppCommandPlannerPanel.h"
 
 #include "KineoKCDModel/kppKCDBox.h"
-#include "KineoKCDModel/kppKCDAssembly.h"
 
-#include <kwsPlus/directPath/directPathVector.h>
+#include "KineoKCDModel/kppKCDAssembly.h"
 
 using namespace std;
 
@@ -77,29 +75,6 @@ using namespace std;
 /*****************************************
  METHODS
 *******************************************/
-
-static
-CkwsPathShPtr wrapPathInDirectPathVector (CkwsPathShPtr path)
-{
-  CkwsDeviceShPtr device (path->device ());
-  CkwsPathShPtr outPath = CkwsPath::create (path->device ());
-  std::vector< CkwsDirectPathConstShPtr > dpVector;
-  for (unsigned int i=0; i < path->countDirectPaths (); i++) {
-    CkwsDirectPathConstShPtr dp = path->directPath (i);
-    std::cout << "i=" << i << std::endl;
-    assert (dp);
-    dpVector.push_back (dp);
-  }
-  assert (KIT_DYNAMIC_PTR_CAST(CkppSteeringMethodComponent,
-			       device->steeringMethod ()));
-  CdirectPathVectorShPtr directPath =
-    CdirectPathVector::create (*(dpVector.front ()->configAtStart ()),
-			       *(dpVector.back ()->configAtEnd()),
-			       CkppSMLinearComponent::create (),
-			       dpVector);
-  assert (outPath->appendDirectPath (directPath) == KD_OK);
-  return outPath;
-}
 
 // ==========================================================================
 
@@ -423,9 +398,7 @@ void CkppInterface::hppAddPath(const CkitNotificationConstShPtr& inNotification)
   // insert robot
   ODEBUG2("adding path " << path_name << " ...");
 
-  CkwsPathShPtr singleDPPath = wrapPathInDirectPathVector (path);
-  CkppPathComponentShPtr kppPath =
-    CkppPathComponent::create(singleDPPath, path_name);
+  CkppPathComponentShPtr kppPath = CkppPathComponent::create(path, path_name);
 
   insertCommand = CkppInsertComponentCommand::create();
   insertCommand->paramValue(insertCommand->parameter(CkppInsertComponentCommand::PARENT_COMPONENT),
