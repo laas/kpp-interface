@@ -46,7 +46,6 @@
 #include "kppInterface/kwsGraphicRoadmap.h"
 #include "kppInterface/kppInterface.h"
 #include "kppInterface/kppCommandStartCorbaServer.h"
-#include "kppInterface/kppCommandSetConfig.h"
 #include "kppInterface/kppCommandInit.h"
 #include "kppInterface/kppCommandPlannerPanel.h"
 
@@ -187,11 +186,6 @@ void CkppInterface::getMenuUICommandLists(const CkppMainWindowUICommandFactoryCo
 					     inCommandFactory->environment(),
 					     "Planner Configuration",
 					     "Displays a configuration panel for Path Planning");
-
-  attCommandSetConfigBase = CkppUICommand::create(CkppCommandSetConfig::create(this),
-						  inCommandFactory->environment(),
-						  "Set INIT/GOAL config",
-						  "");
 
   attCommandInitBase = CkppUICommand::create(CkppCommandInit::create(this),
 						  inCommandFactory->environment(),

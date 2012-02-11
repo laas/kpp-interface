@@ -29,11 +29,9 @@ COMMON_LIBADD = 			\
 
 COMMON_SOURCES = 			\
 	kppInterface.cpp 		\
-	kppCommandSolvePlanner.cpp 	\
 	kppCommandStartCorbaServer.cpp 	\
 	kppCommandPlannerPanel.cpp 	\
 	kppCommandInit.cpp 		\
-	kppCommandSetConfig.cpp 	\
 	kppPlannerPanelController.cpp 	\
 	kppPlannerPanel.cpp 		\
 	kwsGraphicRoadmapDelegate.cpp 	\
