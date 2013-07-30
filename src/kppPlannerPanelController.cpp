@@ -77,7 +77,7 @@ using namespace std;
 
 #ifndef HPP_RDMBUILDER_DEFPENETRATION
 #define HPP_RDMBUILDER_DEFPENETRATION       0.02
-#endif 
+#endif
 
 /***********************************************************/
 
@@ -111,7 +111,7 @@ CkppPlannerPanelControllerShPtr CkppPlannerPanelController::create(){
     {
       shPtr.reset();
     }
-  
+
   return shPtr;
 }
 /*_________________________________________________________*/
@@ -141,7 +141,7 @@ void CkppPlannerPanelController::loadWindow(){
 
   ODEBUG2(" Creating panel ...");
   CkppPlannerPanel* myPanel;
-  
+
   myPanel = new CkppPlannerPanel(parentWindow(), attWeakPtr.lock());
   myPanel->finalize();
 
@@ -151,7 +151,7 @@ void CkppPlannerPanelController::loadWindow(){
 
   window(myPanel);
   ODEBUG2(" Done");
-  
+
 }
 
 /*_________________________________________________________*/
@@ -162,50 +162,69 @@ void CkppPlannerPanelController::builderComboBoxEventHandler(wxCommandEvent& can
 
   ODEBUG2("builder box event triggered");
   wxComboBox* builderCombo = dynamic_cast<wxComboBox*>(cancel.GetEventObject());
-  
+
   switch(builderCombo->GetSelection()){
-  case CkppPlannerPanel::PCA : 
+  case CkppPlannerPanel::PCA :
     ODEBUG1(" PCA builder selected: choose one of the builders in the bottom tab");
-    
-    if(!panel->FindWindowByName("DiffusingBuilder",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("DiffusingBuilder"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"Dif. Builder",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"DiffusingBuilder"));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY,
+			 wxString::FromAscii ("Dif. Builder"),
+			 wxDefaultPosition,wxDefaultSize,0,
+			 wxDefaultValidator,
+			 wxString::FromAscii ("DiffusingBuilder")));
     }
-    if(!panel->FindWindowByName("IPPBuilder",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("IPPBuilder"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"IPP Builder",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"IPPBuilder"));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii
+			 ("IPP Builder"), wxDefaultPosition,
+			 wxDefaultSize,0, wxDefaultValidator,
+			 wxString::FromAscii ("IPPBuilder")));
     }
-    if(!panel->FindWindowByName("LTBuilder",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("LTBuilder"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"LT Builder",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"LTBuilder"));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii ("LT Builder"),
+			 wxDefaultPosition, wxDefaultSize,0,
+			 wxDefaultValidator,wxString::FromAscii ("LTBuilder")));
     }
-    
+
     break;
 
   case CkppPlannerPanel::LOCAL_TREES :
     ODEBUG1(" Local Trees builder selected: choose one of the builders in the bottom tab");
-    
-    if(!panel->FindWindowByName("DiffusingBuilder",panel.get())) {
+
+    if(!panel->FindWindowByName(wxString::FromAscii ("DiffusingBuilder"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"Dif. Builder",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"DiffusingBuilder"));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii ("Dif. Builder"),
+			 wxDefaultPosition,wxDefaultSize,0,
+			 wxDefaultValidator,
+			 wxString::FromAscii ("DiffusingBuilder")));
     }
-    if(!panel->FindWindowByName("IPPBuilder",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("IPPBuilder"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"IPP Builder",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"IPPBuilder"));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii ("IPP Builder"),
+			 wxDefaultPosition, wxDefaultSize, 0,
+			 wxDefaultValidator,
+			 wxString::FromAscii ("IPPBuilder")));
     }
-    
+
     break;
-    
+
   default:
     break;
   }
@@ -227,16 +246,16 @@ void CkppPlannerPanelController::shooterComboBoxEventHandler(wxCommandEvent& can
   if(!mainPage){
     if(!(panel->GetSizer()->GetChildren())[0]) {
       ODEBUG1(" ERROR : The panel has no children - ");
-    } 
+    }
     else {
       ODEBUG1(" ERROR : ");
     }
     ODEBUG1(" Unable to retrieve the main page of the panel");
   }
   else{
-    
+
     switch(shooterCombo->GetSelection()){
-      
+
     case CkppPlannerPanel::CONFIG_LIST : //selecting magnet shooter
       ODEBUG1(" Magnet Shooter has been selected : choose magnet configurations in the new tab");
       addConfigurations();
@@ -244,13 +263,13 @@ void CkppPlannerPanelController::shooterComboBoxEventHandler(wxCommandEvent& can
       panel->getNotebook()->GetPage(1)->Show(false);
       panel->getNotebook()->GetPage(2)->Show(true);
       break;
-      
+
     case CkppPlannerPanel::MULTI_SHHOTER :  //selecting multi shooter
       ODEBUG1(" Multi Shooter has been selected : choose shooters in the new tab");
       panel->getNotebook()->GetPage(2)->Show(false);
       panel->getNotebook()->GetPage(1)->Show(true);
       break;
-      
+
     case CkppPlannerPanel::ADAPTIVE_MULTI : //selecting adaptive multi shooter
       ODEBUG1(" Adaptive Multi Shooter has been selected : choose shooters in the new tab");
       panel->getNotebook()->GetPage(2)->Show(false);
@@ -282,35 +301,46 @@ void CkppPlannerPanelController::steeringComboBoxEventHandler(wxCommandEvent& ca
 
   wxComboBox * steeringCombo = dynamic_cast<wxComboBox*>(cancel.GetEventObject());
   switch(steeringCombo->GetSelection()){
-  case CkppPlannerPanel::FLIC : 
+  case CkppPlannerPanel::FLIC :
     ODEBUG1(" Flic steering method selected");
-    if(!panel->FindWindowByName("IsOriented",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("IsOriented"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY,"Is Oriented",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"IsOriented" ));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii ("Is Oriented"),
+			 wxDefaultPosition,wxDefaultSize,0,
+			 wxDefaultValidator,
+			 wxString::FromAscii ("IsOriented")));
     }
     break;
 
-  case CkppPlannerPanel::RS : 
+  case CkppPlannerPanel::RS :
     ODEBUG1(" choose Reeds & Shepp steering method");
-    if(!panel->FindWindowByName("IsOriented",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("IsOriented"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxCheckBox(panel->getNotebook()->GetPage(0), 
-				       wxID_ANY, "Is Oriented",wxDefaultPosition,wxDefaultSize,0,
-				       wxDefaultValidator,"IsOriented" ));
+			new wxCheckBox
+			(panel->getNotebook()->GetPage(0),
+			 wxID_ANY, wxString::FromAscii ("Is Oriented"),
+			 wxDefaultPosition,wxDefaultSize,0,
+			 wxDefaultValidator,
+			 wxString::FromAscii ("IsOriented") ));
     }
-    if(!panel->FindWindowByName("RSRadius",panel.get())) {
+    if(!panel->FindWindowByName(wxString::FromAscii ("RSRadius"),
+				panel.get())) {
       panel->addControl(panel->getNotebook()->GetPage(0),
-			new wxSpinCtrl(panel->getNotebook()->GetPage(0),
-				       wxID_ANY,"R & S Radius",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,
-				       1,200,0,"RSRadius"));
+			new wxSpinCtrl
+			(panel->getNotebook()->GetPage(0), wxID_ANY,
+			 wxString::FromAscii ("R & S Radius"),
+			 wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,
+			 1,200,0,wxString::FromAscii ("RSRadius")));
     }
     break;
   default:
     break;
   }
-  
+
 }
 
 /*_________________________________________________________*/
@@ -349,7 +379,7 @@ void CkppPlannerPanelController::BiDiffuseCheckBoxEventHandler(wxCommandEvent& c
 void CkppPlannerPanelController::MagnetCheckBoxEventHandler(wxCommandEvent& cancel){
 //TODO : fill the config list for each checked box
 
-  
+
 
 }
 
@@ -366,7 +396,7 @@ void CkppPlannerPanelController::ClShooterCheckBoxEventHandler(wxCommandEvent& c
   wxCheckBox* ClShooterCheckBox = dynamic_cast<wxCheckBox*>(cancel.GetEventObject());
 
   if(ClShooterCheckBox->IsChecked()){
-    
+
     ODEBUG1(" Magnet Shooter selected : choose magnet configurations in the new tab");
     addConfigurations();
     panel->getNotebook()->GetPage(2)->Show(true);
@@ -411,7 +441,9 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
   //TODO : Apply configuration to the planner. Launch algorithm. take into account the solveall checkbox ?
 
   double penetration = HPP_RDMBUILDER_DEFPENETRATION;
-  wxCheckBox * SolveAllCheckBox = dynamic_cast<wxCheckBox*>(panel->FindWindowByName("SolveAll Chk",panel.get()));
+  wxCheckBox * SolveAllCheckBox = dynamic_cast<wxCheckBox*>
+    (panel->FindWindowByName(wxString::FromAscii ("SolveAll Chk"),
+			     panel.get()));
   int FirstProblem, LastProblem;
   bool isDiffusing = false;
   CkwsRoadmapBuilderShPtr rdmBuilder;
@@ -432,30 +464,53 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 
     ODEBUG1(" Configuring Problem " << i);
     CkwsDeviceShPtr Device = panel->getInterface()->hppPlanner()->robotIthProblem(i);
-    
-    wxComboBox* RoadmapBuilderComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Roadmap Builder",panel.get()));
-    wxComboBox* ShooterComboBox  = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Diffusion Shooter",panel.get()));
-    wxComboBox* PickerComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Diffusion Picker",panel.get()));
-    wxComboBox* SteeringMethodComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Steering Method",panel.get()));
+
+    wxComboBox* RoadmapBuilderComboBox = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Roadmap Builder"),
+			       panel.get()));
+    wxComboBox* ShooterComboBox  = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Diffusion Shooter"),
+			       panel.get()));
+    wxComboBox* PickerComboBox = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Diffusion Picker"),
+			       panel.get()));
+    wxComboBox* SteeringMethodComboBox = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Steering Method"),
+			       panel.get()));
 #if 0
-    wxComboBox* DelegateComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Delegates",panel.get()));
+    wxComboBox* DelegateComboBox = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Delegates"),panel.get()));
 #endif
-    wxComboBox* OptimizerComboBox = dynamic_cast<wxComboBox*>(panel->FindWindowByName("Path Optimizer",panel.get()));
-    wxCheckBox* biDiffuseCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("BiDiff Chk",panel.get()));
-    wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("H/S Rdm Chk",panel.get()));
-    wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("IsOriented",panel.get()));
-    wxCheckBox* DiffusingBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("DiffusingBuilder",panel.get()));
-    wxCheckBox* LTBuilderCheckBox =  dynamic_cast<wxCheckBox*>(panel->FindWindowByName("LTBuilder",panel.get()));
-    wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("RSRadius",panel.get()));
-    
+    wxComboBox* OptimizerComboBox = dynamic_cast<wxComboBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("Path Optimizer"),
+			       panel.get()));
+    wxCheckBox* biDiffuseCheckBox =  dynamic_cast<wxCheckBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("BiDiff Chk"),
+			       panel.get()));
+    wxCheckBox* ShowRdmCheckBox =  dynamic_cast<wxCheckBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("H/S Rdm Chk"),
+			       panel.get()));
+    wxCheckBox* IsOrientedCheckBox =  dynamic_cast<wxCheckBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("IsOriented"),
+			       panel.get()));
+    wxCheckBox* DiffusingBuilderCheckBox =  dynamic_cast<wxCheckBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("DiffusingBuilder"),
+			       panel.get()));
+    wxCheckBox* LTBuilderCheckBox =  dynamic_cast<wxCheckBox*>
+      (panel->FindWindowByName(wxString::FromAscii ("LTBuilder"),
+			       panel.get()));
+    wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>
+      (panel->FindWindowByName(wxString::FromAscii ("RSRadius"), panel.get()));
+
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
-    case CkppPlannerPanel::BASIC_RDMBUILDER : 
+    case CkppPlannerPanel::BASIC_RDMBUILDER :
       ODEBUG2(" Basic roadmap builder selected.");
-      rdmBuilder = CkwsBasicRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
+      rdmBuilder = CkwsBasicRdmBuilder::create(CkwsRoadmap::create(Device),
+					       penetration);
       isDiffusing = false;
       break;
 
-    case CkppPlannerPanel::DIFFUSING : 
+    case CkppPlannerPanel::DIFFUSING :
       ODEBUG2(" Diffusing roadmap builder selected.");
       DiffusingRdmBuilder = CkwsDiffusingRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
       rdmBuilder = DiffusingRdmBuilder;
@@ -463,7 +518,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       isDiffusing = true;
       break;
 
-    case CkppPlannerPanel::IPP : 
+    case CkppPlannerPanel::IPP :
       ODEBUG2(" IPP roadmap builder selected.");
       DiffusingRdmBuilder = CkwsIPPRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
       rdmBuilder = DiffusingRdmBuilder;
@@ -471,7 +526,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       isDiffusing = true;
       break;
 
-    case CkppPlannerPanel::VISIBILITY : 
+    case CkppPlannerPanel::VISIBILITY :
       ODEBUG2(" Visibility roadmap builder selected.");
       rdmBuilder = ChppVisRdmBuilder::create(CkwsRoadmap::create(Device), penetration);
       if (!rdmBuilder) {
@@ -480,25 +535,25 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       else {
 	isDiffusing = false;
       }
-      break; 
-    case CkppPlannerPanel::PCA : 
+      break;
+    case CkppPlannerPanel::PCA :
       ODEBUG2(" PCA roadmap builder selected.");
       isDiffusing = true;
       if(LTBuilderCheckBox->IsChecked()){
 	if(DiffusingBuilderCheckBox->IsChecked()) {
-	  DiffusingRdmBuilder = 
+	  DiffusingRdmBuilder =
 	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder
 	    <CkwsDiffusingRdmBuilder> >::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
-	  
+
 	}
 	else {
-	  DiffusingRdmBuilder = 
+	  DiffusingRdmBuilder =
 	    CkwsPlusPCARdmBuilder<CkwsPlusLTRdmBuilder<CkwsIPPRdmBuilder> >::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
 	}
-      } 
-      else { 
+      }
+      else {
 	if(DiffusingBuilderCheckBox->IsChecked()) {
 	  DiffusingRdmBuilder = CkwsPlusPCARdmBuilder<CkwsDiffusingRdmBuilder>::create(CkwsRoadmap::create(Device));
 	  rdmBuilder = DiffusingRdmBuilder;
@@ -511,7 +566,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
       break;
 
-    case CkppPlannerPanel::LOCAL_TREES : 
+    case CkppPlannerPanel::LOCAL_TREES :
       ODEBUG2(" Local tree roadmap builder selected.");
       isDiffusing = true;
       if(DiffusingBuilderCheckBox->IsChecked()) {
@@ -523,7 +578,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
       DiffusingRdmBuilder->diffuseFromProblemGoal(biDiffuseCheckBox->IsChecked());
       rdmBuilder = DiffusingRdmBuilder;
       break;
-    default: 
+    default:
       ODEBUG2(" No roadmap builder selected.");
       isDiffusing = false;
       rdmBuilder = panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i);
@@ -539,64 +594,64 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     if(isDiffusing){
       CkwsShooterConfigListShPtr configList = CkwsShooterConfigList::create();
       switch(ShooterComboBox->GetCurrentSelection()){//To set the chosen shooter
-      case CkppPlannerPanel::CONFIG_PATH : 
+      case CkppPlannerPanel::CONFIG_PATH :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterConfigSpace::create());
 	break;
-      case CkppPlannerPanel::CONFIG_LIST : 
+      case CkppPlannerPanel::CONFIG_LIST :
 	updateConfigList(configList); DiffusingRdmBuilder->diffusionShooter(configList);
 	//TODO : open a panel, a tab or a window, to choose the number of configurations and the configurations
 	break;
-      case CkppPlannerPanel::PATHS : 
+      case CkppPlannerPanel::PATHS :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterPath::create());
 	break;
-      case CkppPlannerPanel::ROADMAP_BOX : 
+      case CkppPlannerPanel::ROADMAP_BOX :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterRoadmapBox::create());
 	break;
-      case CkppPlannerPanel::ROADMAP_NODE : 
+      case CkppPlannerPanel::ROADMAP_NODE :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterRoadmapNodes::create());
 	break;
-      case CkppPlannerPanel::MULTI_SHHOTER : 
+      case CkppPlannerPanel::MULTI_SHHOTER :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterMulti::create(updateShooterList()));
 	break;
-      case CkppPlannerPanel::ADAPTIVE_MULTI : 
+      case CkppPlannerPanel::ADAPTIVE_MULTI :
 	DiffusingRdmBuilder->diffusionShooter(CkwsShooterAdaptiveMulti::create(updateShooterList()));
 	break;
-      default: 
+      default:
 	break;
       }
 
       switch(PickerComboBox->GetCurrentSelection()){//To set the chosen picker
-      case CkppPlannerPanel::BASIC_PICKER : 
+      case CkppPlannerPanel::BASIC_PICKER :
 	DiffusingRdmBuilder->diffusionNodePicker(CkwsPickerBasic::create());
 	break;
-      case CkppPlannerPanel::SMALLEST_TREE : 
+      case CkppPlannerPanel::SMALLEST_TREE :
 	DiffusingRdmBuilder->diffusionNodePicker(CkwsPickerSmallestTree::create());
 	break;
-      default: 
+      default:
 	break;
       }
     }
 
     switch(SteeringMethodComboBox->GetCurrentSelection()){//To set the chosen steering Method
-    case CkppPlannerPanel::LINEAR : 
+    case CkppPlannerPanel::LINEAR :
       Device->steeringMethod(CkwsSMLinear::create());
       break;
-    case CkppPlannerPanel::FLIC : 
+    case CkppPlannerPanel::FLIC :
       Device->steeringMethod(CflicSteeringMethod::create(IsOrientedCheckBox->IsChecked()));
       break;
-    case CkppPlannerPanel::RS : 
+    case CkppPlannerPanel::RS :
       Device->steeringMethod(CreedsSheppSteeringMethod::create(RSRadiusSpinCtrl->GetValue(),IsOrientedCheckBox->IsChecked()));
       break;
-    case CkppPlannerPanel::SLERP : 
+    case CkppPlannerPanel::SLERP :
       Device->steeringMethod(CkwsSMSlerp::create(Device->rootJoint()));
-    default: 
+    default:
       break;
     }
 
 #if 0
     switch(DelegateComboBox->GetCurrentSelection()){//To set the chosen delegate
-    case CkppPlannerPanel::GRAPHIC : 
-      if(!rdmBuilder) { 
+    case CkppPlannerPanel::GRAPHIC :
+      if(!rdmBuilder) {
 	ODEBUG1(" No roadmap builder selected or existing.");
       }
       else {
@@ -604,19 +659,19 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 	rdmBuilder->addDelegate(new CkwsGraphicRoadmapDelegate());
       }
       break;
-    default: 
+    default:
       break;
     }
 #endif
 
     switch(OptimizerComboBox->GetCurrentSelection()){//To set the chosen optimizer
-    case CkppPlannerPanel::CLEAR : 
+    case CkppPlannerPanel::CLEAR :
       panel->getInterface()->hppPlanner()->pathOptimizerIthProblem(i,CkwsClearOptimizer::create());
       break;
-    case CkppPlannerPanel::RANDOM : 
+    case CkppPlannerPanel::RANDOM :
       panel->getInterface()->hppPlanner()->pathOptimizerIthProblem(i,CkwsRandomOptimizer::create());
       break;
-    case CkppPlannerPanel::ADAPTIVE_SHORTCUT : 
+    case CkppPlannerPanel::ADAPTIVE_SHORTCUT :
       panel->getInterface()->hppPlanner()->pathOptimizerIthProblem(i,CkwsAdaptiveShortcutOptimizer::create());
       break;
     default :
@@ -624,7 +679,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     }
 
     if (rdmBuilder) {
-      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i, rdmBuilder, 
+      panel->getInterface()->hppPlanner()->roadmapBuilderIthProblem(i, rdmBuilder,
 								    ShowRdmCheckBox->IsChecked());
     }
   }
@@ -662,8 +717,11 @@ void CkppPlannerPanelController::AddPbButtonEventHandler(wxCommandEvent& cancel)
       ODEBUG1(" Cannot add a problem (init exec error)");
     }
     else{
-      wxSpinCtrl* PbNumberSpinCtrl = dynamic_cast<wxSpinCtrl*>(panel->FindWindowByName("Problem number",panel.get()));
-      PbNumberSpinCtrl->SetRange(0,panel->getInterface()->hppPlanner()->getNbHppProblems()-1); 
+      wxSpinCtrl* PbNumberSpinCtrl = dynamic_cast<wxSpinCtrl*>
+	(panel->FindWindowByName(wxString::FromAscii ("Problem number"),
+				 panel.get()));
+      PbNumberSpinCtrl->SetRange(0,panel->getInterface()->hppPlanner()->
+				 getNbHppProblems()-1);
       PbNumberSpinCtrl->Refresh();
       problemId = panel->getInterface()->hppPlanner()->getNbHppProblems()-1;
     }
@@ -702,19 +760,23 @@ void CkppPlannerPanelController::addConfigurations(){
   CkppDeviceComponentShPtr robot = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent, getPanel()->getInterface()->hppPlanner()->robotIthProblem(problemId));
 
   for(unsigned int i=nbTotalCheckBox; i<robot->countConfigComponents();i++){
-    
-    wxString* label = new wxString("configuration : (");
-    
-    for(unsigned int j=0;j<robot->configComponent(i)->kwsConfig()->size();j++){//build label string for the checkbox
-      
-      *label<<floor(robot->configComponent(i)->kwsConfig()->dofValue(j));
-      if(i<robot->configComponent(i)->kwsConfig()->size()-1) *label<<",";
-      
+
+    wxString* label = new wxString(wxString::FromAscii ("configuration : ("));
+
+    for(unsigned int j=0; j<robot->configComponent(i)->kwsConfig()->size();
+	j++){//build label string for the checkbox
+
+      *label << floor(robot->configComponent(i)->kwsConfig()->dofValue(j));
+      if(i<robot->configComponent(i)->kwsConfig()->size()-1)
+	*label << wxString::FromAscii (",");
+
     }
-    *label<<")";
-    
-    
-    wxCheckBox* confCheckbox = new wxCheckBox(panel->getNotebook()->GetPage(2), wxID_ANY, *label,wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"Path Chk" );
+    *label << wxString::FromAscii (")");
+
+
+    wxCheckBox* confCheckbox = new wxCheckBox
+      (panel->getNotebook()->GetPage(2), wxID_ANY, *label, wxDefaultPosition,
+       wxDefaultSize, 0, wxDefaultValidator, wxString::FromAscii ("Path Chk"));
     panel->addControl(panel->getNotebook()->GetPage(2),confCheckbox);
   }
 
@@ -724,9 +786,9 @@ void CkppPlannerPanelController::addConfigurations(){
 
 void CkppPlannerPanelController::updateConfigList(CkwsShooterConfigListShPtr configList){
 
-  
+
   //add configs to the shooter magnets configs list
-  
+
   CkppDeviceComponentShPtr robot = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent,panel->getRdmBuilder()->roadmap()->device());
   wxWindow* magnetTab = panel->getNotebook()->GetPage(2);
   wxWindowList children = magnetTab->GetChildren();
@@ -760,7 +822,7 @@ CkwsShooterMulti::TWeightedShooterList CkppPlannerPanelController::updateShooter
   CkwsShooterMulti::TWeightedShooter shooterTemp;
 
   //add shooters to the shooters list
-  
+
   CkppDeviceComponentShPtr robot = KIT_DYNAMIC_PTR_CAST(CkppDeviceComponent,panel->getRdmBuilder()->roadmap()->device());
   wxWindow* shooterTab = panel->getNotebook()->GetPage(1);
   wxWindowList children = shooterTab->GetChildren();
@@ -774,23 +836,23 @@ CkwsShooterMulti::TWeightedShooterList CkppPlannerPanelController::updateShooter
 
 	switch(i){
 
-	case 0 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterConfigSpace::create()); 
+	case 0 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterConfigSpace::create());
 	  break;
-	case 1 : 
+	case 1 :
 	  updateConfigList(configList);
-	  shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),configList); 
+	  shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),configList);
 	  break;
-	case 2 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterPath::create()); 
+	case 2 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterPath::create());
 	  break;
-	case 3 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterRoadmapBox::create()); 
+	case 3 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterRoadmapBox::create());
 	  break;
-	case 4 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterRoadmapNodes::create()); 
+	case 4 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterRoadmapNodes::create());
 	  break;
-	case 5 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterMulti::create(shooterList)); 
+	case 5 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterMulti::create(shooterList));
 	  break;
-	case 6 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterAdaptiveMulti::create(shooterList)); 
+	case 6 : shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterAdaptiveMulti::create(shooterList));
 	  break;
-	default: shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterConfigSpace::create()); 
+	default: shooterTemp = CkwsShooterMulti::TWeightedShooter(dynamic_cast<wxCheckBox*>(children.Item(i)->GetData())->GetValue(),CkwsShooterConfigSpace::create());
 	  break;
 
 	}

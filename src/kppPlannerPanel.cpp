@@ -55,7 +55,10 @@ void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
 
   pages = MainPage;
 
-  wxNotebook * tabs = new wxNotebook(MainPage, CHOICES_NOTEBOOK , wxDefaultPosition,wxDefaultSize,wxNB_TOP,"- Options -" );
+  wxNotebook * tabs = new wxNotebook (MainPage, CHOICES_NOTEBOOK ,
+				      wxDefaultPosition, wxDefaultSize,
+				      wxNB_TOP,
+				      wxString::FromAscii ("- Options -"));
 
   notebook = tabs;
 
@@ -79,38 +82,143 @@ void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
   wxBoxSizer* MagnetsSizer = new wxBoxSizer(wxVERTICAL);
 
   /*******CONTROLS**********/
-  wxComboBox * RoadmapBuilderComboBox = new wxComboBox(MainPage,RDM_BUILDER_COMBO_BOX,"Choose RdmBuilder",wxDefaultPosition,wxDefaultSize,buildersArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator , "Roadmap Builder");
-  wxComboBox * ShooterComboBox = new wxComboBox(MainPage,SHOOTER_COMBO_BOX,"Choose Shooter",wxDefaultPosition,wxDefaultSize,shootersArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator ,"Diffusion Shooter"); //Must not appear in case of a basicRdmBuilder -> PRM
-  wxComboBox * PickerComboBox = new wxComboBox(MainPage,PICKER_COMBO_BOX,"Choose Picker",wxDefaultPosition,wxDefaultSize,pickersArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator ,"Diffusion Picker"); //Must not appear in case of a basicRdmBuilder -> PRM
-  wxComboBox * SteeringMethodComboBox = new wxComboBox(MainPage,STEERING_COMBO_BOX,"Choose Steering method",wxDefaultPosition,wxDefaultSize,steeringsArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator ,"Steering Method");
-  wxComboBox * DelegateComboBox = new wxComboBox(MainPage,DELEGATE_COMBO_BOX,"Choose Delegate",wxDefaultPosition,wxDefaultSize,delegatesArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator ,"Delegates");
-  wxComboBox * OptimizerComboBox = new wxComboBox(MainPage,OPTIMIZER_COMBO_BOX,"Choose Path Optimizer",wxDefaultPosition,wxDefaultSize,optimizersArray, (long int)(wxCB_DROPDOWN | wxCB_READONLY),wxDefaultValidator ,"Path Optimizer");
+  wxComboBox * RoadmapBuilderComboBox = 
+    new wxComboBox(MainPage, RDM_BUILDER_COMBO_BOX,
+		   wxString::FromAscii ("Choose RdmBuilder"), wxDefaultPosition,
+		   wxDefaultSize, buildersArray, (long int)(wxCB_DROPDOWN |
+							    wxCB_READONLY),
+		   wxDefaultValidator ,
+		   wxString::FromAscii ("Roadmap Builder"));
+  wxComboBox * ShooterComboBox = 
+    new wxComboBox (MainPage, SHOOTER_COMBO_BOX,
+		   wxString::FromAscii ("Choose Shooter"), wxDefaultPosition,
+		   wxDefaultSize, shootersArray, (long int)(wxCB_DROPDOWN |
+							    wxCB_READONLY),
+		   wxDefaultValidator,
+		   wxString::FromAscii ("Diffusion Shooter"));
 
-  wxCheckBox * ShowRdmCheckBox = new wxCheckBox(tab1_options,RDM_CHECK_BOX,"Show Roadmap",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"H/S Rdm Chk");
-  wxCheckBox * BidiffuseCheckBox = new wxCheckBox(tab1_options,BIDIFF_CHECK_BOX,"Bi-diffuse",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"BiDiff Chk");//Must not appear in case of a basicRdmBuilder -> PRM
-  wxCheckBox * SolveAllCheckBox = new wxCheckBox(tab1_options,SOLVE_ALL_CHECK_BOX,"Solve All",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"SolveAll Chk");
+  wxComboBox * PickerComboBox =
+    new wxComboBox (MainPage, PICKER_COMBO_BOX,
+		    wxString::FromAscii ("Choose Picker"), wxDefaultPosition,
+		    wxDefaultSize,pickersArray, (long int)(wxCB_DROPDOWN |
+							   wxCB_READONLY),
+		    wxDefaultValidator,
+		    wxString::FromAscii ("Diffusion Picker"));
+
+  wxComboBox * SteeringMethodComboBox =
+    new wxComboBox (MainPage, STEERING_COMBO_BOX,
+		    wxString::FromAscii ("Choose Steering method"),
+		    wxDefaultPosition, wxDefaultSize, steeringsArray,
+		    (long int)(wxCB_DROPDOWN | wxCB_READONLY),
+		    wxDefaultValidator,
+		    wxString::FromAscii ("Steering Method"));
+
+  wxComboBox * DelegateComboBox =
+    new wxComboBox (MainPage, DELEGATE_COMBO_BOX,
+		    wxString::FromAscii ("Choose Delegate"), wxDefaultPosition,
+		    wxDefaultSize, delegatesArray, (long int)(wxCB_DROPDOWN |
+							      wxCB_READONLY),
+		    wxDefaultValidator,wxString::FromAscii ("Delegates"));
+
+  wxComboBox * OptimizerComboBox =
+    new wxComboBox (MainPage, OPTIMIZER_COMBO_BOX,
+		    wxString::FromAscii ("Choose Path Optimizer"),
+		    wxDefaultPosition, wxDefaultSize, optimizersArray,
+		    (long int)(wxCB_DROPDOWN | wxCB_READONLY),
+		    wxDefaultValidator,
+		    wxString::FromAscii ("Path Optimizer"));
+
+  wxCheckBox * ShowRdmCheckBox =
+    new wxCheckBox (tab1_options, RDM_CHECK_BOX,
+		    wxString::FromAscii ("Show Roadmap"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("H/S Rdm Chk"));
+
+  wxCheckBox * BidiffuseCheckBox =
+    new wxCheckBox (tab1_options, BIDIFF_CHECK_BOX,
+		    wxString::FromAscii ("Bi-diffuse"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("BiDiff Chk"));
+
+  wxCheckBox * SolveAllCheckBox =
+    new wxCheckBox (tab1_options, SOLVE_ALL_CHECK_BOX,
+		    wxString::FromAscii ("Solve All"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("SolveAll Chk"));
   
   //specific for multishooters (following items will appear in a tab in case of a multishooter choice)
-  wxCheckBox * shooterConfigSpaceCheckBox = new wxCheckBox(tab2_shooters,CS_SHOOTER_CHECK_BOX,"Basic",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"Basic Chk");
-  wxCheckBox * shooterConfigListCheckBox = new wxCheckBox(tab2_shooters,CL_SHOOTER_CHECK_BOX,"Magnets",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"Magnet Chk");
-  wxCheckBox * shooterPathCheckBox  = new wxCheckBox(tab2_shooters,P_SHOOTER_CHECK_BOX,"Path",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"Path Chk");
-  wxCheckBox * shooterRoadmapBoxCheckBox = new wxCheckBox(tab2_shooters,RB_SHOOTER_CHECK_BOX,"RdmBox",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"RdmBox Chk");
-  wxCheckBox * shooterRoadmapNodesCheckBox = new wxCheckBox(tab2_shooters,RN_SHOOTER_CHECK_BOX,"RdmNodes",wxDefaultPosition,wxDefaultSize,0,wxDefaultValidator,"RdmNodes Chk");
+  wxCheckBox * shooterConfigSpaceCheckBox =
+    new wxCheckBox (tab2_shooters, CS_SHOOTER_CHECK_BOX,
+		    wxString::FromAscii ("Basic"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("Basic Chk"));
+
+  wxCheckBox * shooterConfigListCheckBox =
+    new wxCheckBox (tab2_shooters, CL_SHOOTER_CHECK_BOX,
+		    wxString::FromAscii ("Magnets"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("Magnet Chk"));
+
+  wxCheckBox * shooterPathCheckBox  =
+    new wxCheckBox (tab2_shooters, P_SHOOTER_CHECK_BOX,
+		    wxString::FromAscii ("Path"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("Path Chk"));
+
+  wxCheckBox * shooterRoadmapBoxCheckBox =
+    new wxCheckBox(tab2_shooters, RB_SHOOTER_CHECK_BOX,
+		   wxString::FromAscii ("RdmBox"), wxDefaultPosition,
+		   wxDefaultSize, 0, wxDefaultValidator,
+		   wxString::FromAscii ("RdmBox Chk"));
+
+  wxCheckBox * shooterRoadmapNodesCheckBox =
+    new wxCheckBox (tab2_shooters, RN_SHOOTER_CHECK_BOX,
+		    wxString::FromAscii ("RdmNodes"), wxDefaultPosition,
+		    wxDefaultSize, 0, wxDefaultValidator,
+		    wxString::FromAscii ("RdmNodes Chk"));
 
   //To set corresponding weights
-  wxSpinCtrl* weightConfigSpaceBox = new wxSpinCtrl(tab2_shooters,CS_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"Basic Wgt");
-  wxSpinCtrl* weightConfigListBox = new wxSpinCtrl(tab2_shooters,CL_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"Magnet Wgt");
-  wxSpinCtrl* weightPathBox = new wxSpinCtrl(tab2_shooters,P_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"Path Wgt");
-  wxSpinCtrl* weightRdmBoxBox = new wxSpinCtrl(tab2_shooters,RB_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"RdmBox Wgt");
-  wxSpinCtrl* weightRdmNodesBox = new wxSpinCtrl(tab2_shooters,RN_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"RdmNodes Wgt");
+  wxSpinCtrl* weightConfigSpaceBox =
+    new wxSpinCtrl (tab2_shooters, CS_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("Basic Wgt"));
 
-  wxSpinCtrl* ProblemSpinCtrl = new wxSpinCtrl(MainPage,PROBLEM_SPIN_CTRL,"",wxDefaultPosition,wxDefaultSize,wxSP_ARROW_KEYS,1,20,0,"Problem number");
+  wxSpinCtrl* weightConfigListBox =
+    new wxSpinCtrl (tab2_shooters, CL_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("Magnet Wgt"));
+
+  wxSpinCtrl* weightPathBox =
+    new wxSpinCtrl (tab2_shooters, P_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("Path Wgt"));
+
+  wxSpinCtrl* weightRdmBoxBox =
+    new wxSpinCtrl (tab2_shooters, RB_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("RdmBox Wgt"));
+
+  wxSpinCtrl* weightRdmNodesBox =
+    new wxSpinCtrl (tab2_shooters, RN_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("RdmNodes Wgt"));
+
+  wxSpinCtrl* ProblemSpinCtrl =
+    new wxSpinCtrl (MainPage, PROBLEM_SPIN_CTRL, wxString::FromAscii (""),
+		    wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 20, 0,
+		    wxString::FromAscii ("Problem number"));
+
   ProblemSpinCtrl->SetRange(0,0);
 
-  wxButton * StartButton = new wxButton(MainPage, START_BUTTON,"Start");
-  wxButton * SaveButton = new wxButton(MainPage, SAVE_BUTTON,"Save");
-  wxButton * OpenButton = new wxButton(MainPage, OPEN_BUTTON,"Open");
-  wxButton * AddProblemButton = new wxButton(MainPage, ADD_PB_BUTTON,"Add problem");
+  wxButton * StartButton = new wxButton (MainPage, START_BUTTON,
+					 wxString::FromAscii ("Start"));
+  wxButton * SaveButton = new wxButton (MainPage, SAVE_BUTTON,
+					wxString::FromAscii ("Save"));
+  wxButton * OpenButton = new wxButton (MainPage, OPEN_BUTTON,
+					wxString::FromAscii ("Open"));
+  wxButton * AddProblemButton = new wxButton (MainPage, ADD_PB_BUTTON,
+					      wxString::FromAscii
+					      ("Add problem"));
 
   /******** DEFINING LAYOUT ***********/
   
@@ -156,9 +264,9 @@ void CkppPlannerPanel::build (wxBoxSizer *i_sizer){
   OptionsSizer->Layout();
   MagnetsSizer->Layout();
 
-  tabs->AddPage(tab1_options,"Options");
-  tabs->AddPage(tab2_shooters,"Shooters Selection");
-  tabs->AddPage(tab3_magnets,"Configurations Selection");
+  tabs->AddPage(tab1_options, wxString::FromAscii ("Options"));
+  tabs->AddPage(tab2_shooters, wxString::FromAscii ("Shooters Selection"));
+  tabs->AddPage(tab3_magnets, wxString::FromAscii ("Configurations Selection"));
   TabsSizer->Add(tabs);
 
   tab1_options->Show(true);
@@ -184,34 +292,54 @@ CkppPlannerPanel::CkppPlannerPanel(wxWindow *i_parent, const CkppPlannerPanelCon
   isRdmSet = false;
   isInterfaceSet = false;
 
-  attPicker[CkppPlannerPanel::BASIC_PICKER] = wxString("Basic Picker");
-  attPicker[CkppPlannerPanel::SMALLEST_TREE] = wxString("Smallest Tree");
+  attPicker[CkppPlannerPanel::BASIC_PICKER] =
+    wxString::FromAscii("Basic Picker");
+  attPicker[CkppPlannerPanel::SMALLEST_TREE] =
+    wxString::FromAscii("Smallest Tree");
 
-  attShooters[CkppPlannerPanel::CONFIG_PATH] = wxString("Config Space");
-  attShooters[CkppPlannerPanel::CONFIG_LIST] = wxString("Config List");
-  attShooters[CkppPlannerPanel::PATHS] = wxString("Paths");
-  attShooters[CkppPlannerPanel::ROADMAP_BOX] = wxString("Roadmap Box");
-  attShooters[CkppPlannerPanel::ROADMAP_NODE] = wxString("Roadmap Nodes");
-  attShooters[CkppPlannerPanel::MULTI_SHHOTER] = wxString("Multi Shooter");
-  attShooters[CkppPlannerPanel::ADAPTIVE_MULTI] = wxString("Adaptative Multi");
+  attShooters[CkppPlannerPanel::CONFIG_PATH] =
+    wxString::FromAscii("Config Space");
+  attShooters[CkppPlannerPanel::CONFIG_LIST] =
+    wxString::FromAscii("Config List");
+  attShooters[CkppPlannerPanel::PATHS] =
+    wxString::FromAscii("Paths");
+  attShooters[CkppPlannerPanel::ROADMAP_BOX] =
+    wxString::FromAscii("Roadmap Box");
+  attShooters[CkppPlannerPanel::ROADMAP_NODE] =
+    wxString::FromAscii("Roadmap Nodes");
+  attShooters[CkppPlannerPanel::MULTI_SHHOTER] =
+    wxString::FromAscii("Multi Shooter");
+  attShooters[CkppPlannerPanel::ADAPTIVE_MULTI] =
+    wxString::FromAscii("Adaptative Multi");
 
-  attbuilders[CkppPlannerPanel::BASIC_RDMBUILDER] = wxString("Basic Rdm Builder");
-  attbuilders[CkppPlannerPanel::DIFFUSING] = wxString("Diffusing Rdm builder");
-  attbuilders[CkppPlannerPanel::IPP] = wxString("IPP Rdm Builder");
-  attbuilders[CkppPlannerPanel::VISIBILITY] = wxString("Visibility Rdm Builder");
-  attbuilders[CkppPlannerPanel::PCA] = wxString("PCA Rdm Builder");
-  attbuilders[CkppPlannerPanel::LOCAL_TREES] = wxString("LocalTrees Rdm Builder");
+  attbuilders[CkppPlannerPanel::BASIC_RDMBUILDER] =
+    wxString::FromAscii("Basic Rdm Builder");
+  attbuilders[CkppPlannerPanel::DIFFUSING] =
+    wxString::FromAscii("Diffusing Rdm builder");
+  attbuilders[CkppPlannerPanel::IPP] =
+    wxString::FromAscii("IPP Rdm Builder");
+  attbuilders[CkppPlannerPanel::VISIBILITY] =
+    wxString::FromAscii("Visibility Rdm Builder");
+  attbuilders[CkppPlannerPanel::PCA] =
+    wxString::FromAscii("PCA Rdm Builder");
+  attbuilders[CkppPlannerPanel::LOCAL_TREES] =
+    wxString::FromAscii("LocalTrees Rdm Builder");
 
-  attSteeringMethods[CkppPlannerPanel::LINEAR] = wxString("Linear");
-  attSteeringMethods[CkppPlannerPanel::FLIC] = wxString("Flic");
-  attSteeringMethods[CkppPlannerPanel::RS] = wxString("Reeds & Shepp");
-  attSteeringMethods[CkppPlannerPanel::SLERP] = wxString("SLERP");
+  attSteeringMethods[CkppPlannerPanel::LINEAR] = wxString::FromAscii("Linear");
+  attSteeringMethods[CkppPlannerPanel::FLIC] = wxString::FromAscii("Flic");
+  attSteeringMethods[CkppPlannerPanel::RS] =
+    wxString::FromAscii("Reeds & Shepp");
+  attSteeringMethods[CkppPlannerPanel::SLERP] = wxString::FromAscii("SLERP");
 
-  attRdmBuilderDelegates[CkppPlannerPanel::GRAPHIC] = wxString("Graphic Roadmap Delegate");
+  attRdmBuilderDelegates[CkppPlannerPanel::GRAPHIC] =
+    wxString::FromAscii("Graphic Roadmap Delegate");
 
-  attPathOptimizers[CkppPlannerPanel::CLEAR] = wxString("Clear Optimizer");
-  attPathOptimizers[CkppPlannerPanel::RANDOM] = wxString("Random Optimizer");
-  attPathOptimizers[CkppPlannerPanel::ADAPTIVE_SHORTCUT] = wxString("Adaptive Shortcut Optimizer");
+  attPathOptimizers[CkppPlannerPanel::CLEAR] =
+    wxString::FromAscii("Clear Optimizer");
+  attPathOptimizers[CkppPlannerPanel::RANDOM] =
+    wxString::FromAscii("Random Optimizer");
+  attPathOptimizers[CkppPlannerPanel::ADAPTIVE_SHORTCUT] =
+    wxString::FromAscii("Adaptive Shortcut Optimizer");
 
 }
 /*_________________________________________________________*/
