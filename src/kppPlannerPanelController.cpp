@@ -46,9 +46,10 @@
 
 #include "hpp/core/planner.hh"
 
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
-#include "kppInterface/kppInterface.h"
+#include "kpp/interface/command-planner-panel.hh"
+#include "kpp/interface/planner-panel-controller.hh"
+#include "kpp/interface/planner-panel.hh"
+#include "kpp/interface/interface.hh"
 
 //Definition of the event table declared in the header file
 BEGIN_EVENT_TABLE(CkppPlannerPanelController,CkppWindowController)

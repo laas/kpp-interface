@@ -25,10 +25,10 @@
 
 #include <iostream>
 
-#include "kppInterface/kppInterface.h"
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
-#include "kppInterface/kwsGraphicRoadmap.h"
+#include "kpp/interface/interface.hh"
+#include "kpp/interface/command-planner-panel.hh"
+#include "kpp/interface/planner-panel.hh"
+#include "kpp/interface/graphic-roadmap.hh"
 
 #include "KineoGUI/kppMainWindowUICommandFactory.h"
 #include "KineoModel/kppDefaultCreateFactory.h"

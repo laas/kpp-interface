@@ -25,7 +25,7 @@
 #include <sstream>
 #include <cstdio>
 
-#include "kppInterface/kwsGraphicRoadmapDelegate.h"
+#include "kpp/interface/graphic-roadmap-delegate.hh"
 #include "KineoGUI/kppController.h"
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoGUI/kppMainFrame.h"

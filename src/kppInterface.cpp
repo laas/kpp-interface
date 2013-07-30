@@ -55,11 +55,11 @@
 #include "hpp/core/problem.hh"
 #include <hpp/corbaserver/server.hh>
 
-#include "kppInterface/kwsGraphicRoadmap.h"
-#include "kppInterface/kppInterface.h"
-#include "kppInterface/kppCommandStartCorbaServer.h"
-#include "kppInterface/kppCommandInit.h"
-#include "kppInterface/kppCommandPlannerPanel.h"
+#include "kpp/interface/graphic-roadmap.hh"
+#include "kpp/interface/interface.hh"
+#include "kpp/interface/command-start-corbaserver.hh"
+#include "kpp/interface/command-init.hh"
+#include "kpp/interface/command-planner-panel.hh"
 
 #include "KineoKCDModel/kppKCDBox.h"
 

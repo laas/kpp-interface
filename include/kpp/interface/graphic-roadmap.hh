@@ -43,7 +43,7 @@
 #include "KineoModel/kppPathComponent.h"
 #include "KineoModel/kppPathNode.h"
 
-#include "kppInterface/kwsGraphicRoadmapDelegate.h"
+#include "kpp/interface/graphic-roadmap-delegate.hh"
 
 KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
 KIT_PREDEF_CLASS(CkppInterface);

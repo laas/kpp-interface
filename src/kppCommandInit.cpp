@@ -29,9 +29,9 @@
 
 #include "hpp/core/planner.hh"
 
-#include "kppInterface/kppCommandInit.h"
-#include "kppInterface/kwsGraphicRoadmap.h"
-#include "kppInterface/kwsGraphicRoadmapDelegate.h"
+#include "kpp/interface/command-init.hh"
+#include "kpp/interface/graphic-roadmap.hh"
+#include "kpp/interface/graphic-roadmap-delegate.hh"
 
 /*****************************************
  DEFINES

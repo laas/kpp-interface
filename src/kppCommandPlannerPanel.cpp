@@ -31,9 +31,9 @@
 
 #include "hpp/core/planner.hh"
 
-#include "kppInterface/kppCommandPlannerPanel.h"
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
+#include "kpp/interface/command-planner-panel.hh"
+#include "kpp/interface/planner-panel.hh"
+#include "kpp/interface/planner-panel-controller.hh"
 
 /*****************************************
  DEFINES

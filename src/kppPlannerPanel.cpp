@@ -18,8 +18,9 @@
 
 /**************************INCLUDES*************************/
 
-#include "kppInterface/kppPlannerPanelController.h"
-#include "kppInterface/kppPlannerPanel.h"
+#include "kpp/interface/command-planner-panel.hh"
+#include "kpp/interface/planner-panel-controller.hh"
+#include "kpp/interface/planner-panel.hh"
 
 #include "wx/sizer.h"
 #include "wx/bmpcbox.h"

@@ -23,7 +23,7 @@
   \brief Main class of builder kppCommandOpenFile
  */
 
-#include "kppInterface/kppInterface.h"
+#include "kpp/interface/interface.hh"
 
 KIT_PREDEF_CLASS(CkppCommandOpenFile);
 class CkppCommandOpenFile : public CkppCommand{

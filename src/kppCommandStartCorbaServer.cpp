@@ -16,8 +16,8 @@
 // kpp-interface  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "kppInterface/kppCommandStartCorbaServer.h"
-#include "kppInterface/kppInterface.h"
+#include "kpp/interface/command-start-corbaserver.hh"
+#include "kpp/interface/interface.hh"
 
 #include "KineoController/kppSetPropertyCommand.h"
 #include "KineoModel/kppComponentParameter.h"

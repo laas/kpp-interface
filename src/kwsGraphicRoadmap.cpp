@@ -16,9 +16,9 @@
 // kpp-interface  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "kppInterface/kwsGraphicRoadmap.h"
-#include "kppInterface/kppInterface.h"
-#include "kppInterface/kwsGraphicRoadmapDelegate.h"
+#include "kpp/interface/graphic-roadmap.hh"
+#include "kpp/interface/interface.hh"
+#include "kpp/interface/graphic-roadmap-delegate.hh"
 
 #include "KineoWorks2/kwsNode.h"
 #include "KineoWorks2/kwsConfig.h"

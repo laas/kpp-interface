@@ -16,7 +16,7 @@
 // kpp-interface  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "kppInterface/kppCommandOpenFile.h" 
+#include "kpp/interface/command-openfile.hh" 
 
 #include "KineoModel/kppComponentParameter.h"
 #include "KineoModel/kppGeometryNode.h"
