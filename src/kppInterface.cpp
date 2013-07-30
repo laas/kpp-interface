@@ -662,14 +662,13 @@ void CkppInterface::hppAddGraphicRoadmap(const CkitNotificationConstShPtr& inNot
   ODEBUG2(":hppAddGraphicRoadmap: " << roadmapName.str() << " created");
 }
 
-void CkppInterface::hppSetCurrentConfig(const CkitNotificationConstShPtr&
-					inNotification)
+void CkppInterface::hppSetCurrentConfig(const CkitNotificationConstShPtr&)
 {
   mainWindowController()->graphicWindowController()->viewWindow()->
     redraw(CkppViewCanvas::NOW);
 }
 
-void CkppInterface::onIdle(const CkitNotificationConstShPtr& inNotification)
+void CkppInterface::onIdle(const CkitNotificationConstShPtr&)
 {
   if (corbaServerRunning) {
     attHppCorbaServer->processRequest(false);
@@ -822,7 +821,8 @@ void CkppInterface::graphicRoadmapHasBeenModified(const CkitNotificationConstShP
 
 // ==========================================================================
 
-void CkppInterface::removeAllRoadmapsAndProblems(const CkitNotificationConstShPtr& inNotification)
+void CkppInterface::removeAllRoadmapsAndProblems
+(const CkitNotificationConstShPtr&)
 {
 
   ODEBUG1("removing all roadmaps and all problems");
