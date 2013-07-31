@@ -19,18 +19,3 @@
 
 # Reinitialize directory where libs are installed since for Kineo addon, this
 # directory is non standard: lib/modules/${UNAME_N}
-SET(PKG_CONFIG_LIBS "")
-
-SET(KINEO_ADDON_SOURCES
-  kppInterface.cpp
-  kppCommandStartCorbaServer.cpp
-  kppCommandPlannerPanel.cpp
-  kppCommandInit.cpp
-  kppPlannerPanelController.cpp
-  kppPlannerPanel.cpp
-  kwsGraphicRoadmapDelegate.cpp
-  kwsGraphicRoadmap.cpp
-  )
-KINEO_ADDON(${PROJECT_NAME})
-PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-corbaserver)
-PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} Kite)

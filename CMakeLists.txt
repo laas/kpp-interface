@@ -48,9 +48,21 @@ ADD_REQUIRED_DEPENDENCY("hpp-core >= 2.5")
 ADD_REQUIRED_DEPENDENCY("hpp-corbaserver >= 1.16")
 ADD_REQUIRED_DEPENDENCY("kwsPlus >= 2.1")
 
-PKG_CONFIG_APPEND_LIBS(${PROJECT_NAME})
+SET(PKG_CONFIG_LIBS "")
 
-ADD_SUBDIRECTORY(src)
+SET(KINEO_ADDON_SOURCES
+  src/kppInterface.cpp
+  src/kppCommandStartCorbaServer.cpp
+  src/kppCommandPlannerPanel.cpp
+  src/kppCommandInit.cpp
+  src/kppPlannerPanelController.cpp
+  src/kppPlannerPanel.cpp
+  src/kwsGraphicRoadmapDelegate.cpp
+  src/kwsGraphicRoadmap.cpp
+  )
+KINEO_ADDON(${PROJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} hpp-corbaserver)
+PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} Kite)
 
 SETUP_PROJECT_FINALIZE()
 SETUP_PROJECT_CPACK()
