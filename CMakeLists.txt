@@ -23,11 +23,11 @@ SET(PROJECT_NAME kpp-interface)
 SET(PROJECT_DESCRIPTION "Graphical interface for Humanoid Path Planner")
 SET(PROJECT_URL https://github.com:laas/kpp-interface)
 
-SET(PROJECT_HEADERS
+SET(${PROJECT_NAME}_HEADERS
   include/kpp/interface/command-init.hh
   include/kpp/interface/command-open-file.hh
   include/kpp/interface/command-planner-panel.hh
-  include/kpp/interface/command-start-corba-server.hh
+  include/kpp/interface/command-start-corbaserver.hh
   include/kpp/interface/interface.hh
   include/kpp/interface/planner-panel-controller.hh
   include/kpp/interface/planner-panel.hh
