@@ -39,7 +39,6 @@
 #include "KineoController/kppUICommand.h"
 
 #include "kwsPlus/directPath/flicSteeringMethod.h"
-#include "kwsPlus/directPath/reedsSheppSteeringMethod.h"
 #include "kwsPlus/roadmap/hppVisRdmBuilder.h"
 #include "kwsPlus/roadmap/kwsPlusPCARdmBuilder.h"
 #include "kwsPlus/roadmap/kwsPlusLTRdmBuilder.h"
@@ -653,10 +652,7 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
     case CkppPlannerPanel::FLIC :
       Device->steeringMethod(CflicSteeringMethod::create(IsOrientedCheckBox->IsChecked()));
       break;
-    case CkppPlannerPanel::RS :
-      Device->steeringMethod(CreedsSheppSteeringMethod::create(RSRadiusSpinCtrl->GetValue(),IsOrientedCheckBox->IsChecked()));
-      break;
-    case CkppPlannerPanel::SLERP :
+    case CkppPlannerPanel::SLERP : 
       Device->steeringMethod(CkwsSMSlerp::create(Device->rootJoint()));
     default:
       break;
