@@ -25,8 +25,8 @@
 
 #include "KineoView/kppViewGraphic.h"
 #include "KineoView/kppViewGeneral.h"
-#include "KineoView/kppViewWindow.h"
 #include "KineoView/kppViewCanvas.h"
+#include "KineoGUI/kppViewWindow.h"
 #include "KineoGUI/kppMainWindowController.h"
 #include "KineoGUI/kppGraphicWindowController.h"
 #include "KineoWorks2/kwsRoadmap.h"
