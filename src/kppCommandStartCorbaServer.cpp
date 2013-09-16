@@ -34,7 +34,6 @@
 #include "KineoModel/kppModelTree.h"
 #include "KineoModel/kppGeometryNode.h"
 #include "KineoModel/kppDeviceNode.h"
-#include "KineoWorks2/kwsJointDof.h"
 
 #include "hpp/core/planner.hh"
 
