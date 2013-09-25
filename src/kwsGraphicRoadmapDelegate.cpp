@@ -31,7 +31,7 @@
 #include "KineoGUI/kppMainFrame.h"
 #include "KineoWorks2/kwsNode.h"
 
-#include "kwsIO/kwsioConfig.h"
+#include <hpp/kwsio/configuration.hh>
 
 // Select verbosity at configuration by setting CXXFLAGS="... -DDEBUG=[1 or 2]"
 #if DEBUG==2
