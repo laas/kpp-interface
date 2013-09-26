@@ -38,10 +38,10 @@
 #include "KineoWorks2/kwsSMSlerp.h"
 #include "KineoController/kppUICommand.h"
 
-#include "kwsPlus/directPath/flicSteeringMethod.h"
-#include "kwsPlus/roadmap/hppVisRdmBuilder.h"
-#include "kwsPlus/roadmap/kwsPlusPCARdmBuilder.h"
-#include "kwsPlus/roadmap/kwsPlusLTRdmBuilder.h"
+#include <hpp/kwsplus/direct-path/flic-steering-method.hh>
+#include <hpp/kwsplus/roadmap/vis-rdm-builder.hh>
+#include <hpp/kwsplus/roadmap/pca-rdm-builder.hh>
+#include <hpp/kwsplus/roadmap/lt-rdm-builder.hh>
 
 #include "hpp/core/planner.hh"
 
