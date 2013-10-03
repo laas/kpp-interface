@@ -512,8 +512,6 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent&){
     wxCheckBox* LTBuilderCheckBox =  dynamic_cast<wxCheckBox*>
       (panel->FindWindowByName(wxString::FromAscii ("LTBuilder"),
 			       panel.get()));
-    wxSpinCtrl* RSRadiusSpinCtrl = dynamic_cast<wxSpinCtrl*>
-      (panel->FindWindowByName(wxString::FromAscii ("RSRadius"), panel.get()));
 
     switch(RoadmapBuilderComboBox->GetCurrentSelection()){//to set the chosen roadmapBuilder
     case CkppPlannerPanel::BASIC_RDMBUILDER :
