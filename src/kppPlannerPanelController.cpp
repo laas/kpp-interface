@@ -299,7 +299,7 @@ void CkppPlannerPanelController::shooterComboBoxEventHandler(wxCommandEvent& can
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::pickerComboBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::pickerComboBoxEventHandler(wxCommandEvent&){
 //TODO : create an instance of the chosen picker and add it to the problem
 // Verify that the builder is a diffusion one
   ODEBUG2("picker box event triggered");
@@ -357,39 +357,39 @@ void CkppPlannerPanelController::steeringComboBoxEventHandler(wxCommandEvent& ca
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::delegateComboBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::delegateComboBoxEventHandler(wxCommandEvent&){
   ODEBUG2("delegate box event triggered");
 
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::optimizerComboBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::optimizerComboBoxEventHandler(wxCommandEvent&){
 //TODO : create an instance of the chosen path optimizer and add it to the problem
     ODEBUG2("Optimizer box event triggered");
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::RoadmapCheckBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::RoadmapCheckBoxEventHandler(wxCommandEvent&){
 //TODO : enable roadmap display.
   ODEBUG2(" RoadmapCheckBoxEventHandler");
 
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::SolveAllCheckBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::SolveAllCheckBoxEventHandler(wxCommandEvent&){
 //TODO : if checked, allow users to solve all problems contained in the vector of problems
 // otherwise, only the problem with the selected number will be solved
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::BiDiffuseCheckBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::BiDiffuseCheckBoxEventHandler(wxCommandEvent&){
 //TODO : only for diffusion builders. allow users to diffuse from both start & goal nodes
 //  wxCheckBox * BiDiffuseCheckBox = dynamic_cast<wxCheckBox*>(cancel.GetEventObject());
 //  KIT_DYNAMIC_PTR_CAST(CkwsDiffusingRdmBuilder,panel->getRdmBuilder())->diffuseFromProblemGoal(BiDiffuseCheckBox->IsChecked());
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::MagnetCheckBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::MagnetCheckBoxEventHandler(wxCommandEvent&){
 //TODO : fill the config list for each checked box
 
 
@@ -445,12 +445,12 @@ void CkppPlannerPanelController::RnShooterCheckBoxEventHandler(wxCommandEvent& c
 
 }
 /*_________________________________________________________*/
-void CkppPlannerPanelController::ShooterCheckBoxEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::ShooterCheckBoxEventHandler(wxCommandEvent&){
 //TODO : create an instance of the chosen shooter and add it in the multishooter's vector
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent&){
   //TODO : Apply configuration to the planner. Launch algorithm. take into account the solveall checkbox ?
 
   double penetration = HPP_RDMBUILDER_DEFPENETRATION;
@@ -709,17 +709,17 @@ void CkppPlannerPanelController::StartButtonEventHandler(wxCommandEvent& cancel)
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::SaveButtonEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::SaveButtonEventHandler(wxCommandEvent&){
 //TODO : (Apply changes?) and save configuration in a file ?
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::OpenButtonEventHandler(wxCommandEvent& cancel){
+void CkppPlannerPanelController::OpenButtonEventHandler(wxCommandEvent&){
   //TODO : open a saved configuration
 }
 
 /*_________________________________________________________*/
-void CkppPlannerPanelController::AddPbButtonEventHandler(wxCommandEvent& cancel){//Add a problem at the end of hppProblemVector
+void CkppPlannerPanelController::AddPbButtonEventHandler(wxCommandEvent&){//Add a problem at the end of hppProblemVector
   //TODO : add a hppproblem in the vector of problems (how to initialize this specific problem? how to choose the device parameter needed?)
 
   if(panel->getInterface()->attCommandInitBase != NULL){
