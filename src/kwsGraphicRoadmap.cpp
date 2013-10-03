@@ -223,14 +223,20 @@ void CkwsGraphicRoadmap::drawRoadmap(){
 
 	//drawing an edge
 	glBegin(GL_LINES);
-	glVertex3f(x1,y1,z1);
-	glVertex3f(x2,y2,z2);
+	glVertex3f(static_cast<GLfloat> (x1),
+		   static_cast<GLfloat> (y1),
+		   static_cast<GLfloat> (z1));
+	glVertex3f(static_cast<GLfloat> (x2),
+		   static_cast<GLfloat> (y2),
+		   static_cast<GLfloat> (z2));
 	glEnd();
 
 
 	//drawing a point for the current node
 	glBegin(GL_POINTS);
-	glVertex3f(x1,y1,z1);
+	glVertex3f(static_cast<GLfloat> (x1),
+		   static_cast<GLfloat> (y1),
+		   static_cast<GLfloat> (z1));
 	glEnd();
 	glPointSize(4.f);
 
