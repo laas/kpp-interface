@@ -71,8 +71,8 @@ class CkppInterface; //references croisees
 #define CHOICES_NOTEBOOK wxID_LOWEST-26
 
 
-KIT_PREDEF_CLASS( CkppPlannerPanel );
-KIT_PREDEF_CLASS( CkppPlannerPanelController );
+HPP_KIT_PREDEF_CLASS( CkppPlannerPanel );
+HPP_KIT_PREDEF_CLASS( CkppPlannerPanelController );
 
 /***********************************************************/
 

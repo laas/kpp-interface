@@ -40,7 +40,9 @@
 #include <sstream>
 #include <ctime>
 
-KIT_PREDEF_CLASS(CkwsGraphicRoadmapDelegate);
+#include <hpp/util/kitelab.hh>
+
+HPP_KIT_PREDEF_CLASS(CkwsGraphicRoadmapDelegate);
 
 using namespace std ;
 

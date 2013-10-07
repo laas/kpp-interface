@@ -39,7 +39,7 @@
  DEFINES
 *******************************************/
 
-KIT_PREDEF_CLASS( CkppPlannerPanelController );
+HPP_KIT_PREDEF_CLASS( CkppPlannerPanelController );
 
 /*****************************************
  METHODS

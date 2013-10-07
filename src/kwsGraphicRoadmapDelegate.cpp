@@ -55,7 +55,7 @@ const std::string CkwsGraphicRoadmapDelegate::ROADMAPBUILDER_KEY("ROADMAPBUILER"
 // Counter of existing objects of this class
 unsigned int CkwsGraphicRoadmapDelegate::nbObjects = 0;
 
-KIT_PREDEF_CLASS( CkppComponent );
+HPP_KIT_PREDEF_CLASS( CkppComponent );
 
 //constructor
 CkwsGraphicRoadmapDelegate::CkwsGraphicRoadmapDelegate(){

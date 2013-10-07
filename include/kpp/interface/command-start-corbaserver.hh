@@ -21,11 +21,13 @@
 
 # include "KineoController/kppCommand.h"
 
-KIT_PREDEF_CLASS( CkppCommandStartCorbaServer );
-KIT_PREDEF_CLASS( ChppDevice );
-KIT_PREDEF_CLASS( ChppBox );
-KIT_PREDEF_CLASS( CkppInterface );
-KIT_PREDEF_CLASS( CkitNotification);
+# include <hpp/util/kitelab.hh>
+
+HPP_KIT_PREDEF_CLASS( CkppCommandStartCorbaServer );
+HPP_KIT_PREDEF_CLASS( ChppDevice );
+HPP_KIT_PREDEF_CLASS( ChppBox );
+HPP_KIT_PREDEF_CLASS( CkppInterface );
+HPP_KIT_PREDEF_CLASS( CkitNotification);
 
 class CkppCommandStartCorbaServer : public CkppCommand
 {

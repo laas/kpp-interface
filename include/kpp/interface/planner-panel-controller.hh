@@ -46,8 +46,8 @@
 #include "wx/spinctrl.h"
 
 
-KIT_PREDEF_CLASS( CkppPlannerPanelController );
-KIT_PREDEF_CLASS( CkppPlannerPanel );
+HPP_KIT_PREDEF_CLASS( CkppPlannerPanelController );
+HPP_KIT_PREDEF_CLASS( CkppPlannerPanel );
 
 /***********************************************************/
 

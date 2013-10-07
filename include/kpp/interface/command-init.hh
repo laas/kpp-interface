@@ -29,7 +29,7 @@
 
 #include "KineoController/kppCommand.h"
 
-KIT_PREDEF_CLASS( CkppCommandInit );
+HPP_KIT_PREDEF_CLASS( CkppCommandInit );
 
 
 /*****************************************

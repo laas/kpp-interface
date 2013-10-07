@@ -45,8 +45,8 @@
 
 #include "kpp/interface/graphic-roadmap-delegate.hh"
 
-KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
-KIT_PREDEF_CLASS(CkppInterface);
+HPP_KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
+HPP_KIT_PREDEF_CLASS(CkppInterface);
 
 /** 
     \addtogroup kppInterface_graphic_Roadmap

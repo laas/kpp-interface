@@ -34,21 +34,23 @@
 #include "KineoGUI/kppGUIModuleInterface.h"
 #include "KineoView/kppViewModuleInterface.h"
 
+#include <hpp/util/kitelab.hh>
+
 #include <hpp/corbaserver/fwd.hh>
 #include <hpp/core/fwd.hh>
 
-KIT_PREDEF_CLASS(CkitNotification);
-KIT_PREDEF_CLASS(CkwsRoadmap);
-KIT_PREDEF_CLASS(CkppUICommand);
-KIT_PREDEF_CLASS(CkppMainWindowController);
-KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
-KIT_PREDEF_CLASS(CkppViewGeneral);
+HPP_KIT_PREDEF_CLASS(CkitNotification);
+HPP_KIT_PREDEF_CLASS(CkwsRoadmap);
+HPP_KIT_PREDEF_CLASS(CkppUICommand);
+HPP_KIT_PREDEF_CLASS(CkppMainWindowController);
+HPP_KIT_PREDEF_CLASS(CkwsGraphicRoadmap);
+HPP_KIT_PREDEF_CLASS(CkppViewGeneral);
 
 /*****************************************
  CLASS
 *******************************************/
 
-KIT_PREDEF_CLASS(CkppInterface);
+HPP_KIT_PREDEF_CLASS(CkppInterface);
 
 class CkppInterface : public CkppModuleInterface, public CkppGUIModuleInterface, public CkppViewModuleInterface
 {

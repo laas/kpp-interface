@@ -35,7 +35,7 @@
 
 #include "KineoController/kppPlanPathCommand.h"
 
-KIT_PREDEF_CLASS( CkppCommandPlannerPanel );
+HPP_KIT_PREDEF_CLASS( CkppCommandPlannerPanel );
 
 class CkppInterface;
 
