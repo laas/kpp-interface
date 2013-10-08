@@ -1,3 +1,7 @@
+09/26/2013 Release 2.1.1
+	   1. Fix compilation warnings.
+	   2. Synchronize cmake submodule.
+
 09/26/2013 Release 2.1
 	   1. Port to Kitelab 2.07
 	   2. Stop support for Reeds and Shepp steering method.
